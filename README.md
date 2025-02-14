@@ -48,7 +48,7 @@ Cập nhật file `application.properties`:
 ```properties
 spring.data.mongodb.uri=mongodb://localhost:27017/formmanagement
 ```
-
+Kết nối MongoDB (Mở MongoDB Compass -> connect Project)
 #### Bước 3: Chạy Backend
 
 ```bash
@@ -76,7 +76,7 @@ FormManagement/
 │   ├── styles.css
 ```
 ## Giải thích ý nghĩa cây thư mục
-## 1. Backend
+## 6.1. Backend
 Thư mục backend/ chứa mã nguồn của phần máy chủ (server-side), viết bằng Java + Spring Boot.
 
 ### a. controller/ (Lớp điều khiển)
@@ -103,7 +103,7 @@ Chứa các file cấu hình quan trọng.
 - SwaggerConfig.java - Cấu hình Swagger UI để mô tả API.
 
 
-## 2. Frontend
+## 6.2. Frontend
 Thư mục frontend/ chứa giao diện của website, viết bằng HTML, CSS, JavaScript.
 
 - index.html - Giao diện chính.
