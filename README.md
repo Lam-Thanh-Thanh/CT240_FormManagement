@@ -48,7 +48,7 @@ Cập nhật file `application.properties`:
 ```properties
 spring.data.mongodb.uri=mongodb://localhost:27017/formmanagement
 ```
-Kết nối MongoDB (Mở MongoDB Compass -> connect Project)
+Kết nối MongoDB (Mở MongoDB Compass -> export connections -> (file compass-connections) -> connect Project)
 #### Bước 3: Chạy Backend
 
 ```bash
