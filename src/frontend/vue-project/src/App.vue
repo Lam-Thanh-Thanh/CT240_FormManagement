@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-screen font-Atkinson text-myDarkNavy">
+  <div class="flex flex-col min-h-screen font-Georama text-myDarkNavy">
     <Navbar />
     <div class="flex-grow"><RouterView /></div>
     <Footer></Footer>
