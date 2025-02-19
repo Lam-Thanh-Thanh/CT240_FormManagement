@@ -1,7 +1,5 @@
 <template>
-  <footer class="h-[200px] bg-myDarkNavy">
-    <div></div>
-  </footer>
+  <div></div>
 </template>
 
 <script setup></script>

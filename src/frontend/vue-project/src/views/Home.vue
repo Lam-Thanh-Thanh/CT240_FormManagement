@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex h-[30vh] lg:h-[60vh] justify-center items-center bg-myGray1 px-40 gap-48"
+    class="flex h-[30vh] lg:h-[65vh] justify-center items-center bg-myLightGray px-40 gap-48"
   >
     <div>
-      <p class="text-3xl lg:text-7xl font-extrabold">Welcome!</p>
+      <p class="text-3xl lg:text-7xl font-extrabold animate-bounce">Welcome!</p>
     </div>
 
     <div>
@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div>
+  <div class="">
     <ProjectList />
   </div>
 </template>

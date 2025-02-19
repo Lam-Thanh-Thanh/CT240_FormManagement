@@ -1,6 +1,6 @@
 <template>
   <header
-    class="flex justify-between items-center h-[60px] bg-white px-10 border-solid border-b-gray-200 border-b-2"
+    class="flex justify-between items-center h-[60px] px-10 border-solid border-b-gray-200 border-b-2"
   >
     <div class="">
       <router-link to="/" class="text-3xl font-extrabold"
@@ -11,13 +11,15 @@
       <router-link to="/" class="text-xl font-normal px-8 hover:text-gray-900"
         >Home</router-link
       >
-      <router-link to="/" class="text-xl font-normal px-8 hover:text-gray-900"
+      <router-link
+        to="/projects"
+        class="text-xl font-normal px-8 hover:text-gray-900"
         >Projects</router-link
       >
       <div>
         <router-link
           to="/user"
-          class="text-xl font-bold px-8 hover:text-gray-900"
+          class="text-xl font-bold pl-8 hover:text-gray-900"
           ><i class="fa-regular fa-user"></i
         ></router-link>
       </div>
