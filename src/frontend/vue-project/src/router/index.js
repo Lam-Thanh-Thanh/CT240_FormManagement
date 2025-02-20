@@ -5,6 +5,7 @@ import ProjectDetails from "@/components/ProjectDetails.vue";
 import FormDetails from "@/components/FormDetails.vue";
 import ProjectCreate from "@/components/ProjectCreate.vue";
 import FormCreate from "@/components/FormCreate.vue";
+import FormEdit from "@/components/FormEdit.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: "/projects/forms/create",
       name: "form-create",
       component: FormCreate,
+    },
+    {
+      path: "/projects/forms/edit",
+      name: "form-edit",
+      component: FormEdit,
     },
   ],
 });
