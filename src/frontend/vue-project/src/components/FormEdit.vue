@@ -3,7 +3,7 @@
     <h1 class="text-center m-32 mb-20 text-4xl font-extrabold">Form Edit</h1>
 
     <form @submit.prevent="" class="space-y-4">
-      <!-- Tên Project -->
+      <!-- Tên form -->
       <div
         class="p-6 bg-white rounded-lg shadow-md mt-0 my-40 m-80 border-t-pink-800 border-t-8"
       >
@@ -14,11 +14,10 @@
             id="formTitle"
             v-model="form.formTitle"
             class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
-            required
           />
         </div>
 
-        <!-- Mô tả Project -->
+        <!-- Mô tả form -->
         <div class="my-5 mx-3">
           <label for="projectDescription" class="block font-medium"
             >Description:</label
@@ -27,19 +26,11 @@
             id="projectDescription"
             v-model="form.formDescription"
             class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
-            rows="4"
-            required
+            rows="3"
           ></textarea>
         </div>
-
-        <div class="text-center mt-10">
-          <button
-            v-on:click="addQuestion"
-            class="hover:bg-pink-800 hover:text-white text-pink-800 px-2 py-1 rounded-full border-pink-800 border transition duration-300 ease-in-out"
-          >
-            <i class="fa-solid fa-plus"></i>
-          </button>
-        </div>
+        <!-- question -->
+        <Question></Question>
       </div>
       <!-- Nút Submit -->
       <div class="text-center">
@@ -55,12 +46,18 @@
 </template>
 
 <script>
+import Question from "./Question.vue";
+
 export default {
+  //add component
+  components: { Question },
+
   data() {
     return {
       form: {
         formTitle: this.$route.query.oldTitle || "",
         formDescription: "",
+        questions: [],
       },
     };
   },
@@ -75,7 +72,11 @@ export default {
       this.form = {
         projectName: "",
         projectDescription: "",
+        quetions: [],
       };
+    },
+    saveForm() {
+      //updateFormOfProject  api  formData   save form - save question - save option
     },
   },
 };

@@ -2,66 +2,75 @@
   <h1 class="text-center m-32 mb-20 text-4xl font-extrabold">
     Project Creation
   </h1>
-  <div class="p-6 bg-white rounded-lg shadow-md mt-0 my-40 m-80">
-    <form @submit.prevent="submitForm" class="space-y-4">
+
+  <form @submit.prevent="createProject" class="mx-7">
+    <div class="p-6 bg-white rounded-lg shadow-md mt-0 my-40 m-80">
       <!-- Tên Project -->
-      <div>
+      <div class="mb-2">
         <label for="projectName" class="block">Name</label>
         <input
           type="text"
           id="projectName"
-          v-model="form.projectName"
-          class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          v-model="project.name"
+          class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
           required
         />
       </div>
 
       <!-- Mô tả Project -->
-      <div>
+      <div class="mb-2">
         <label for="projectDescription" class="block">Description</label>
         <textarea
           id="projectDescription"
-          v-model="form.projectDescription"
-          class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          v-model="project.description"
+          class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
           rows="4"
           required
         ></textarea>
       </div>
+    </div>
+    <!-- form creation -->
 
-      <!-- Nút Submit -->
-      <div class="text-center">
-        <button
-          type="submit"
-          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Create Project
-        </button>
-      </div>
-    </form>
-  </div>
+    <!-- create project button -->
+    <div class="text-center mb-40">
+      <button
+        type="submit"
+        class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
+      >
+        Create Project
+      </button>
+    </div>
+  </form>
 </template>
 
 <script>
+import ProjectService from "@/services/ProjectService";
 export default {
   data() {
     return {
-      form: {
-        projectName: "",
-        projectDescription: "",
+      project: {
+        name: "",
+        description: "",
+        forms: [],
       },
     };
   },
   methods: {
-    submitForm() {
-      // Xử lý dữ liệu form ở đây
-      console.log("Form submitted:", this.form);
-      alert("Project đã được thêm thành công!");
-      this.resetForm();
+    async createProject() {
+      try {
+        const response = await ProjectService.createProject(this.project);
+        console.log("Project created:", response.data);
+        alert("Project created sucessfully !!");
+        this.resetForm();
+      } catch (error) {
+        console.error("There was an error creating the project:", error);
+        alert("Project creation failed !!");
+      }
     },
     resetForm() {
-      this.form = {
-        projectName: "",
-        projectDescription: "",
+      this.project = {
+        name: "",
+        description: "",
       };
     },
   },

@@ -49,10 +49,10 @@
     <div class="flex flex-wrap gap-14 justify-start mx-20 mt-32 mb-48">
       <button
         v-on:click="viewFormDetails"
-        class="w-[22%] bg-white shadow-md hover:shadow-lg rounded-2xl text-left"
+        class="w-[22%] bg-white shadow-lg hover:shadow-md rounded-2xl text-left transition duration-300 ease-in-out"
       >
         <div
-          class="font-bold text-lg bg-slate-300 rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
+          class="font-bold text-lg bg-gray-200 border-2 border-myLightNavy rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
         >
           form 1
         </div>
