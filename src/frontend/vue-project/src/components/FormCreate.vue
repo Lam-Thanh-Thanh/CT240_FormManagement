@@ -4,7 +4,7 @@
       Creating a form
     </h1>
 
-    <form @submit.prevent="" class="space-y-4">
+    <form @submit.prevent="submitForm" class="space-y-4">
       <!-- Tên form -->
       <div
         class="p-6 bg-white rounded-lg shadow-md mt-0 my-40 m-80 border-t-pink-800 border-t-8"
@@ -31,8 +31,19 @@
             rows="3"
           ></textarea>
         </div>
-        <!-- question -->
-        <Question></Question>
+        <div>
+          <!-- question -->
+          <Question :questions="form.questions"></Question>
+          <div class="text-center mt-10">
+            <button
+              v-on:click="addMoreQuestion"
+              class="hover:bg-pink-800 hover:text-white text-pink-800 px-2 py-1 rounded-full border-pink-800 border transition duration-300 ease-in-out"
+              type="button"
+            >
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
       </div>
       <!-- Nút Submit -->
       <div class="text-center">
@@ -79,6 +90,18 @@ export default {
     },
     creatForm() {
       //updateFormOfProject  api  formData   save form - save question - save option
+    },
+    addMoreQuestion() {
+      this.form.questions.push({
+        questionContent: "",
+        options: [],
+        TextOption: "",
+        open: false,
+        showChooseOption: true,
+        showTextOption: false,
+        type: "radio",
+      });
+      console.log("Added question:", this.form.questions);
     },
   },
 };

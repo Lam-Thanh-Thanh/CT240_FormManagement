@@ -32,9 +32,6 @@
       </div>
     </div>
     <!-- more option button -->
-    <div>
-      <button v-on:click="addMoreOption" class="">More option</button>
-    </div>
   </div>
 </template>
 
@@ -44,23 +41,10 @@ export default {
     inputType: {
       type: String,
     },
-  },
-  data() {
-    return {
-      //options of questionId
-      options: [
-        {
-          isChecked: false,
-          optionContent: "",
-        },
-      ],
-    };
+    options: Array, // Nhận danh sách option từ Question.vue
   },
 
   methods: {
-    addMoreOption() {
-      this.options.push({ optionContent: "", isChecked: false });
-    },
     deleteOption(index) {
       this.options.splice(index, 1);
     },

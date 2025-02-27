@@ -24,6 +24,7 @@
             <button
               v-on:click="question.open = !question.open"
               class="bg-zinc-200 px-2 py-1 hover:shadow-lg w-full"
+              type="button"
             >
               Type
             </button>
@@ -34,6 +35,7 @@
                 <button
                   v-on:click="changeOptionType(question, 'radio')"
                   class=""
+                  type="button"
                 >
                   Radio
                 </button>
@@ -45,6 +47,7 @@
                 <button
                   v-on:click="changeOptionType(question, 'checkbox')"
                   class=""
+                  type="button"
                 >
                   Check box
                 </button>
@@ -52,7 +55,11 @@
               <div
                 class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2"
               >
-                <button v-on:click="changeTextType(question)" class="">
+                <button
+                  v-on:click="changeTextType(question)"
+                  class=""
+                  type="button"
+                >
                   Text
                 </button>
               </div>
@@ -66,48 +73,50 @@
         </div>
         <!-- option -->
         <div class="mt-7">
-          <RadioOption
-            v-if="question.showChooseOption"
-            :input-type="question.type"
-          ></RadioOption>
+          <div>
+            <Options
+              :options="question.options"
+              v-if="question.showChooseOption"
+              :input-type="question.type"
+            ></Options>
+            <!-- more option button -->
+            <div>
+              <button
+                v-on:click="addMoreOption(question)"
+                class=""
+                type="button"
+              >
+                More option
+              </button>
+            </div>
+          </div>
+
           <TextOption v-if="question.showTextOption"> </TextOption>
         </div>
-      </div>
-      <div class="text-center mt-10">
-        <button
-          v-on:click="addMoreQuestion"
-          class="hover:bg-pink-800 hover:text-white text-pink-800 px-2 py-1 rounded-full border-pink-800 border transition duration-300 ease-in-out"
-        >
-          <i class="fa-solid fa-plus"></i>
-        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import RadioOption from "./RadioOptions.vue";
+import Options from "./Options.vue";
 import TextOption from "./TextOption.vue";
 
 export default {
-  components: { RadioOption, TextOption },
+  components: { Options, TextOption },
+  props: {
+    questions: Array, // Nhận danh sách câu hỏi từ Form.vue
+  },
   data() {
     return {
-      questions: [
-        {
-          questionContent: "",
-          RadioOptions: [],
-          TextOption: "",
-          open: false,
-          showChooseOption: false,
-          showTextOption: false,
-          type: "",
-        },
-      ],
+      options: [],
     };
   },
   methods: {
     changeOptionType(question, type) {
+      if (!question.options) {
+        this.addMoreOption(question);
+      }
       question.showChooseOption = true;
       question.showTextOption = false;
       question.type = type;
@@ -116,12 +125,19 @@ export default {
       question.showTextOption = true;
       question.showChooseOption = false;
     },
-    addMoreQuestion() {
-      this.questions.push({
-        questionContent: "",
-        RadioOptions: [],
-        TextOption: "",
+    addMoreOption(question) {
+      if (!question.options) {
+        question.options = [];
+      }
+
+      question.showChooseOption = true;
+      question.showTextOption = false;
+      question.options.push({
+        optionContent: "",
+        isChecked: false,
       });
+
+      console.log("Added question:", question.options);
     },
   },
 };
