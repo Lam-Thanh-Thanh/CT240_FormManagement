@@ -12,7 +12,7 @@
           <div class="w-[80%]">
             <textarea
               id="projectDescription"
-              v-model="question.questionContent"
+              v-model="question.content"
               class="w-full border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
               rows="2"
               placeholder="Question title"
@@ -78,10 +78,12 @@
               :options="question.options"
               v-if="question.showChooseOption"
               :input-type="question.type"
+              v-model="question.options"
             ></Options>
             <!-- more option button -->
             <div>
               <button
+                v-if="question.type !== 'text'"
                 v-on:click="addMoreOption(question)"
                 class=""
                 type="button"
@@ -117,6 +119,7 @@ export default {
       if (!question.options) {
         this.addMoreOption(question);
       }
+
       question.showChooseOption = true;
       question.showTextOption = false;
       question.type = type;
@@ -125,6 +128,7 @@ export default {
       question.showTextOption = true;
       question.showChooseOption = false;
     },
+
     addMoreOption(question) {
       if (!question.options) {
         question.options = [];
@@ -133,6 +137,7 @@ export default {
       question.showChooseOption = true;
       question.showTextOption = false;
       question.options.push({
+        questionId: "",
         optionContent: "",
         isChecked: false,
       });

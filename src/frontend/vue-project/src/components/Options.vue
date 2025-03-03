@@ -43,7 +43,9 @@ export default {
     },
     options: Array, // Nhận danh sách option từ Question.vue
   },
-
+  data() {
+    return {};
+  },
   methods: {
     deleteOption(index) {
       this.options.splice(index, 1);

@@ -14,4 +14,7 @@ export default {
   getAllProjects() {
     return apiClient.get("");
   },
+  getProjectDetials(projectId) {
+    return apiClient.get(`/${projectId}`);
+  },
 };

@@ -14,7 +14,7 @@
           <input
             type="text"
             id="formTitle"
-            v-model="form.formTitle"
+            v-model="form.title"
             class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
           />
         </div>
@@ -26,7 +26,7 @@
           >
           <textarea
             id="projectDescription"
-            v-model="form.formDescription"
+            v-model="form.description"
             class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
             rows="3"
           ></textarea>
@@ -60,31 +60,39 @@
 
 <script>
 import Question from "./Question.vue";
+import FormService from "@/services/FormService";
 
 export default {
   //add component
   components: { Question },
-
+  props: ["projectId"],
   data() {
     return {
       form: {
-        formTitle: "",
-        formDescription: "",
+        title: "",
+        description: "",
+        projectId: "",
         questions: [],
       },
     };
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       // Xử lý dữ liệu form ở đây
+      const response = await FormService.createFormForProject(
+        this.projectId,
+        this.form
+      );
+
       console.log("Form submitted:", this.form);
       alert("Project đã được thêm thành công!");
       this.resetForm();
     },
     resetForm() {
       this.form = {
-        projectName: "",
-        projectDescription: "",
+        title: "",
+        description: "",
+        projectId: "",
         quetions: [],
       };
     },
@@ -93,13 +101,15 @@ export default {
     },
     addMoreQuestion() {
       this.form.questions.push({
-        questionContent: "",
+        content: "",
+        formId: "",
+        type: "radio",
         options: [],
+        // answer: [],
         TextOption: "",
         open: false,
         showChooseOption: true,
         showTextOption: false,
-        type: "radio",
       });
       console.log("Added question:", this.form.questions);
     },

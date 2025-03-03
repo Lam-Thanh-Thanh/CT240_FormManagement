@@ -6,7 +6,7 @@
     <button
       v-for="project in projects"
       :key="project.id"
-      v-on:click="viewProjectDetails"
+      v-on:click="viewProjectDetails(project.id)"
       class="w-[25%] bg-white shadow-lg hover:shadow-md rounded-2xl text-left transition duration-300 ease-in-out"
     >
       <div
@@ -49,16 +49,17 @@ export default {
     async fetchAllProjects() {
       try {
         const response = await ProjectService.getAllProjects();
-        this.projects = response.data; //update variable
+        this.projects = response.data;
       } catch (error) {
         console.error("There was an error fetching the projects:", error);
       }
     },
 
-    viewProjectDetails() {
+    viewProjectDetails(seletedId) {
       try {
         this.$router.push({
           name: "project-details",
+          params: { projectId: seletedId },
         });
       } catch (error) {}
     },

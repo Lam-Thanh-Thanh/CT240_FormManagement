@@ -8,10 +8,21 @@ const apiClient = axios.create({
 });
 
 export default {
-  getAllForms() {
-    return apiClient.get("/forms");
+  // getAllFormsOfProject(projectId) {
+  //   return apiClient.get(`/${projectId}/details`);
+  // },
+
+  getFormDetails(formId) {
+    return apiClient.get(`forms/${formId}`);
   },
-  createFormForProject(formData, projectId) {
+
+  createFormForProject(projectId, formData) {
     return apiClient.post(`/${projectId}/form-create`, formData);
+  },
+  updateForm(projectId, formId, updatedformData) {
+    return apiClient.put(
+      `/${projectId}/forms/${formId}/update`,
+      updatedformData
+    );
   },
 };
