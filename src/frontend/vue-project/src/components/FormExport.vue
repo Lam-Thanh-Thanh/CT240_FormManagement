@@ -1,7 +1,7 @@
 <template>
   <!-- dropdown -->
   <div class="flex gap-16 items-start mx-72 my-32 mb-20 justify-between">
-    <h1 class="text-4xl font-extrabold">Form edit</h1>
+    <h1 class="text-4xl font-extrabold">Form export</h1>
     <div class="text-right">
       <button
         v-on:click="open = !open"
@@ -35,10 +35,7 @@
         <span class="font-bold pr-2">Description:</span>
         <span class="">{{ form.description }}</span>
       </div>
-      <div class="pb-3">
-        <span class="font-bold pr-2">Project Name:</span>
-        <span class=""> ..</span>
-      </div>
+
       <div class="pb-3">
         <span class="font-bold pr-2">Create at:</span>
         <span class="">Date</span>
@@ -51,8 +48,8 @@
 
     <!-- question -->
     <div
-      v-for="(question, index) in form.questions"
-      :key="index"
+      v-for="(question, qIndex) in form.questions"
+      :key="qIndex"
       class="mx-32 my-20 shadow-lg shadow-myLightGray p-6 rounded border-t-pink-800 border-t-4"
     >
       <!-- content -->
@@ -60,26 +57,89 @@
         <div class="w-[80%]">
           <p>{{ question.content }}</p>
         </div>
-
-        <!-- dropdown -->
       </div>
       <!-- option -->
       <div class="mt-7">
         <div class="flex flex-col">
           <div
-            v-for="(option, index) in question.options"
-            :key="index"
-            class="flex flex-row items-center"
+            v-if="question.type === 'radio'"
+            v-for="(option, oIndex) in question.options"
+            :key="oIndex"
+            class="flex flex-row items-center gap-4"
           >
             <!-- question.type -->
-            <input type="radio" name="radioOption" v-model="option.isChecked" />
+            <input
+              type="radio"
+              :name="'radio-' + qIndex"
+              :value="option.optionContent"
+              v-model="response.answers[qIndex].selectedOptions"
+            />
 
             <p>{{ option.optionContent }}</p>
           </div>
-
-          <!-- more option button -->
         </div>
       </div>
+
+      <!-- option -->
+      <div class="mt-7">
+        <div class="flex flex-col">
+          <div
+            v-if="question.type === 'checkbox'"
+            v-for="(option, oIndex) in question.options"
+            :key="oIndex"
+            class="flex flex-row items-center gap-4"
+          >
+            <!-- question.type -->
+            <input
+              type="checkbox"
+              :value="option.optionContent"
+              v-model="response.answers[qIndex].selectedOptions"
+            />
+
+            <p>{{ option.optionContent }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- text -->
+      <div class="mt-7">
+        <div class="flex flex-col">
+          <div
+            v-if="question.type === 'text'"
+            class="flex flex-row items-center gap-4"
+          >
+            <!-- question.type -->
+            <input
+              type="text"
+              placeholder="Text...."
+              v-model="response.answers[qIndex].answerText"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- file -->
+      <div class="mt-7">
+        <div class="flex flex-col">
+          <div
+            v-if="question.type === 'file'"
+            class="flex flex-row items-center gap-4"
+          >
+            <!-- question.type -->
+            <input type="file" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Nút Submit -->
+    <div class="text-center">
+      <button
+        v-on:click="submitForm"
+        type="submit"
+        class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
+      >
+        Submit
+      </button>
     </div>
   </div>
 </template>
@@ -91,9 +151,13 @@ export default {
   data() {
     return {
       open: false,
-      // oldTitle: "form1",
       form: {
         questions: [],
+      },
+      response: {
+        formId: this.formId,
+
+        answers: [],
       },
     };
   },
@@ -105,20 +169,31 @@ export default {
       try {
         const response = await FormService.getFormDetails(this.formId);
         this.form = response.data;
+
+        // Khởi tạo response.answers với cấu trúc đúng
+        this.response.answers = this.form.questions.map((q) => ({
+          questionId: q.id,
+          answerText: "",
+          selectedOptions: [],
+        }));
+
         console.log(response.data);
       } catch (error) {
         console.error("There was an error getting form details:", error);
       }
     },
-
-    // editForm() {
-    //   try {
-    //     this.$router.push({
-    //       name: "form-edit",
-    //       query: { oldTitle: this.oldTitle },
-    //     });
-    //   } catch (error) {}
-    // },
+    async submitForm() {
+      try {
+        const response = await FormService.createResponse(
+          this.formId,
+          this.response
+        );
+        alert("Form submitted successfully!");
+        console.log("Response saved:", response.data);
+      } catch (error) {
+        console.error("Error submitting response:", error);
+      }
+    },
   },
 };
 </script>

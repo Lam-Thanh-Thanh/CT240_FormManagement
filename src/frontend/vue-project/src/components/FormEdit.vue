@@ -49,7 +49,7 @@
     <form @submit.prevent="updateForm" class="space-y-4">
       <!-- Tên form -->
       <div
-        class="p-6 bg-white rounded-lg shadow-md mt-0 my-40 m-80 border-t-pink-800 border-t-8"
+        class="p-6 bg-white rounded-lg shadow-md mt-0 my-40 m-44 border-t-pink-800 border-t-8"
       >
         <div class="my-5 mx-3">
           <label for="formTitle" class="block font-medium">Title:</label>
@@ -133,13 +133,11 @@ export default {
       this.form.questions.push({
         content: "",
         formId: "",
-        type: "radio",
+        type: "text",
         options: [],
         // answer: [],
-        TextOption: "",
+
         open: false,
-        showChooseOption: true,
-        showTextOption: false,
       });
       console.log("Added question:", this.form.questions);
     },
@@ -155,7 +153,14 @@ export default {
       alert("Project đã được update thành công!");
     },
 
-    formExport() {},
+    formExport() {
+      try {
+        this.$router.push({
+          name: "form-export",
+          params: { formId: this.formId },
+        });
+      } catch (error) {}
+    },
   },
 };
 </script>

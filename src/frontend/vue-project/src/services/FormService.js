@@ -25,4 +25,8 @@ export default {
       updatedformData
     );
   },
+
+  createResponse(formId, responseData) {
+    return apiClient.post(`forms/${formId}/response`, responseData);
+  },
 };

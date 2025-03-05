@@ -45,7 +45,7 @@ const router = createRouter({
       props: true,
     },
     {
-      path: "/projects/:projectId/forms/:formId/export",
+      path: "/:formId/",
       name: "form-export",
       component: FormExport,
       props: true,

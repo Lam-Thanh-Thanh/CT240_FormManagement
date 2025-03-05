@@ -103,13 +103,11 @@ export default {
       this.form.questions.push({
         content: "",
         formId: "",
-        type: "radio",
+        type: "text",
         options: [],
         // answer: [],
-        TextOption: "",
+
         open: false,
-        showChooseOption: true,
-        showTextOption: false,
       });
       console.log("Added question:", this.form.questions);
     },
