@@ -44,14 +44,10 @@ public class FormController {
     }
 
     @PutMapping("/{projectId}/forms/{formId}/update")
-    public ResponseEntity<Form> updateForm(@PathVariable("projectId") String projectId, @PathVariable("formId") String formId, @RequestBody Form form) {
-        try {
-            Form updatedForm   = formService.updateForm(formId, form);
-            projectService.updateFormToProject(projectId, formId,updatedForm);
-            return ResponseEntity.ok(updatedForm);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Form> updateForm(@PathVariable("projectId") String projectId, @PathVariable("formId") String formId, @RequestBody Form updatedForm) {
+        Form form = formService.updateForm(formId, updatedForm);
+        projectService.updateFormToProject(projectId,formId, updatedForm);
+        return ResponseEntity.ok(form);
     }
 
     @DeleteMapping("/{projectId}/forms/{formId}/delete")

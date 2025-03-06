@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface ResponseRepository extends MongoRepository<Response, String> {
     List<Response> getAllByFormId(String formId);
+
+    Iterable<Object> findByFormId(String formId);
 }

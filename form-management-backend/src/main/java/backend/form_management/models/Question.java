@@ -20,5 +20,6 @@ public class Question {
     private String formId;
     private String type;    //
     private List<Option> options;
+//    private List<Answer> answers;
 
 }

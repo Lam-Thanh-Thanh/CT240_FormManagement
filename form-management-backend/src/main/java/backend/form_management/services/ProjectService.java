@@ -49,9 +49,16 @@ public class ProjectService {
         Optional<Project> optionalProject = projectRepository.findById(projectId);
         if (optionalProject.isPresent()) {
             Project project = optionalProject.get();
-            project.getForms().removeIf(form -> form.getId().equals(formId));    //delete old form
-            project.getForms().add(updatedForm);        //add new form
+            // Tìm form trong danh sách forms
+            for (int i = 0; i < project.getForms().size(); i++) {
+                if (project.getForms().get(i).getId().equals(formId)) {
+                    project.getForms().set(i, updatedForm); // Cập nhật form
+                    break;
+                }
+            }      //add new form
             projectRepository.save(project);
+        } else {
+            throw new RuntimeException("Project not found");
         }
     }
 
