@@ -133,7 +133,7 @@ export default {
     async addMoreQuestion() {
       const newQuestion = {
         content: "",
-        formId: "",
+        formId: this.formId,
         type: "text",
         options: [],
         // answer: [],
