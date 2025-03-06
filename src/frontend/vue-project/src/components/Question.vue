@@ -4,8 +4,8 @@
       <!-- question -->
 
       <div
-        v-for="(question, index) in questions"
-        :key="index"
+        v-for="question in questions"
+        :key="question.id"
         class="mx-5 my-20 border-l-pink-800 border-l-4 shadow-md hover:shadow-sm shadow-myLightGray transition duration-300 ease-in-out rounded flex flex-row items-center justify-between p-7 pl-9"
       >
         <div class="w-[90%]">
@@ -129,7 +129,11 @@
         </div>
         <!-- delete question -->
         <div class="w-[10%] flex flex-row items-center justify-around">
-          <button v-on:click="deleteQuestion(index)" class="" type="button">
+          <button
+            v-on:click="deleteQuestion(question.id)"
+            class=""
+            type="button"
+          >
             <i class="fa-regular fa-trash-can"></i>
           </button>
         </div>
@@ -178,8 +182,8 @@ export default {
       console.log("Added question:", question.options);
     },
 
-    async deleteQuestion(index) {
-      this.questions.splice(index, 1);
+    async deleteQuestion(questionId) {
+      this.questions.splice(questionId, 1);
     },
   },
 };

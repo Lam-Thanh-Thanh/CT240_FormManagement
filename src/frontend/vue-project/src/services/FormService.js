@@ -26,6 +26,10 @@ export default {
     );
   },
 
+  deleteFormOfProject(projectId, formId) {
+    return apiClient.delete(`/${projectId}/forms/${formId}/delete`);
+  },
+
   createResponse(formId, responseData) {
     return apiClient.post(`forms/${formId}/response`, responseData);
   },

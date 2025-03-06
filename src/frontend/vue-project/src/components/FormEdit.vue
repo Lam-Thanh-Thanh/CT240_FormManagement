@@ -106,6 +106,7 @@
 <script>
 import FormService from "@/services/FormService";
 import Question from "./Question.vue";
+
 export default {
   components: { Question },
   props: ["projectId", "formId"],
@@ -129,8 +130,8 @@ export default {
         console.error("There was an error getting form details:", error);
       }
     },
-    addMoreQuestion() {
-      this.form.questions.push({
+    async addMoreQuestion() {
+      const newQuestion = {
         content: "",
         formId: "",
         type: "text",
@@ -138,7 +139,9 @@ export default {
         // answer: [],
 
         open: false,
-      });
+      };
+      this.form.questions.push(newQuestion);
+
       console.log("Added question:", this.form.questions);
     },
 

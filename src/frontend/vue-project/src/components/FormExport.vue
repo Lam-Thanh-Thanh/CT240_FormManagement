@@ -70,9 +70,8 @@
             <!-- question.type -->
             <input
               type="radio"
-              :name="'radio-' + qIndex"
               :value="option.optionContent"
-              v-model="response.answers[qIndex].selectedOptions"
+              v-model="response.answers[qIndex].answerText"
             />
 
             <p>{{ option.optionContent }}</p>
@@ -126,7 +125,7 @@
             class="flex flex-row items-center gap-4"
           >
             <!-- question.type -->
-            <input type="file" />
+            <!-- <input type="file" /> -->
           </div>
         </div>
       </div>
@@ -170,8 +169,12 @@ export default {
         const response = await FormService.getFormDetails(this.formId);
         this.form = response.data;
 
+        console.log("🚀 API Response:", this.form); // Kiểm tra toàn bộ dữ liệu trả về
+        console.log("✅ Questions:", this.form.questions); // Kiểm tra danh sách câu hỏi
+
         // Khởi tạo response.answers với cấu trúc đúng
         this.response.answers = this.form.questions.map((q) => ({
+          responseId: this.response.id,
           questionId: q.id,
           answerText: "",
           selectedOptions: [],
@@ -191,6 +194,7 @@ export default {
         alert("Form submitted successfully!");
         console.log("Response saved:", response.data);
       } catch (error) {
+        // console.log("errrrr", this.response);
         console.error("Error submitting response:", error);
       }
     },

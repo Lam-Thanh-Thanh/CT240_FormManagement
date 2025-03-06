@@ -43,26 +43,36 @@
 
     <!-- form list -->
     <div class="flex flex-wrap gap-14 justify-start mx-20 mt-32 mb-48">
-      <button
+      <div
+        class="w-[22%] bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
         v-for="form in project.forms"
         :key="form.id"
-        v-on:click="viewFormDetails(form.id)"
-        class="w-[22%] bg-white shadow-lg hover:shadow-md rounded-2xl text-left transition duration-300 ease-in-out"
       >
-        <div
-          class="font-bold text-lg bg-gray-200 border-2 border-myLightNavy rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
-        >
-          <!-- //here//////////// -->
-          {{ form.title }}
-        </div>
-        <div class="py-3 px-4">
-          <p class="overflow-hidden whitespace-nowrap overflow-ellipsis">
-            {{ form.description }}
-          </p>
-          <p class="">Date:</p>
-        </div>
-      </button>
+        <button v-on:click="viewFormDetails(form.id)" class="w-full text-left">
+          <div
+            class="font-bold text-lg bg-gray-200 border-2 border-myLightNavy rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
+          >
+            {{ form.title }}
+          </div>
+          <div class="py-3 px-4">
+            <p class="overflow-hidden whitespace-nowrap overflow-ellipsis">
+              {{ form.description }}
+            </p>
+            <p class="">Date:</p>
+          </div>
+          <!-- delete form -->
+        </button>
 
+        <button
+          type="button"
+          v-on:click="deleteForm(form.id)"
+          class="float-right pb-3 px-6"
+        >
+          <i
+            class="fa-regular fa-trash-can hover:bg-gray-200 p-2 rounded-full text-gray-400 hover:text-gray-700"
+          ></i>
+        </button>
+      </div>
       <!-- create new -->
 
       <button
@@ -79,6 +89,7 @@
 
 <script>
 import ProjectService from "@/services/ProjectService";
+import FormService from "@/services/FormService";
 export default {
   props: ["projectId"],
   data() {
@@ -120,6 +131,15 @@ export default {
           params: { projectId: this.projectId },
         });
       } catch (error) {}
+    },
+    async deleteForm(formId) {
+      const response = await FormService.deleteFormOfProject(
+        this.projectId,
+        formId
+      );
+      this.project.forms.splice(formId, 1);
+
+      console.log(response.data);
     },
   },
 };

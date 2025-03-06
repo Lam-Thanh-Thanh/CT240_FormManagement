@@ -17,4 +17,7 @@ export default {
   getProjectDetials(projectId) {
     return apiClient.get(`/${projectId}`);
   },
+  deleteProject(projectId) {
+    return apiClient.delete(`/${projectId}`);
+  },
 };

@@ -44,15 +44,30 @@ public class ProjectService {
         }
     }
 
-    //add form to project
+    //update form of project
     public void updateFormToProject(String projectId, String formId, Form updatedForm) {
         Optional<Project> optionalProject = projectRepository.findById(projectId);
         if (optionalProject.isPresent()) {
             Project project = optionalProject.get();
-project.getForms().removeIf(form -> form.getId().equals(formId));
-            project.getForms().add(updatedForm);
+            project.getForms().removeIf(form -> form.getId().equals(formId));    //delete old form
+            project.getForms().add(updatedForm);        //add new form
             projectRepository.save(project);
         }
+    }
+
+    //delete form of project
+    public void deleteFormOfProject(String projectId, String formId) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        if (optionalProject.isPresent()) {
+            Project project = optionalProject.get();
+            project.getForms().removeIf(form -> form.getId().equals(formId));
+            projectRepository.save(project);
+        }
+    }
+
+    //delete project
+    public void deleteProject(String projectId) {
+        projectRepository.deleteById(projectId);
     }
 
 

@@ -3,6 +3,7 @@ package backend.form_management.controllers;
 import backend.form_management.models.Form;
 import backend.form_management.models.Project;
 import backend.form_management.repositories.FormRepository;
+import backend.form_management.repositories.ProjectRepository;
 import backend.form_management.services.FormService;
 import backend.form_management.services.ProjectService;
 import org.bson.types.ObjectId;
@@ -23,6 +24,7 @@ public class FormController {
     @Autowired
     private ProjectService projectService ;
 
+
 //    @GetMapping("")
 //    public ResponseEntity<List<Form>> getAllFormOfProject(@PathVariable("projectId")String projectId) {
 //        return new ResponseEntity<>(formService.getAllFormsByProjectId(projectId), HttpStatus.OK);
@@ -42,7 +44,7 @@ public class FormController {
     }
 
     @PutMapping("/{projectId}/forms/{formId}/update")
-    public ResponseEntity<Form> getFormDetails(@PathVariable("projectId") String projectId, @PathVariable("formId") String formId, @RequestBody Form form) {
+    public ResponseEntity<Form> updateForm(@PathVariable("projectId") String projectId, @PathVariable("formId") String formId, @RequestBody Form form) {
         try {
             Form updatedForm   = formService.updateForm(formId, form);
             projectService.updateFormToProject(projectId, formId,updatedForm);
@@ -51,6 +53,17 @@ public class FormController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping("/{projectId}/forms/{formId}/delete")
+    public ResponseEntity<String> deleteFormOfProject(@PathVariable("projectId") String projectId, @PathVariable("formId") String formId) {
+            projectService.deleteFormOfProject(projectId, formId);
+        formService.deleteForm(formId);
+
+        return ResponseEntity.ok("Form deleted successfully");
+    }
+
+    
+
 
 
 }

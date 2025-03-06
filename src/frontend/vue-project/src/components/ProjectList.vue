@@ -3,24 +3,32 @@
   <div class="flex flex-wrap pt-0 p-28 py-40 gap-20 justify-center m-20">
     <!-- project list -->
 
-    <button
+    <div
       v-for="project in projects"
       :key="project.id"
-      v-on:click="viewProjectDetails(project.id)"
       class="w-[25%] bg-white shadow-lg hover:shadow-md rounded-2xl text-left transition duration-300 ease-in-out"
     >
-      <div
-        class="font-bold text-lg bg-pink-50 border-2 border-pink-700 rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
-      >
-        {{ project.name }}
+      <button v-on:click="viewProjectDetails(project.id)" class="w-full">
+        <div
+          class="font-bold text-lg bg-pink-50 border-2 border-pink-700 rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
+        >
+          {{ project.name }}
+        </div>
+        <div class="py-5 px-4">
+          <p class="line-clamp-2">
+            {{ project.description }}
+          </p>
+        </div>
+      </button>
+      <!-- delete project-->
+      <div class="text-right pb-3 px-6">
+        <button v-on:click="deleteProject(project.id)">
+          <i
+            class="fa-regular fa-trash-can hover:bg-gray-200 p-2 rounded-full text-gray-400 hover:text-gray-700"
+          ></i>
+        </button>
       </div>
-      <div class="py-5 px-4">
-        <p class="line-clamp-1">
-          {{ project.description }}
-        </p>
-      </div>
-    </button>
-
+    </div>
     <!-- create new -->
 
     <button
@@ -69,6 +77,11 @@ export default {
           name: "project-create",
         });
       } catch (error) {}
+    },
+    async deleteProject(projectId) {
+      const response = await ProjectService.deleteProject(projectId);
+      this.projects.splice(projectId, 1);
+      console.log(response.data);
     },
   },
 };
