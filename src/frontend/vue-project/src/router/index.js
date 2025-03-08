@@ -10,7 +10,7 @@ import FormEdit from "@/components/FormEdit.vue";
 import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 // import Auth from "@/views/Auth.vue";
-import AuthForm from "@/views/AuthForm.vue";
+import AuthForm from "@/components/AuthForm.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
