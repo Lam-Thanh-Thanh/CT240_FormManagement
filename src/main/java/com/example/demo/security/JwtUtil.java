@@ -4,6 +4,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import javax.crypto.SecretKey;
+
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import java.util.Date;
 
@@ -31,11 +33,12 @@ public class JwtUtil {
         return parser.parseSignedClaims(token).getPayload().getSubject(); // Đổi parseClaimsJws thành parseSignedClaims
     }
 
-    public boolean validateToken(String token, String username) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         try {
             JwtParser parser = Jwts.parser().verifyWith(getSigningKey()).build();
             Jws<Claims> claimsJws = parser.parseSignedClaims(token); // Sử dụng parseSignedClaims thay vì parseClaimsJws
-            return claimsJws.getPayload().getSubject().equals(username) && !isTokenExpired(token);
+            String username = claimsJws.getPayload().getSubject();
+            return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
