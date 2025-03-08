@@ -9,19 +9,12 @@
     </div>
     <nav class="flex justify-between items-center">
       <router-link to="/" class="text-xl font-normal px-7 hover:text-gray-900"
-        ><span
-          class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out"
-          >Home</span
-        ></router-link
+        >Home</router-link
       >
       <router-link
         to="/projects"
         class="text-xl font-normal px-7 hover:text-gray-900"
-      >
-        <span
-          class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out"
-          >Projects</span
-        ></router-link
+        >Projects</router-link
       >
       <div>
         <router-link

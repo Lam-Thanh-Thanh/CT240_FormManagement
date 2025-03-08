@@ -4,11 +4,11 @@
     <form @submit.prevent="submitForm" class="space-y-4">
       <!-- Tên Project -->
       <div>
-        <label for="projectName" class="block">Title:</label>
+        <label for="projectName" class="block">Name</label>
         <input
           type="text"
           id="projectName"
-          v-model="form.formTitle"
+          v-model="form.projectName"
           class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
@@ -16,10 +16,10 @@
 
       <!-- Mô tả Project -->
       <div>
-        <label for="projectDescription" class="block">Description:</label>
+        <label for="projectDescription" class="block">Description</label>
         <textarea
           id="projectDescription"
-          v-model="form.formDescription"
+          v-model="form.projectDescription"
           class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           rows="4"
           required
@@ -32,7 +32,7 @@
           type="submit"
           class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          Add form
+          Create Project
         </button>
       </div>
     </form>
@@ -44,8 +44,8 @@ export default {
   data() {
     return {
       form: {
-        formTitle: "",
-        formDescription: "",
+        projectName: "",
+        projectDescription: "",
       },
     };
   },

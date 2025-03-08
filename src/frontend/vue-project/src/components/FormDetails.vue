@@ -1,35 +1,11 @@
 <template>
-  <!-- dropdown -->
-  <div class="flex gap-16 items-start mx-60 my-32 justify-between">
-    <h1 class="text-4xl font-extrabold">Form Details</h1>
-    <div class="text-right">
-      <button
-        v-on:click="open = !open"
-        class="bg-zinc-200 rounded-full px-2 py-1 m-2 hover:shadow-lg"
-      >
-        <i class="fa-solid fa-ellipsis"></i>
-      </button>
-      <div class="shadow-lg" v-if="open">
-        <div class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2">
-          <button class="">View Results</button>
-        </div>
-
-        <div class="hover:bg-zinc-200 px-2 py-1 border-b-gray-100 border-b-2">
-          <button v-on:click="editForm" class="">Edit</button>
-        </div>
-        <div class="hover:bg-red-400 px-2 py-1">
-          <button class="">Delete</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  <h1 class="text-center m-32 text-4xl font-extrabold">Form Details</h1>
   <div class="mt-0 m-40">
-    <!-- Form information -->
+    <!-- project information -->
     <div class="text-left mx-20 my-32">
       <div class="pb-3">
-        <span class="font-bold pr-2">Title:</span>
-        <span class=""> {{ oldTitle }}</span>
+        <span class="font-bold pr-2">Name:</span>
+        <span class="">Project 1</span>
       </div>
       <div class="pb-3">
         <span class="font-bold pr-2">Description:</span>
@@ -40,40 +16,36 @@
         >
       </div>
       <div class="pb-3">
-        <span class="font-bold pr-2">Project Name:</span>
-        <span class="">Project 1</span>
-      </div>
-      <div class="pb-3">
-        <span class="font-bold pr-2">Create at:</span>
+        <span class="font-bold pr-2">Date created:</span>
         <span class="">Date</span>
       </div>
-      <div class="pb-3">
-        <span class="font-bold pr-2">Update at:</span>
-        <span class="">Date</span>
-      </div>
+    </div>
+    <div class="text-center">
+      <button
+        v-on:click="editFormInfo"
+        class="bg-yellow-400 text-black bg-opacity-85 px-3 py-1 shadow-md hover:shadow-lg mx-3"
+      >
+        <span class="m-2">View Results</span>
+        <i class="fa-solid fa-pen-to-square"></i>
+      </button>
+      <button
+        v-on:click="editFormInfo"
+        class="bg-slate-200 hover:bg-red-700 hover:text-white bg-opacity-85 px-3 py-1 shadow-md hover:shadow-lg mx-3"
+      >
+        <span class="m-2">Edit</span>
+        <i class="fa-solid fa-pen-to-square"></i>
+      </button>
+      <button
+        v-on:click="editFormInfo"
+        class="bg-slate-200 hover:bg-red-700 hover:text-white bg-opacity-85 px-3 py-1 shadow-md hover:shadow-lg mx-3"
+      >
+        <span class="m-2">Delete</span>
+        <i class="fa-solid fa-trash"></i>
+      </button>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      open: false,
-      oldTitle: "form1",
-    };
-  },
-  methods: {
-    editForm() {
-      try {
-        this.$router.push({
-          name: "form-edit",
-          query: { oldTitle: this.oldTitle },
-        });
-      } catch (error) {}
-    },
-  },
-};
-</script>
+<script setup></script>
 
 <style lang="scss" scoped></style>
