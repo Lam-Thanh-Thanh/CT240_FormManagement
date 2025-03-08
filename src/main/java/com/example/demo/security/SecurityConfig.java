@@ -26,7 +26,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/responses/**").permitAll() //  Mở API khảo sát
                 .requestMatchers("/api/reports/**").permitAll() //  Mở API thống kê
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()// Mở Swagger
-                .anyRequest().authenticated())  // Các request khác cần authentication
+                // .anyRequest().authenticated()// Các request khác cần authentication
+                )  
+                
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // Không lưu session
             .httpBasic(httpBasic -> httpBasic.disable())  // Tắt xác thực HTTP Basic
@@ -39,7 +41,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://127.0.0.1:5500", "http://localhost:5500")); // 🚀 Thêm domain frontend
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5500")); // 🚀 Thêm domain frontend
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true); // Hỗ trợ gửi cookie/token nếu cần

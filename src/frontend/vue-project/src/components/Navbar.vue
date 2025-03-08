@@ -30,10 +30,28 @@
           ><i class="fa-regular fa-user"></i
         ></router-link>
       </div>
+      <button v-if="isAuthenticated" @click="handleLogout" class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
+      Đăng xuất
+      </button>
     </nav>
   </header>
 </template>
 
-<script setup></script>
+<script>
+import { AuthService } from "@/api/authService";
 
+export default {
+  computed: {
+    isAuthenticated() {
+      return AuthService.isAuthenticated();
+    },
+  },
+  methods: {
+    handleLogout() {
+      AuthService.removeToken();
+      this.$router.push("/");
+    },
+  },
+};
+</script>
 <style lang="scss" scoped></style>
