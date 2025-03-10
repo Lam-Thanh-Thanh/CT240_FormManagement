@@ -4,8 +4,8 @@
     <!-- project list -->
 
     <div
-      v-for="project in projects"
-      :key="project.id"
+      v-for="(project, index) in projects"
+      :key="index"
       class="w-[25%] bg-white shadow-lg hover:shadow-md rounded-2xl text-left transition duration-300 ease-in-out"
     >
       <button v-on:click="viewProjectDetails(project.id)" class="w-full">
@@ -22,7 +22,7 @@
       </button>
       <!-- delete project-->
       <div class="text-right pb-3 px-6">
-        <button v-on:click="deleteProject(project.id)">
+        <button v-on:click="deleteProject(index)">
           <i
             class="fa-regular fa-trash-can hover:bg-gray-200 p-2 rounded-full text-gray-400 hover:text-gray-700"
           ></i>
@@ -78,9 +78,11 @@ export default {
         });
       } catch (error) {}
     },
-    async deleteProject(projectId) {
-      const response = await ProjectService.deleteProject(projectId);
-      this.projects.splice(projectId, 1);
+    async deleteProject(index) {
+      const response = await ProjectService.deleteProject(
+        this.projects[index].id
+      );
+      this.projects.splice(index, 1);
       console.log(response.data);
     },
   },

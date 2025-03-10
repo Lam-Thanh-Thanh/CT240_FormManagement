@@ -50,31 +50,37 @@
     <div
       v-for="(question, qIndex) in form.questions"
       :key="qIndex"
-      class="mx-32 my-20 shadow-lg shadow-myLightGray p-6 rounded border-t-pink-800 border-t-4"
+      class="mx-32 my-20 shadow-lg shadow-myLightGray p-14 rounded border-t-pink-800 border-t-4"
     >
       <!-- content -->
       <div class="flex row justify-between items-start">
         <div class="w-[80%]">
-          <p>{{ question.content }}</p>
+          <p class="font-semibold">{{ question.content }}</p>
         </div>
       </div>
       <!-- option -->
-      <div class="mt-7">
-        <div class="flex flex-col">
+      <div class="mt-16">
+        <div class="flex flex-col gap-7">
           <div
             v-if="question.type === 'radio'"
             v-for="(option, oIndex) in question.options"
             :key="oIndex"
-            class="flex flex-row items-center gap-4"
+            class="flex flex-col gap-2"
           >
+            <!-- image view-->
+            <div v-if="option.imageUrl" class="w-[70%]">
+              <img :src="option.imageUrl" alt="Uploaded" width="100%" />
+            </div>
             <!-- question.type -->
-            <input
-              type="radio"
-              :value="option.optionContent"
-              v-model="response.answers[qIndex].answerText"
-            />
+            <div class="flex gap-4">
+              <input
+                type="radio"
+                :value="option.optionContent"
+                v-model="response.answers[qIndex].answerText"
+              />
 
-            <p>{{ option.optionContent }}</p>
+              <p>{{ option.optionContent }}</p>
+            </div>
           </div>
         </div>
       </div>

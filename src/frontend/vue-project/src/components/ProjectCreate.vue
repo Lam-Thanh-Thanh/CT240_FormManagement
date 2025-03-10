@@ -62,6 +62,10 @@ export default {
         console.log("Project created:", response.data);
         alert("Project created sucessfully !!");
         this.resetForm();
+        this.$router.push({
+          name: "project-details",
+          params: { projectId: response.data.id },
+        });
       } catch (error) {
         console.error("There was an error creating the project:", error);
         alert("Project creation failed !!");

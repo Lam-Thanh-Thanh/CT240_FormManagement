@@ -87,6 +87,10 @@ export default {
       console.log("Form submitted:", this.form);
       alert("Project đã được thêm thành công!");
       this.resetForm();
+      this.$router.push({
+        name: "project-details",
+        params: { projectId: this.projectId },
+      });
     },
     resetForm() {
       this.form = {

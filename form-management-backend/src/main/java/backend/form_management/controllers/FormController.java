@@ -1,18 +1,16 @@
 package backend.form_management.controllers;
 
 import backend.form_management.models.Form;
-import backend.form_management.models.Project;
-import backend.form_management.repositories.FormRepository;
-import backend.form_management.repositories.ProjectRepository;
+import backend.form_management.services.CloudinaryService;
 import backend.form_management.services.FormService;
 import backend.form_management.services.ProjectService;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.io.IOException;
 import java.util.Optional;
 
 @RestController
@@ -20,10 +18,10 @@ import java.util.Optional;
 public class FormController {
     @Autowired
     private FormService formService ;
-
     @Autowired
     private ProjectService projectService ;
-
+    @Autowired
+    private CloudinaryService cloudinaryService ;
 
 //    @GetMapping("")
 //    public ResponseEntity<List<Form>> getAllFormOfProject(@PathVariable("projectId")String projectId) {
@@ -43,6 +41,8 @@ public class FormController {
         return createdForm;
     }
 
+
+
     @PutMapping("/{projectId}/forms/{formId}/update")
     public ResponseEntity<Form> updateForm(@PathVariable("projectId") String projectId, @PathVariable("formId") String formId, @RequestBody Form updatedForm) {
         Form form = formService.updateForm(formId, updatedForm);
@@ -58,7 +58,29 @@ public class FormController {
         return ResponseEntity.ok("Form deleted successfully");
     }
 
-    
+    @PostMapping("/upload-image")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+        try {
+            String imageUrl = cloudinaryService.uploadFile(file);
+            return ResponseEntity.ok(imageUrl);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
+        }
+    }
+
+    @DeleteMapping("/delete-image")
+    public ResponseEntity<String> deleteImage(String publicId) {
+        try {
+            String result = cloudinaryService.deleteFile(publicId);
+            if ("ok".equals(result)) {
+                return ResponseEntity.ok("Image deleted successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Failed to delete image");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
+    }
 
 
 

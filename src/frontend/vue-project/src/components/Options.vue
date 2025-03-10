@@ -1,12 +1,24 @@
 <template>
-  <div class="">
-    <!-- option -->
-    <div
-      v-for="(option, index) in options"
-      :key="index"
-      class="flex flex-row justify-between items-center"
-    >
-      <div class="flex flex-row items-center w-[80%]">
+  <!-- option -->
+  <div
+    v-for="(option, index) in options"
+    :key="index"
+    class="flex flex-col justify-between gap-5"
+  >
+    <!-- image view-->
+    <div v-if="option.imageUrl" class="w-[80%] relative">
+      <img :src="option.imageUrl" alt="Uploaded" width="100%" />
+
+      <button
+        type="button"
+        @click="removeImage(option)"
+        class="absolute -top-2 -right-2 bg-gray-300 text-black rounded-full"
+      >
+        <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
+      </button>
+    </div>
+    <div class="flex flex-row justify-between items-center w-[100%]">
+      <div class="flex flex-row w-[100%]">
         <input
           :type="inputType"
           name="radioOption"
@@ -23,19 +35,31 @@
       </div>
       <!--add image, delete button -->
       <div class="w-[20%] m-5 text-center flex justify-around">
-        <button v-on:click="addImage" class="">
-          <i class="fa-regular fa-image"></i>
-        </button>
-        <button v-on:click="deleteOption(index)" class="">
+        <div>
+          <!-- Icon thay thế nút Choose File -->
+          <label :for="'file-upload-' + index" class="upload-label">
+            <i class="fa-regular fa-image"></i>
+          </label>
+          <input
+            :id="'file-upload-' + index"
+            type="file"
+            @change="addImageToOption($event, option)"
+            accept="image/*"
+            class="hidden"
+          />
+        </div>
+        <!-- delete -->
+        <button v-on:click="deleteOption(index)" class="" type="button">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
     </div>
-    <!-- more option button -->
   </div>
 </template>
 
 <script>
+import CloudinaryService from "@/services/CloudinaryService";
+
 export default {
   props: {
     inputType: {
@@ -50,8 +74,44 @@ export default {
     deleteOption(index) {
       this.options.splice(index, 1);
     },
+
+    async addImageToOption(event, option) {
+      const file = event.target.files[0];
+
+      if (!file) {
+        console.error("No file selected");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+      console.log("Uploading file:", file);
+      console.log("FormData content:", formData.get("file")); // Kiểm tra dữ liệu gửi đi
+
+      try {
+        const response = await CloudinaryService.uploadImage(formData);
+        console.log("URL", response.data);
+        option.imageUrl = response.data;
+        const parts = response.data.split("/");
+        const fileName = parts.pop().split(".")[0]; // Lấy tên file không có đuôi mở rộng
+        option.publicId = fileName;
+      } catch (error) {
+        console.error("Image upload failed", error);
+      }
+    },
+    async removeImage(option) {
+      if (!option.imageUrl) return;
+
+      try {
+        await CloudinaryService.deleteImage(option.publicId);
+        option.imageUrl = ""; // Xóa ảnh trong UI khi thành công
+        option.publicId = "";
+        console.log("Image deleted successfully");
+      } catch (error) {
+        console.error("Error deleting image", error);
+      }
+    },
   },
-  //save without button
 };
 </script>
 

@@ -17,6 +17,8 @@ public class Option {
 
     private String questionId;
     private String optionContent;
+    private String imageUrl;
+    private String publicId;
     private boolean isChecked ;
 
 }

@@ -45,8 +45,8 @@
     <div class="flex flex-wrap gap-14 justify-start mx-20 mt-32 mb-48">
       <div
         class="w-[22%] bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
-        v-for="form in project.forms"
-        :key="form.id"
+        v-for="(form, index) in project.forms"
+        :key="index"
       >
         <button v-on:click="viewFormDetails(form.id)" class="w-full text-left">
           <div
@@ -65,7 +65,7 @@
 
         <button
           type="button"
-          v-on:click="deleteForm(form.id)"
+          v-on:click="deleteForm(index)"
           class="float-right pb-3 px-6"
         >
           <i
@@ -132,12 +132,12 @@ export default {
         });
       } catch (error) {}
     },
-    async deleteForm(formId) {
+    async deleteForm(index) {
       const response = await FormService.deleteFormOfProject(
         this.projectId,
-        formId
+        this.project.forms[index].id
       );
-      this.project.forms.splice(formId, 1);
+      this.project.forms.splice(index, 1);
 
       console.log(response.data);
     },

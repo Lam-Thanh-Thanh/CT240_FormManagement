@@ -61,10 +61,10 @@ public class FormService {
                         question.setId(UUID.randomUUID().toString());
                     }
             }
+
             existingForm.setTitle(updatedForm.getTitle());
             existingForm.setDescription(updatedForm.getDescription());
             existingForm.setQuestions(updatedForm.getQuestions());
-
 
             // Lưu danh sách questionId mới
             Set<String> newQuestionIds = updatedForm.getQuestions().stream()
@@ -74,12 +74,10 @@ public class FormService {
             //old - new
             oldQuestionIds.removeAll(newQuestionIds);
 
-
             // Nếu có question bị xóa, cập nhật response để xóa answers liên quan
             if (!oldQuestionIds.isEmpty()) {
                 responseService.removeAnswersByQuestionIds(formId, oldQuestionIds);
             }
-
             return formRepository.save(existingForm);
         } else {
             throw new RuntimeException("Form not found");
@@ -89,9 +87,7 @@ public class FormService {
     //delete form
     public void deleteForm(String formId) {
         formRepository.deleteById(formId);
-
         List<Response> responses = responseService.getAllResponseByFormId(formId);
-
         for (Response response : responses) {
           responseService.deleteResponse(response.getId());
         }
@@ -102,6 +98,9 @@ public class FormService {
         return formRepository.findAllByProjectId(projectId);
     }
 
+
+    //upload image
+    
 
 
 
