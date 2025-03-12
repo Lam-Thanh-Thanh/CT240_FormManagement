@@ -1,6 +1,6 @@
-package com.example.demo.repository;
+package backend.form_management.repositories;
 
-import com.example.demo.model.User;
+import backend.form_management.models.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
