@@ -29,15 +29,11 @@
     <div class="text-left mx-20 my-32">
       <div class="pb-3">
         <span class="font-bold pr-2">Name:</span>
-        <span class="">Project 1</span>
+        <span class="">{{ project.name }}</span>
       </div>
       <div class="pb-3">
         <span class="font-bold pr-2">Description:</span>
-        <span class=""
-          >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum
-          libero eaque omnis quia dignissimos, fugiat praesentium illum
-          excepturi temporibus corporis.</span
-        >
+        <span class="">{{ project.description }}</span>
       </div>
       <div class="pb-3">
         <span class="font-bold pr-2">Date created:</span>
@@ -47,24 +43,36 @@
 
     <!-- form list -->
     <div class="flex flex-wrap gap-14 justify-start mx-20 mt-32 mb-48">
-      <button
-        v-on:click="viewFormDetails"
-        class="w-[22%] bg-white shadow-md hover:shadow-lg rounded-2xl text-left"
+      <div
+        class="w-[22%] bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
+        v-for="(form, index) in project.forms"
+        :key="index"
       >
-        <div
-          class="font-bold text-lg bg-slate-300 rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
-        >
-          form 1
-        </div>
-        <div class="py-3 px-4">
-          <p class="overflow-hidden whitespace-nowrap overflow-ellipsis">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio,
-            ipsum?
-          </p>
-          <p class="">Date:</p>
-        </div>
-      </button>
+        <button v-on:click="viewFormDetails(form.id)" class="w-full text-left">
+          <div
+            class="font-bold text-lg bg-gray-200 border-2 border-myLightNavy rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
+          >
+            {{ form.title }}
+          </div>
+          <div class="py-3 px-4">
+            <p class="overflow-hidden whitespace-nowrap overflow-ellipsis">
+              {{ form.description }}
+            </p>
+            <p class="">Date:</p>
+          </div>
+          <!-- delete form -->
+        </button>
 
+        <button
+          type="button"
+          v-on:click="deleteForm(index)"
+          class="float-right pb-3 px-6"
+        >
+          <i
+            class="fa-regular fa-trash-can hover:bg-gray-200 p-2 rounded-full text-gray-400 hover:text-gray-700"
+          ></i>
+        </button>
+      </div>
       <!-- create new -->
 
       <button
@@ -80,17 +88,39 @@
 </template>
 
 <script>
+import ProjectService from "@/services/ProjectService";
+import FormService from "@/services/FormService";
 export default {
+  props: ["projectId"],
   data() {
     return {
       open: false,
+      project: "",
+      forms: [],
     };
   },
+  async created() {
+    await this.getProjectDetails();
+  },
   methods: {
-    viewFormDetails() {
+    async getProjectDetails() {
+      try {
+        const response = await ProjectService.getProjectDetials(this.projectId);
+        this.project = response.data;
+        //
+        // const response1 = await FormService.getAllFormOfProject(this.projectId);   //id
+        // this.form = response.data;
+
+        console.log(response.data);
+      } catch (error) {
+        console.error("There was an error getting project details:", error);
+      }
+    },
+    viewFormDetails(seletedFormId) {
       try {
         this.$router.push({
-          name: "form-details",
+          name: "form-edit",
+          params: { formId: seletedFormId, projectId: this.projectId },
         });
       } catch (error) {}
     },
@@ -98,8 +128,18 @@ export default {
       try {
         this.$router.push({
           name: "form-create",
+          params: { projectId: this.projectId },
         });
       } catch (error) {}
+    },
+    async deleteForm(index) {
+      const response = await FormService.deleteFormOfProject(
+        this.projectId,
+        this.project.forms[index].id
+      );
+      this.project.forms.splice(index, 1);
+
+      console.log(response.data);
     },
   },
 };

@@ -1,12 +1,13 @@
 <template>
   <header
-    class="flex justify-between items-center h-[60px] px-10 border-solid border-b-gray-200 border-b-2"
+    class="flex justify-between items-center h-[70px] px-10 border-solid border-b-gray-200 border-b-2"
   >
     <div>
       <router-link to="/" class="text-3xl font-black">
         <i class="fa-solid fa-leaf"></i> Form
       </router-link>
     </div>
+<<<<<<< HEAD
     <nav class="flex justify-between items-center relative">
       <router-link to="/" class="text-xl font-normal px-7 hover:text-gray-900">
         <span class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out">
@@ -19,6 +20,24 @@
         </span>
       </router-link>
 
+=======
+    <nav class="flex justify-between items-center">
+      <router-link to="/" class="text-xl font-normal px-7 hover:text-gray-900"
+        ><span
+          class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out"
+          >Home</span
+        ></router-link
+      >
+      <router-link
+        to="/projects"
+        class="text-xl font-normal px-7 hover:text-gray-900"
+      >
+        <span
+          class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out"
+          >Projects</span
+        ></router-link
+      >
+>>>>>>> origin/van
       <!-- Biểu tượng User -->
       <div class="relative">
         <button @click="toggleDropdown" class="text-xl font-bold pl-7 hover:text-gray-900 focus:outline-none">
@@ -48,7 +67,35 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import { AuthService } from "@/api/authService";
+=======
+import { AuthService } from "@/services/authService";
+
+export default {
+  data() {
+    return {
+      isDropdownOpen: false,
+    };
+  },
+  computed: {
+    isAuthenticated() {
+      return AuthService.isAuthenticated();
+    },
+  },
+  methods: {
+    toggleDropdown() {
+      this.isDropdownOpen = !this.isDropdownOpen;
+    },
+    handleLogout() {
+      AuthService.removeToken();
+      this.$router.push("/");
+      this.isDropdownOpen = false;
+    },
+  },
+};
+</script>
+>>>>>>> origin/van
 
 export default {
   data() {

@@ -1,73 +1,191 @@
 <template>
-  <div class="mb-60">
-    <h1 class="text-center m-32 mb-20 text-4xl font-extrabold">Form Edit</h1>
+  <div class="mb-20">
+    <div
+      v-for="(question, qindex) in questions"
+      :key="qindex"
+      class="flex flex-col"
+    >
+      <div class="flex flex-row">
+        <!-- question -->
 
-    <form @submit.prevent="" class="space-y-4">
-      <!-- Tên Project -->
-      <div
-        class="p-6 bg-white rounded-lg shadow-md mt-0 my-40 m-80 border-t-pink-800 border-t-8"
-      >
-        <div class="my-5 mx-3">
-          <label for="formTitle" class="block font-medium">Title:</label>
-          <input
-            type="text"
-            id="formTitle"
-            v-model="form.formTitle"
-            class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
-            required
-          />
+        <div
+          class="w-[90%] mx-5 my-10 border-l-pink-800 border-l-4 shadow-md hover:shadow-sm shadow-myLightGray transition duration-300 ease-in-out rounded flex flex-row items-center justify-between p-7"
+        >
+          <div class="w-[100%]">
+            <!-- content -->
+            <div class="flex row justify-between items-start">
+              <div class="w-[80%]">
+                <textarea
+                  id="projectDescription"
+                  v-model="question.content"
+                  class="w-full font-semibold border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
+                  rows="2"
+                  placeholder="Question title"
+                ></textarea>
+              </div>
+
+              <!-- dropdown -->
+              <div class="text-right w-[20%] mx-5">
+                <button
+                  v-on:click="question.open = !question.open"
+                  class="bg-zinc-200 px-2 py-1 hover:shadow-lg w-full"
+                  type="button"
+                >
+                  Type
+                </button>
+                <div class="shadow-lg" v-if="question.open">
+                  <div
+                    class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2"
+                  >
+                    <button
+                      v-on:click="changeOptionType(question, 'radio')"
+                      class=""
+                      type="button"
+                    >
+                      Radio
+                    </button>
+                  </div>
+
+                  <div
+                    class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2"
+                  >
+                    <button
+                      v-on:click="changeOptionType(question, 'checkbox')"
+                      class=""
+                      type="button"
+                    >
+                      Check box
+                    </button>
+                  </div>
+                  <div
+                    class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2"
+                  >
+                    <button
+                      v-on:click="changeOtherType(question, 'text')"
+                      class=""
+                      type="button"
+                    >
+                      Text
+                    </button>
+                  </div>
+                  <div
+                    class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2"
+                  >
+                    <button
+                      v-on:click="changeOtherType(question, 'file')"
+                      class=""
+                      type="button"
+                    >
+                      File
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- type -->
+            <div class="mt-20">
+              <!-- option -->
+              <div
+                v-if="question.type === 'radio' || question.type === 'checkbox'"
+              >
+                <Options
+                  :options="question.options"
+                  :input-type="question.type"
+                  v-model="question.options"
+                ></Options>
+                <!-- more options -->
+                <div>
+                  <button
+                    v-on:click="addMoreOption(question)"
+                    class=""
+                    type="button"
+                  >
+                    More option
+                  </button>
+                </div>
+              </div>
+              <!-- text -->
+              <div v-if="question.type === 'text'">
+                <div class="flex flex-row justify-between items-center">
+                  <div class="flex flex-row items-center w-[80%]">
+                    <input
+                      type="text"
+                      class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
+                      placeholder="Text..."
+                    />
+                  </div>
+                </div>
+              </div>
+              <!-- file -->
+              <div v-if="question.type === 'file'">
+                <div class="flex flex-row justify-between items-center">
+                  <div class="flex flex-row items-center w-[80%]">
+                    <input
+                      type="file"
+                      class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
+                      placeholder="Text..."
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <!-- Mô tả Project -->
-        <div class="my-5 mx-3">
-          <label for="projectDescription" class="block font-medium"
-            >Description:</label
-          >
-          <textarea
-            id="projectDescription"
-            v-model="form.formDescription"
-            class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
-            rows="4"
-            required
-          ></textarea>
-        </div>
-
-        <div class="text-center mt-10">
-          <button
-            v-on:click="addQuestion"
-            class="hover:bg-pink-800 hover:text-white text-pink-800 px-2 py-1 rounded-full border-pink-800 border transition duration-300 ease-in-out"
-          >
-            <i class="fa-solid fa-plus"></i>
+        <!-- delete question -->
+        <div class="w-[10%] flex flex-row items-center justify-around">
+          <button v-on:click="deleteQuestion(qindex)" class="" type="button">
+            <i class="fa-regular fa-trash-can"></i>
           </button>
         </div>
       </div>
-      <!-- Nút Submit -->
-    </form>
+    </div>
   </div>
 </template>
 
 <script>
+import Options from "./Options.vue";
+
 export default {
+  components: { Options },
+  props: {
+    questions: Array, // Nhận danh sách câu hỏi từ Form.vue
+  },
   data() {
     return {
-      form: {
-        formTitle: "",
-        formDescription: "",
-      },
+      options: [],
     };
   },
   methods: {
-    submitForm() {
-      // Xử lý dữ liệu form ở đây
-      console.log("Form submitted:", this.form);
-      alert("Project đã được thêm thành công!");
-      this.resetForm();
+    changeOptionType(question, type) {
+      if (!question.options) {
+        this.addMoreOption(question);
+      }
+
+      question.type = type;
     },
-    resetForm() {
-      this.form = {
-        projectName: "",
-        projectDescription: "",
-      };
+    changeOtherType(question, type) {
+      question.options = [];
+
+      question.type = type;
+    },
+
+    addMoreOption(question) {
+      if (!question.options) {
+        question.options = [];
+      }
+
+      question.options.push({
+        questionId: "",
+        optionContent: "",
+        imageUrl: "",
+        publicId: "",
+        isChecked: false,
+      });
+      console.log("Added question:", question.options);
+    },
+
+    async deleteQuestion(index) {
+      this.questions.splice(index, 1);
     },
   },
 };
