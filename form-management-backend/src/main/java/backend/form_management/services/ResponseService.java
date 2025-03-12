@@ -37,7 +37,6 @@ public class ResponseService {
 
 
     //delete answer
-
     public void removeAnswersByQuestionIds(String formId, Set<String> questionIds) {
         List<Response> responses = responseRepository.getAllByFormId(formId);
              for (Response response : responses) {
@@ -47,6 +46,7 @@ public class ResponseService {
 
     }
 
+    //get answer
 
     //delete response
     public void deleteResponse(String responseId) {

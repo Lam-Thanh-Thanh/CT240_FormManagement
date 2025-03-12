@@ -7,6 +7,7 @@ import ProjectCreate from "@/components/ProjectCreate.vue";
 import FormCreate from "@/components/FormCreate.vue";
 import FormEdit from "@/components/FormEdit.vue";
 import FormExport from "@/components/FormExport.vue";
+import FormResponses from "@/components/FormResponses.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,6 +49,12 @@ const router = createRouter({
       path: "/:formId/",
       name: "form-export",
       component: FormExport,
+      props: true,
+    },
+    {
+      path: "/projects/:projectId/forms/:formId/responses",
+      name: "form-responses",
+      component: FormResponses,
       props: true,
     },
   ],

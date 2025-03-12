@@ -13,7 +13,9 @@
         <div class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2">
           <button class="" v-on:click="formExport">View Results</button>
         </div>
-
+        <div class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2">
+          <button class="" v-on:click="viewResponses">Responses</button>
+        </div>
         <div class="hover:bg-red-400 px-2 py-1">
           <button class="">Delete</button>
         </div>
@@ -46,7 +48,7 @@
       </div>
     </div>
 
-    <form @submit.prevent="updateForm" class="space-y-4">
+    <form @submit.prevent="updateForm" colass="space-y-4">
       <!-- Tên form -->
       <div
         class="p-6 bg-white rounded-lg shadow-md mt-0 my-40 m-44 border-t-pink-800 border-t-8"
@@ -106,6 +108,7 @@
 <script>
 import FormService from "@/services/FormService";
 import Question from "./Question.vue";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   components: { Question },
@@ -132,6 +135,7 @@ export default {
     },
     async addMoreQuestion() {
       const newQuestion = {
+        id: uuidv4(),
         content: "",
         formId: this.formId,
         type: "text",
@@ -141,7 +145,11 @@ export default {
         open: false,
       };
       this.form.questions.push(newQuestion);
-
+      const response = await FormService.updateForm(
+        this.projectId,
+        this.formId,
+        this.form
+      );
       console.log("Added question:", this.form.questions);
     },
 
@@ -161,6 +169,14 @@ export default {
         this.$router.push({
           name: "form-export",
           params: { formId: this.formId },
+        });
+      } catch (error) {}
+    },
+    viewResponses() {
+      try {
+        this.$router.push({
+          name: "form-responses",
+          params: { projectId: this.projectId, formId: this.formId },
         });
       } catch (error) {}
     },

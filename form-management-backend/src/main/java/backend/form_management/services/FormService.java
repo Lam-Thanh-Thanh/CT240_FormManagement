@@ -54,13 +54,14 @@ public class FormService {
                     .map(Question::getId)
                     .collect(Collectors.toSet());
 
-            //set questionId for new creation
-            for (int i = 0; i < updatedForm.getQuestions().size(); i++) {
-                Question question = updatedForm.getQuestions().get(i);
-                    if(question.getId()==null) {
-                        question.setId(UUID.randomUUID().toString());
-                    }
-            }
+            //id bên vue
+//            //set questionId for new creation
+//            for (int i = 0; i < updatedForm.getQuestions().size(); i++) {
+//                Question question = updatedForm.getQuestions().get(i);
+//                    if(question.getId()==null) {
+//                        question.setId(UUID.randomUUID().toString());
+//                    }
+//            }
 
             existingForm.setTitle(updatedForm.getTitle());
             existingForm.setDescription(updatedForm.getDescription());
@@ -99,8 +100,8 @@ public class FormService {
     }
 
 
-    //upload image
-    
+    //add question  -> update
+
 
 
 

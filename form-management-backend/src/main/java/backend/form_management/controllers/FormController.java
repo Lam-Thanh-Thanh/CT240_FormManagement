@@ -59,7 +59,7 @@ public class FormController {
     }
 
     @PostMapping("/upload-image")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadImage( @RequestParam("file") MultipartFile file) {
         try {
             String imageUrl = cloudinaryService.uploadFile(file);
             return ResponseEntity.ok(imageUrl);
@@ -69,7 +69,7 @@ public class FormController {
     }
 
     @DeleteMapping("/delete-image")
-    public ResponseEntity<String> deleteImage(String publicId) {
+    public ResponseEntity<String> deleteImage(@RequestParam String publicId) {
         try {
             String result = cloudinaryService.deleteFile(publicId);
             if ("ok".equals(result)) {
@@ -81,6 +81,7 @@ public class FormController {
             return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }
     }
+
 
 
 

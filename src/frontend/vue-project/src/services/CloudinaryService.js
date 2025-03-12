@@ -10,9 +10,11 @@ const apiClient = axios.create({
 
 export default {
   uploadImage(imageFile) {
-    return apiClient.post("/upload-image", imageFile);
+    return apiClient.post(`/upload-image`, imageFile);
   },
   deleteImage(publicId) {
-    return apiClient.delete("/delete-image", publicId);
+    return apiClient.delete("/delete-image", {
+      params: { publicId },
+    });
   },
 };

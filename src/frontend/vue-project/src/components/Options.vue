@@ -2,7 +2,7 @@
   <!-- option -->
   <div
     v-for="(option, index) in options"
-    :key="index"
+    :key="option.id"
     class="flex flex-col justify-between gap-5"
   >
     <!-- image view-->
@@ -19,11 +19,7 @@
     </div>
     <div class="flex flex-row justify-between items-center w-[100%]">
       <div class="flex flex-row w-[100%]">
-        <input
-          :type="inputType"
-          name="radioOption"
-          v-model="option.isChecked"
-        />
+        <input :type="inputType" name="radioOption" />
 
         <input
           type="text"
@@ -37,11 +33,11 @@
       <div class="w-[20%] m-5 text-center flex justify-around">
         <div>
           <!-- Icon thay thế nút Choose File -->
-          <label :for="'file-upload-' + index" class="upload-label">
+          <label :for="'file-upload-' + option.id" class="upload-label">
             <i class="fa-regular fa-image"></i>
           </label>
           <input
-            :id="'file-upload-' + index"
+            :id="'file-upload-' + option.id"
             type="file"
             @change="addImageToOption($event, option)"
             accept="image/*"
@@ -75,6 +71,7 @@ export default {
       this.options.splice(index, 1);
     },
 
+    //add image
     async addImageToOption(event, option) {
       const file = event.target.files[0];
 
@@ -90,15 +87,18 @@ export default {
 
       try {
         const response = await CloudinaryService.uploadImage(formData);
-        console.log("URL", response.data);
-        option.imageUrl = response.data;
         const parts = response.data.split("/");
         const fileName = parts.pop().split(".")[0]; // Lấy tên file không có đuôi mở rộng
+        console.log("option", option);
+        option.imageUrl = response.data;
         option.publicId = fileName;
       } catch (error) {
         console.error("Image upload failed", error);
       }
+      // Reset input file sau khi xử lý xong
+      event.target.value = null;
     },
+
     async removeImage(option) {
       if (!option.imageUrl) return;
 

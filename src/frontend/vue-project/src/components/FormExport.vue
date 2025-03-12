@@ -59,46 +59,24 @@
         </div>
       </div>
       <!-- option -->
-      <div class="mt-16">
-        <div class="flex flex-col gap-7">
-          <div
-            v-if="question.type === 'radio'"
-            v-for="(option, oIndex) in question.options"
-            :key="oIndex"
-            class="flex flex-col gap-2"
-          >
-            <!-- image view-->
-            <div v-if="option.imageUrl" class="w-[70%]">
-              <img :src="option.imageUrl" alt="Uploaded" width="100%" />
-            </div>
-            <!-- question.type -->
-            <div class="flex gap-4">
-              <input
-                type="radio"
-                :value="option.optionContent"
-                v-model="response.answers[qIndex].answerText"
-              />
 
-              <p>{{ option.optionContent }}</p>
-            </div>
+      <div class="mt-16 flex flex-col gap-7">
+        <div
+          v-if="question.type === 'radio'"
+          v-for="(option, oIndex) in question.options"
+          :key="oIndex"
+          class="flex flex-col gap-2"
+        >
+          <!-- image view-->
+          <div v-if="option.imageUrl" class="w-[70%]">
+            <img :src="option.imageUrl" alt="Uploaded" width="100%" />
           </div>
-        </div>
-      </div>
-
-      <!-- option -->
-      <div class="mt-7">
-        <div class="flex flex-col">
-          <div
-            v-if="question.type === 'checkbox'"
-            v-for="(option, oIndex) in question.options"
-            :key="oIndex"
-            class="flex flex-row items-center gap-4"
-          >
-            <!-- question.type -->
+          <!-- question.type -->
+          <div class="flex gap-4">
             <input
-              type="checkbox"
+              type="radio"
               :value="option.optionContent"
-              v-model="response.answers[qIndex].selectedOptions"
+              v-model="response.answers[qIndex].answerText"
             />
 
             <p>{{ option.optionContent }}</p>
@@ -106,33 +84,77 @@
         </div>
       </div>
 
+      <!-- option -->
+
+      <div class="mt-7 flex flex-col">
+        <div
+          v-if="question.type === 'checkbox'"
+          v-for="(option, oIndex) in question.options"
+          :key="oIndex"
+          class="flex flex-row items-center gap-4"
+        >
+          <!-- question.type -->
+          <input
+            type="checkbox"
+            :value="option.optionContent"
+            v-model="response.answers[qIndex].selectedOptions"
+          />
+
+          <p>{{ option.optionContent }}</p>
+        </div>
+      </div>
+
       <!-- text -->
-      <div class="mt-7">
-        <div class="flex flex-col">
-          <div
-            v-if="question.type === 'text'"
-            class="flex flex-row items-center gap-4"
-          >
-            <!-- question.type -->
-            <input
-              type="text"
-              placeholder="Text...."
-              v-model="response.answers[qIndex].answerText"
-            />
-          </div>
+
+      <div class="mt-7 flex flex-col">
+        <div
+          v-if="question.type === 'text'"
+          class="flex flex-row items-center gap-4"
+        >
+          <!-- question.type -->
+          <input
+            type="text"
+            placeholder="Text...."
+            v-model="response.answers[qIndex].answerText"
+          />
         </div>
       </div>
 
       <!-- file -->
-      <div class="mt-7">
-        <div class="flex flex-col">
-          <div
-            v-if="question.type === 'file'"
-            class="flex flex-row items-center gap-4"
+
+      <div
+        v-if="question.type === 'file'"
+        class="flex flex-row items-center gap-4 justify-between"
+      >
+        <!-- image view-->
+        <div v-if="response.answers[qIndex].imageUrl" class="w-[80%] relative">
+          <img
+            :src="response.answers[qIndex].imageUrl"
+            alt="Uploaded"
+            width="100%"
+          />
+
+          <button
+            type="button"
+            @click="removeImage(response.answers[qIndex])"
+            class="absolute -top-2 -right-2 bg-gray-300 text-black rounded-full"
           >
-            <!-- question.type -->
-            <!-- <input type="file" /> -->
-          </div>
+            <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
+          </button>
+        </div>
+        <!--add image, delete button -->
+        <div>
+          <!-- Icon thay thế nút Choose File -->
+          <label :for="image - answer" class="upload-label">
+            <i class="fa-regular fa-image"></i>
+          </label>
+          <input
+            :id="image - answer"
+            type="file"
+            @change="addImageAnswer($event, response.answers[qIndex])"
+            accept="image/*"
+            class="hidden"
+          />
         </div>
       </div>
     </div>
@@ -151,6 +173,7 @@
 
 <script>
 import FormService from "@/services/FormService";
+import CloudinaryService from "@/services/CloudinaryService";
 export default {
   props: ["formId"],
   data() {
@@ -184,6 +207,8 @@ export default {
           questionId: q.id,
           answerText: "",
           selectedOptions: [],
+          imageUrl: "",
+          publicId: "",
         }));
 
         console.log(response.data);
@@ -202,6 +227,46 @@ export default {
       } catch (error) {
         // console.log("errrrr", this.response);
         console.error("Error submitting response:", error);
+      }
+    },
+
+    // add image answer
+    async addImageAnswer(event, answer) {
+      const file = event.target.files[0];
+
+      if (!file) {
+        console.error("No file selected");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+      console.log("Uploading file:", file);
+      console.log("FormData content:", formData.get("file")); // Kiểm tra dữ liệu gửi đi
+
+      try {
+        const response = await CloudinaryService.uploadImage(formData);
+        const parts = response.data.split("/");
+        const fileName = parts.pop().split(".")[0]; // Lấy tên file không có đuôi mở rộng
+        console.log("answer", answer);
+        answer.imageUrl = response.data;
+        answer.publicId = fileName;
+      } catch (error) {
+        console.error("Image upload failed", error);
+      }
+      // Reset input file sau khi xử lý xong
+      event.target.value = null;
+    },
+    async removeImage(answer) {
+      if (!answer.imageUrl) return;
+
+      try {
+        await CloudinaryService.deleteImage(answer.publicId);
+        answer.imageUrl = ""; // Xóa ảnh trong UI khi thành công
+        answer.publicId = "";
+        console.log("Image deleted successfully");
+      } catch (error) {
+        console.error("Error deleting image", error);
       }
     },
   },

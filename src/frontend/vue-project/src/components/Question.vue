@@ -144,7 +144,7 @@
 
 <script>
 import Options from "./Options.vue";
-
+import { v4 as uuidv4 } from "uuid";
 export default {
   components: { Options },
   props: {
@@ -169,18 +169,19 @@ export default {
       question.type = type;
     },
 
-    addMoreOption(question) {
+    async addMoreOption(question) {
       if (!question.options) {
         question.options = [];
       }
 
       question.options.push({
-        questionId: "",
+        id: uuidv4(),
+        questionId: question.id,
         optionContent: "",
         imageUrl: "",
         publicId: "",
-        isChecked: false,
       });
+
       console.log("Added question:", question.options);
     },
 
