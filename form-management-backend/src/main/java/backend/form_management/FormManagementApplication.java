@@ -18,7 +18,7 @@ public class FormManagementApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:5173") // Địa chỉ của ứng dụng Vue
+						.allowedOrigins("http://localhost:5175") // Địa chỉ của ứng dụng Vue
 						.allowedMethods("GET", "POST", "PUT", "DELETE")
 						.allowedHeaders("*")
 						.allowCredentials(true);
