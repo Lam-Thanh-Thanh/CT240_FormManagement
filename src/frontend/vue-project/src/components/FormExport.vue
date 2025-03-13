@@ -37,12 +37,12 @@
       </div>
 
       <div class="pb-3">
-        <span class="font-bold pr-2">Create at:</span>
-        <span class="">Date</span>
+        <span class="font-bold pr-2">Created at:</span>
+        <span class="">{{ formattedDate(form.createdAt) }}</span>
       </div>
       <div class="pb-3">
-        <span class="font-bold pr-2">Update at:</span>
-        <span class="">Date</span>
+        <span class="font-bold pr-2">Updated at:</span>
+        <span class="">{{ formattedDate(form.lastModifiedAt) }}</span>
       </div>
     </div>
 
@@ -58,7 +58,7 @@
           <p class="font-semibold">{{ question.content }}</p>
         </div>
       </div>
-      <!-- option -->
+      <!--radio option -->
 
       <div class="mt-16 flex flex-col gap-7">
         <div
@@ -84,23 +84,29 @@
         </div>
       </div>
 
-      <!-- option -->
+      <!--checkbox option -->
 
-      <div class="mt-7 flex flex-col">
+      <div class="mt-7 flex flex-col gap-7">
         <div
           v-if="question.type === 'checkbox'"
           v-for="(option, oIndex) in question.options"
           :key="oIndex"
-          class="flex flex-row items-center gap-4"
+          class="flex flex-col items-start gap-2"
         >
+          <!-- image view-->
+          <div v-if="option.imageUrl" class="w-[70%]">
+            <img :src="option.imageUrl" alt="Uploaded" width="100%" />
+          </div>
           <!-- question.type -->
-          <input
-            type="checkbox"
-            :value="option.optionContent"
-            v-model="response.answers[qIndex].selectedOptions"
-          />
+          <div class="flex gap-4">
+            <input
+              type="checkbox"
+              :value="option.optionContent"
+              v-model="response.answers[qIndex].selectedOptions"
+            />
 
-          <p>{{ option.optionContent }}</p>
+            <p>{{ option.optionContent }}</p>
+          </div>
         </div>
       </div>
 
@@ -161,7 +167,7 @@
     <!-- Nút Submit -->
     <div class="text-center">
       <button
-        v-on:click="submitForm"
+        v-on:click="submitForm()"
         type="submit"
         class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
       >
@@ -193,6 +199,17 @@ export default {
     await this.getFormDetails();
   },
   methods: {
+    formattedDate(createdAt) {
+      return new Date(createdAt).toLocaleString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZoneName: "short",
+      });
+    },
     async getFormDetails() {
       try {
         const response = await FormService.getFormDetails(this.formId);
@@ -203,7 +220,6 @@ export default {
 
         // Khởi tạo response.answers với cấu trúc đúng
         this.response.answers = this.form.questions.map((q) => ({
-          responseId: this.response.id,
           questionId: q.id,
           answerText: "",
           selectedOptions: [],

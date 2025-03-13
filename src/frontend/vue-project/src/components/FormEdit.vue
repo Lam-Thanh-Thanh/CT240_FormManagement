@@ -39,12 +39,12 @@
         <span class=""> ..</span>
       </div>
       <div class="pb-3">
-        <span class="font-bold pr-2">Create at:</span>
-        <span class="">Date</span>
+        <span class="font-bold pr-2">Created at:</span>
+        <span class="">{{ formattedDate(form.createdAt) }}</span>
       </div>
       <div class="pb-3">
-        <span class="font-bold pr-2">Update at:</span>
-        <span class="">Date</span>
+        <span class="font-bold pr-2">Updated at:</span>
+        <span class="">{{ formattedDate(form.lastModifiedAt) }}</span>
       </div>
     </div>
 
@@ -123,7 +123,19 @@ export default {
   async created() {
     await this.getFormDetails();
   },
+
   methods: {
+    formattedDate(createdAt) {
+      return new Date(createdAt).toLocaleString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZoneName: "short",
+      });
+    },
     async getFormDetails() {
       try {
         const response = await FormService.getFormDetails(this.formId);

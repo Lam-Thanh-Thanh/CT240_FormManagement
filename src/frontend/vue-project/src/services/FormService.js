@@ -33,4 +33,8 @@ export default {
   createResponse(formId, responseData) {
     return apiClient.post(`forms/${formId}/response`, responseData);
   },
+
+  getAllResponses(formId) {
+    return apiClient.get(`forms/${formId}/response-list`);
+  },
 };

@@ -24,13 +24,14 @@ public class ResponseService {
 
     //create a response of the form
     public Response createResponse(String formId, Response response) {
+        Response newResponse = responseRepository.save(response);
 
         response.setFormId(formId);
-        return responseRepository.save(response);
+        return newResponse;
     }
 
     //get all response of form
-    public List<Response> getAllResponseByFormId(String formId) {
+    public List<Response> getAllResponsesByFormId(String formId) {
         return responseRepository.getAllByFormId(formId);
     }
 
@@ -46,7 +47,7 @@ public class ResponseService {
 
     }
 
-    //get answer
+
 
     //delete response
     public void deleteResponse(String responseId) {

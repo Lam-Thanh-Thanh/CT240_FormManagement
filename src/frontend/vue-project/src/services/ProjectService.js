@@ -12,7 +12,7 @@ export default {
     return apiClient.post("/create", projectData);
   },
   getAllProjects() {
-    return apiClient.get("");
+    return apiClient.get(`/`);
   },
   getProjectDetials(projectId) {
     return apiClient.get(`/${projectId}`);

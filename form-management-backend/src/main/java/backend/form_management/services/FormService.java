@@ -34,11 +34,16 @@ public class FormService {
 
     //create a form in the project
     public Form createForm(Form form) {
-        // Tìm form trong danh sách forms
-        for (int i = 0; i < form.getQuestions().size(); i++) {
-            form.getQuestions().get(i).setId(UUID.randomUUID().toString());
+        Form newForm = formRepository.save(form);
+        // set formId to each question
+        for (int i = 0; i < newForm.getQuestions().size(); i++) {
+            newForm.getQuestions().get(i).setFormId(newForm.getId());
         }
-        return formRepository.save(form);
+        // Nếu lastModifiedAt chưa có, gán bằng createdAt
+        if (newForm.getLastModifiedAt() == null) {
+            newForm.setLastModifiedAt(form.getCreatedAt());
+        }
+        return newForm;
     }
 
 
@@ -88,7 +93,7 @@ public class FormService {
     //delete form
     public void deleteForm(String formId) {
         formRepository.deleteById(formId);
-        List<Response> responses = responseService.getAllResponseByFormId(formId);
+        List<Response> responses = responseService.getAllResponsesByFormId(formId);
         for (Response response : responses) {
           responseService.deleteResponse(response.getId());
         }

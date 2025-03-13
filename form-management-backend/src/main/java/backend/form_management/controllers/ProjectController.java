@@ -24,7 +24,12 @@ public class ProjectController {
  @Autowired
  private FormService formService;
 
-    @GetMapping("")
+//    @GetMapping("/{userId}")
+//    public ResponseEntity<List<Project> > getAllProjects(@PathVariable("userId") String userId) {
+//        return new ResponseEntity<>(projectService.getAllProjects(userId), HttpStatus.OK);
+//    }
+
+    @GetMapping("/")
     public ResponseEntity<List<Project> > getAllProjects() {
         return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
     }

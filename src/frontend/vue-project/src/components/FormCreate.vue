@@ -61,6 +61,7 @@
 <script>
 import Question from "./Question.vue";
 import FormService from "@/services/FormService";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
   //add component
@@ -105,6 +106,7 @@ export default {
     },
     addMoreQuestion() {
       this.form.questions.push({
+        id: uuidv4(),
         content: "",
         formId: "",
         type: "text",
