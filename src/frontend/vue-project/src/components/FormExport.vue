@@ -17,12 +17,36 @@
         <div class="hover:bg-zinc-200 px-2 py-1 border-b-gray-100 border-b-2">
           <button v-on:click="editForm" class="">Edit</button>
         </div>
+
+        <div class="hover:bg-blue-300 px-2 py-1 border-b-gray-100 border-b-2">
+          <button @click="copyLink">Sao chép liên kết</button>
+        </div>
+
+        <div class="hover:bg-green-300 px-2 py-1 border-b-gray-100 border-b-2">
+          <button @click="generateQRCode">Tạo mã QR</button>
+        </div>
+
         <div class="hover:bg-red-400 px-2 py-1">
           <button class="">Delete</button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Thanh -->
+
+<!-- Modal hiển thị QR Code -->
+<div v-if="showQRCode" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg text-center relative w-96">
+    <button @click="closeQRCodeModal" class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full">
+      ✖
+    </button>
+    <h3 class="text-xl font-bold my-4">Mã QR của bạn:</h3>
+    <img :src="qrCode" alt="QR Code" class="w-40 h-40 mx-auto" />
+  </div>
+</div>
+
+   <!-- Thanh -->
 
   <div class="mt-0 m-40">
     <!-- Form information -->
@@ -180,6 +204,9 @@
 <script>
 import FormService from "@/services/FormService";
 import CloudinaryService from "@/services/CloudinaryService";
+// THANH
+import QRCode from "qrcode";
+//THANH
 export default {
   props: ["formId"],
   data() {
@@ -190,15 +217,39 @@ export default {
       },
       response: {
         formId: this.formId,
-
         answers: [],
       },
+      currentLink: `http://localhost:5173/${this.formId}`, // Link gốc
+      qrCode: "", // Ảnh QR Code
+      showQRCode: false, // Biến kiểm soát hiển thị QR Code
     };
   },
   async created() {
     await this.getFormDetails();
   },
   methods: {
+    // THANH
+     // Sao chép liên kết
+      copyLink() {
+        navigator.clipboard.writeText(this.currentLink).then(() => {
+          alert("Đã sao chép liên kết!");
+        });
+      },
+
+      // Tạo mã QR và hiển thị ảnh
+      async generateQRCode() {
+        try {
+          const qrData = await QRCode.toDataURL(this.currentLink);
+          this.qrCode = qrData;
+          this.showQRCode = true; // Hiển thị modal
+        } catch (error) {
+          console.error("Lỗi khi tạo mã QR:", error);
+        }
+      },
+      closeQRCodeModal() {
+        this.showQRCode = false; // Đóng modal
+      },
+    // THANH
     formattedDate(createdAt) {
       return new Date(createdAt).toLocaleString("en-US", {
         year: "numeric",

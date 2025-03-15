@@ -25,7 +25,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Vô hiệu hóa CSRF
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll() // Mở quyền truy cập API auth
-                .requestMatchers("/projects/**").permitAll() // Mở quyền truy cập API auth
+                .requestMatchers("/api/url/**").permitAll() // Mở quyền truy cập API auth
+                .requestMatchers("/projects/**").permitAll() // Mở quyền truy cập API project
                 .requestMatchers("/api/responses/**").permitAll()
                 .requestMatchers("/api/reports/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()

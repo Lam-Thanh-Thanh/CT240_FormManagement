@@ -39,8 +39,6 @@ public class ProjectController {
         return new ResponseEntity<Optional<Project>>(projectService.getProjectById(projectId), HttpStatus.OK);
     }
 
-
-
     @PostMapping("/create")
     public Project createProject(@RequestBody Project project) {
         return projectService.createProject(project);

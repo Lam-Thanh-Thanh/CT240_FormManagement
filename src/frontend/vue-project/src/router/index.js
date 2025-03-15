@@ -13,6 +13,7 @@ import FormResponses from "@/components/FormResponses.vue";
 import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -72,6 +73,27 @@ const router = createRouter({
       name: "register",
       component: Register,
     },
+    {
+      path: "/s/:shortCode",
+      name: "short-url",
+      beforeEnter: async (to, from, next) => {
+        try {
+          const response = await axios.get(`http://localhost:8080/api/url/${to.params.shortCode}`);
+    
+          if (response.data && response.data.originalUrl) {
+            console.log("Chuyển hướng đến:", response.data.originalUrl);
+            window.location.replace(response.data.originalUrl); // Dùng replace để tránh lưu vào lịch sử
+          } else {
+            console.error("Không tìm thấy URL gốc");
+            next("/"); // Chuyển về trang chủ nếu không tìm thấy
+          }
+        } catch (error) {
+          console.error("Lỗi khi lấy URL gốc:", error);
+          next("/"); // Nếu lỗi, quay về trang chủ
+        }
+      }
+    }
+    ,
   ],
 });
 

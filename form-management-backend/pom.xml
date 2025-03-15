@@ -89,7 +89,8 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<!-- * -->
-
+		<!-- new short URL -->
+		<!-- end short url -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
