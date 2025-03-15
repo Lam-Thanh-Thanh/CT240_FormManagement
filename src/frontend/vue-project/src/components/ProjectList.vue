@@ -1,6 +1,6 @@
 <template>
-  <h1 class="text-center m-32 text-4xl font-extrabold">Project Management</h1>
-  <div class="flex flex-wrap pt-0 p-28 py-40 gap-20 justify-center m-20">
+  <h1 class="text-center p-32 text-4xl font-extrabold">Project Management</h1>
+  <div class="flex flex-wrap px-28 pb-40 gap-20 justify-center">
     <!-- project list -->
 
     <div
@@ -84,6 +84,7 @@ export default {
       );
       this.projects.splice(index, 1);
       console.log(response.data);
+      alert("Project is deleted successfully!!");
     },
   },
 };

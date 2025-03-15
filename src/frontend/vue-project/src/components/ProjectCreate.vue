@@ -1,46 +1,46 @@
 <template>
-  <h1 class="text-center m-32 mb-20 text-4xl font-extrabold">
-    Project Creation
-  </h1>
+  <div class="my-40">
+    <h1 class="text-center text-4xl font-extrabold">Project Creation</h1>
 
-  <form @submit.prevent="createProject" class="mx-7">
-    <div class="p-6 bg-white rounded-lg shadow-md mt-0 my-40 m-80">
-      <!-- Tên Project -->
-      <div class="mb-2">
-        <label for="projectName" class="block">Name</label>
-        <input
-          type="text"
-          id="projectName"
-          v-model="project.name"
-          class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
-          required
-        />
+    <form @submit.prevent="createProject" class="">
+      <div class="p-6 bg-white rounded-lg shadow-md my-20 mx-80">
+        <!-- Tên Project -->
+        <div class="mb-2">
+          <label for="projectName" class="block">Name</label>
+          <input
+            type="text"
+            id="projectName"
+            v-model="project.name"
+            class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
+            required
+          />
+        </div>
+
+        <!-- Mô tả Project -->
+        <div class="mb-2">
+          <label for="projectDescription" class="block">Description</label>
+          <textarea
+            id="projectDescription"
+            v-model="project.description"
+            class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
+            rows="4"
+            required
+          ></textarea>
+        </div>
       </div>
+      <!-- form creation -->
 
-      <!-- Mô tả Project -->
-      <div class="mb-2">
-        <label for="projectDescription" class="block">Description</label>
-        <textarea
-          id="projectDescription"
-          v-model="project.description"
-          class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
-          rows="4"
-          required
-        ></textarea>
+      <!-- create project button -->
+      <div class="text-center">
+        <button
+          type="submit"
+          class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
+        >
+          Create Project
+        </button>
       </div>
-    </div>
-    <!-- form creation -->
-
-    <!-- create project button -->
-    <div class="text-center mb-40">
-      <button
-        type="submit"
-        class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
-      >
-        Create Project
-      </button>
-    </div>
-  </form>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -60,7 +60,7 @@ export default {
       try {
         const response = await ProjectService.createProject(this.project);
         console.log("Project created:", response.data);
-        alert("Project created sucessfully !!");
+        alert("Project is created sucessfully !!");
         this.resetForm();
         this.$router.push({
           name: "project-details",

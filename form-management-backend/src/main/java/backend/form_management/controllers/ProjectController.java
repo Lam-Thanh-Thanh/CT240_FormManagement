@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +50,7 @@ public class ProjectController {
 
 
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<String> deleteProject(@PathVariable("projectId") String projectId) {
+    public ResponseEntity<String> deleteProject(@PathVariable("projectId") String projectId) throws IOException {
         projectService.deleteProject(projectId);
         List<Form> forms = formService.getAllFormsOfProject(projectId);
         for (Form form : forms) {

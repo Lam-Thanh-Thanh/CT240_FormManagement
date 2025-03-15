@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex h-[30vh] lg:h-[65vh] justify-center items-center bg-myLightGray px-40 gap-60 mb-44"
+    class="bg-white flex h-[30vh] lg:h-[65vh] justify-center items-center px-40 gap-60 border-b"
   >
     <div>
       <p class="text-3xl lg:text-7xl font-extrabold animate-bounce">Welcome!</p>

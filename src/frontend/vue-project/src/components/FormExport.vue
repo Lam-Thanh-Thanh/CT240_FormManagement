@@ -1,36 +1,33 @@
 <template>
-  <!-- dropdown -->
-  <div class="flex gap-16 items-start mx-72 my-32 mb-20 justify-between">
-    <h1 class="text-4xl font-extrabold">Form export</h1>
-    <div class="text-right">
-      <button
-        v-on:click="open = !open"
-        class="bg-zinc-200 rounded-full px-2 py-1 m-2 hover:shadow-lg"
-      >
-        <i class="fa-solid fa-ellipsis"></i>
-      </button>
-      <div class="shadow-lg" v-if="open">
-        <div class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2">
-          <button class="">View Results</button>
-        </div>
+  <div class="py-20 px-80 border">
+    <div class="flex gap-16 items-start justify-between">
+      <h1 class="text-4xl font-extrabold">{{ form.title }}</h1>
+      <!-- dropdown -->
+      <div class="text-right">
+        <button
+          v-on:click="open = !open"
+          class="bg-zinc-200 rounded-full px-2 py-1 m-2 hover:shadow-lg"
+        >
+          <i class="fa-solid fa-ellipsis"></i>
+        </button>
+        <div class="shadow-lg" v-if="open">
+          <div
+            class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2"
+          >
+            <button class="">View Results</button>
+          </div>
 
-        <div class="hover:bg-zinc-200 px-2 py-1 border-b-gray-100 border-b-2">
-          <button v-on:click="editForm" class="">Edit</button>
-        </div>
-        <div class="hover:bg-red-400 px-2 py-1">
-          <button class="">Delete</button>
+          <div class="hover:bg-zinc-200 px-2 py-1 border-b-gray-100 border-b-2">
+            <button v-on:click="editForm" class="">Edit</button>
+          </div>
+          <div class="hover:bg-red-400 px-2 py-1">
+            <button class="">Delete</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="mt-0 m-40">
     <!-- Form information -->
-    <div class="text-left mx-32 my-20">
-      <div class="pb-3">
-        <span class="font-bold pr-2">Title:</span>
-        <span class=""> {{ form.title }}</span>
-      </div>
+    <div class="text-left pt-10">
       <div class="pb-3">
         <span class="font-bold pr-2">Description:</span>
         <span class="">{{ form.description }}</span>
@@ -45,15 +42,26 @@
         <span class="">{{ formattedDate(form.lastModifiedAt) }}</span>
       </div>
     </div>
+  </div>
 
+  <div class="py-40 bg-white">
     <!-- question -->
     <div
       v-for="(question, qIndex) in form.questions"
       :key="qIndex"
-      class="mx-32 my-20 shadow-lg shadow-myLightGray p-14 rounded border-t-pink-800 border-t-4"
+      class="mx-80 mb-20 shadow-myLightGray shadow-md border- p-14 rounded hover:border-t-4 hover:border-t-pink-800 hover:border hover:border-pink-800 border-t-pink-800 border-t-4 transition duration-300 ease-in-out"
     >
+      <!-- image view-->
+      <div v-if="question.imageUrl" class="w-[80%] relative">
+        <img
+          :src="question.imageUrl"
+          alt="Uploaded"
+          width="100%"
+          class="rounded-md"
+        />
+      </div>
       <!-- content -->
-      <div class="flex row justify-between items-start">
+      <div class="flex row justify-between items-start my-5">
         <div class="w-[80%]">
           <p class="font-semibold">{{ question.content }}</p>
         </div>
@@ -95,7 +103,12 @@
         >
           <!-- image view-->
           <div v-if="option.imageUrl" class="w-[70%]">
-            <img :src="option.imageUrl" alt="Uploaded" width="100%" />
+            <img
+              :src="option.imageUrl"
+              alt="Uploaded"
+              width="100%"
+              class="rounded-md"
+            />
           </div>
           <!-- question.type -->
           <div class="flex gap-4">
@@ -120,6 +133,7 @@
           <!-- question.type -->
           <input
             type="text"
+            class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
             placeholder="Text...."
             v-model="response.answers[qIndex].answerText"
           />
@@ -238,7 +252,7 @@ export default {
           this.formId,
           this.response
         );
-        alert("Form submitted successfully!");
+        alert("Form is submitted successfully!");
         console.log("Response saved:", response.data);
       } catch (error) {
         // console.log("errrrr", this.response);

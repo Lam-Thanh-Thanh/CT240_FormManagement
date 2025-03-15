@@ -51,7 +51,7 @@ public class FormController {
     }
 
     @DeleteMapping("/{projectId}/forms/{formId}/delete")
-    public ResponseEntity<String> deleteFormOfProject(@PathVariable("projectId") String projectId, @PathVariable("formId") String formId) {
+    public ResponseEntity<String> deleteFormOfProject(@PathVariable("projectId") String projectId, @PathVariable("formId") String formId) throws IOException {
             projectService.deleteFormOfProject(projectId, formId);
         formService.deleteForm(formId);
 
