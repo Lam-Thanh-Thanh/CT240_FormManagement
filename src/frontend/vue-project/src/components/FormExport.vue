@@ -48,7 +48,7 @@
     <!-- question -->
     <div
       v-for="(question, qIndex) in form.questions"
-      :key="qIndex"
+      :key="question.id"
       class="mx-80 mb-20 shadow-myLightGray shadow-md border- p-14 rounded hover:border-t-4 hover:border-t-pink-800 hover:border hover:border-pink-800 border-t-pink-800 border-t-4 transition duration-300 ease-in-out"
     >
       <!-- image view-->
@@ -72,7 +72,7 @@
         <div
           v-if="question.type === 'radio'"
           v-for="(option, oIndex) in question.options"
-          :key="oIndex"
+          :key="option.id"
           class="flex flex-col gap-2"
         >
           <!-- image view-->
@@ -83,7 +83,7 @@
           <div class="flex gap-4">
             <input
               type="radio"
-              :value="option.optionContent"
+              :value="option.id"
               v-model="response.answers[qIndex].answerText"
             />
 
@@ -114,7 +114,7 @@
           <div class="flex gap-4">
             <input
               type="checkbox"
-              :value="option.optionContent"
+              :value="option.id"
               v-model="response.answers[qIndex].selectedOptions"
             />
 

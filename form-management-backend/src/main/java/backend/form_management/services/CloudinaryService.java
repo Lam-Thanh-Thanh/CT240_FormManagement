@@ -17,18 +17,12 @@ public class CloudinaryService {
         this.cloudinary = cloudinary;
     }
 
-//    public String uploadFile(MultipartFile file) throws IOException {
-//        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-//        return uploadResult.get("url").toString();
-//    }
-
     public String uploadFile(MultipartFile file) throws IOException {
-        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
-                "resource_type", "raw",
-                "folder", "uploads"
-        ));
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
         return uploadResult.get("url").toString();
     }
+
+
 
     public String deleteFile(String publicId) throws IOException {
         Map result = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());

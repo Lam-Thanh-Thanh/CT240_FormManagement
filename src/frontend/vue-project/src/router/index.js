@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import ProjectList from "@/components/ProjectList.vue";
 import ProjectDetails from "@/components/ProjectDetails.vue";
-
+import ProjectEdit from "@/components/ProjectEdit.vue";
 import ProjectCreate from "@/components/ProjectCreate.vue";
 import FormCreate from "@/components/FormCreate.vue";
 import FormEdit from "@/components/FormEdit.vue";
@@ -42,6 +42,11 @@ const router = createRouter({
       path: "/projects/create",
       name: "project-create",
       component: ProjectCreate,
+    },
+    {
+      path: "/projects/edit",
+      name: "project-edit",
+      component: ProjectEdit,
     },
     {
       path: "/projects/:projectId/forms/create",

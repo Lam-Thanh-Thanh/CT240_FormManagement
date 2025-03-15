@@ -12,8 +12,8 @@
           class="w-[95%] mx-5 my-10 shadow-myLightGray shadow-md hover:border hover:border-pink-800 hover:border-l-4 hover:borde-l-pink-800 border-l-pink-800 border-l-4 transition duration-300 ease-in-out rounded flex flex-row items-center justify-between p-10"
         >
           <div class="w-[100%]">
-            <!-- image view  -->
-            <!-- <div v-if="question.imageUrl" class="w-[80%] relative">
+            <!-- image view   -->
+            <div v-if="question.imageUrl" class="w-[80%] relative">
               <img
                 :src="question.imageUrl"
                 alt="Uploaded"
@@ -28,22 +28,8 @@
               >
                 <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
               </button>
-            </div> -->
-            <!-- file view  ------------------------------>
-            <div v-if="question.imageUrl" class="w-[80%] relative mt-2">
-              <iframe
-                :src="question.imageUrl"
-                class="w-full h-64 rounded-md"
-              ></iframe>
-
-              <button
-                type="button"
-                @click="removeFile(question)"
-                class="absolute -top-2 -right-2 bg-gray-300 text-black rounded-full"
-              >
-                <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
-              </button>
             </div>
+
             <!-- content -->
             <div class="flex row justify-between relative">
               <div class="w-[78%]">
@@ -56,8 +42,7 @@
                 ></textarea>
               </div>
               <!-- image upload for question -->
-              <!-- <div class="absolute right-36">
-                
+              <div class="absolute right-36">
                 <label :for="'file-upload-' + question.id" class="upload-label">
                   <i class="fa-regular fa-image"></i>
                 </label>
@@ -68,20 +53,8 @@
                   accept="image/*"
                   class="hidden"
                 />
-              </div> -->
-              <!-- file upload for question ---------------------------------------------->
-              <div class="absolute right-36">
-                <label :for="'file-upload-' + question.id" class="upload-label">
-                  <i class="fa-regular fa-image"></i>
-                </label>
-                <input
-                  :id="'file-upload-' + question.id"
-                  type="file"
-                  @change="addImageToQuestion($event, question)"
-                  accept=".pdf,.doc,.docx,.txt"
-                  class="hidden"
-                />
               </div>
+
               <!-- dropdown -->
               <div class="text-center w-[18%] absolute right-0">
                 <button

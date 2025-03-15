@@ -3,7 +3,7 @@
     <div class="flex gap-16 items-start justify-between">
       <h1 class="text-4xl font-extrabold">Project Details</h1>
       <!-- dropdown -->
-      <div class="text-right">
+      <div class="text-center">
         <button
           v-on:click="open = !open"
           class="bg-zinc-200 rounded-full px-2 py-1 m-2 hover:shadow-lg"
@@ -11,6 +11,9 @@
           <i class="fa-solid fa-ellipsis"></i>
         </button>
         <div class="shadow-lg rounded-md py-4 bg-white" v-if="open">
+          <div class="hover:bg-yellow-300 px-10 py-1">
+            <button class="" v-on:click="editProject">Edit</button>
+          </div>
           <div class="hover:bg-red-500 px-10 py-1 hover:text-white">
             <button class="" v-on:click="deleteProject">Delete</button>
           </div>
@@ -153,6 +156,12 @@ export default {
       alert("Project is deleted successfully!!");
       this.$router.push({
         name: "project-list",
+      });
+    },
+    async editProject() {
+      this.$router.push({
+        name: "project-edit",
+        params: { projectId: this.projectId },
       });
     },
   },

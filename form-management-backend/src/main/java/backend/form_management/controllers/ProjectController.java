@@ -47,7 +47,12 @@ public class ProjectController {
         return projectService.createProject(project);
     }
 
+@PutMapping("/{projectId}/update")
+public ResponseEntity<Project> updateProject(@PathVariable("projectId") String projectId, @RequestBody Project project) {
+    Project project1 = projectService.updateProject(projectId, project);
 
+    return ResponseEntity.ok(project1);
+}
 
     @DeleteMapping("/{projectId}")
     public ResponseEntity<String> deleteProject(@PathVariable("projectId") String projectId) throws IOException {

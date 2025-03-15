@@ -19,9 +19,9 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes); // Trả về kiểu SecretKey
     }
     //get role
-    public String generateToken(String username) {
+    public String generateToken(String userId) {
         return Jwts.builder()
-                .subject(username)
+                .subject(userId)
                 //.subject(roles)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
