@@ -18,10 +18,11 @@ public class JwtUtil {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes); // Trả về kiểu SecretKey
     }
-
+    //get role
     public String generateToken(String username) {
         return Jwts.builder()
                 .subject(username)
+                //.subject(roles)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey(), Jwts.SIG.HS256) // Dùng đúng kiểu SecretKey + HS256
@@ -49,3 +50,6 @@ public class JwtUtil {
         return parser.parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 }
+
+
+

@@ -1,4 +1,4 @@
-<template>
+<template v-if="isLoggedIn">
   <h1 class="text-center p-32 text-4xl font-extrabold">Project Management</h1>
   <div class="flex flex-wrap px-28 pb-40 gap-20 justify-center">
     <!-- project list -->
@@ -43,17 +43,30 @@
 
 <script>
 import ProjectService from "@/services/ProjectService";
+import { AuthService } from "@/services/authService";
+import router from "@/router"; // Import router để điều hướng
 export default {
   data() {
     return {
       projects: [],
+      isLoggedIn: false,
     };
+  },
+  mounted() {
+    this.checkLogin(); // Kiểm tra đăng nhập khi component được mount
   },
   async created() {
     await this.fetchAllProjects();
   },
 
   methods: {
+    checkLogin() {
+      this.isLoggedIn = !!AuthService.getToken(); // Kiểm tra token, nếu có thì set isLoggedIn = true
+      if (!this.isLoggedIn) {
+        alert("Bạn cần đăng nhập trước!");
+        router.push("/login"); // Chuyển hướng đến trang đăng nhập
+      }
+    },
     async fetchAllProjects() {
       try {
         const response = await ProjectService.getAllProjects();

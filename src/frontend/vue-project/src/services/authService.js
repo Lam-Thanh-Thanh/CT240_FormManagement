@@ -10,5 +10,5 @@ export const AuthService = {
   },
   isAuthenticated() {
     return !!localStorage.getItem("token");
-  }
+  },
 };

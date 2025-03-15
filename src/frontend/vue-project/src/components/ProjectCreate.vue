@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { jwtDecode } from "jwt-decode";
 import ProjectService from "@/services/ProjectService";
 export default {
   data() {
@@ -51,13 +52,26 @@ export default {
       project: {
         name: "",
         description: "",
+
         forms: [],
+        userId: "",
       },
     };
   },
   methods: {
     async createProject() {
       try {
+        // Lấy token từ localStorage
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("Bạn chưa đăng nhập!");
+          return;
+        }
+
+        // Giải mã token để lấy userId
+        const decoded = jwtDecode(token);
+        this.project.userId = decoded.userId; // Đảm bảo key trong token là 'userId'
+
         const response = await ProjectService.createProject(this.project);
         console.log("Project created:", response.data);
         alert("Project is created sucessfully !!");

@@ -98,7 +98,7 @@
         <div
           v-if="question.type === 'checkbox'"
           v-for="(option, oIndex) in question.options"
-          :key="oIndex"
+          :key="option.id"
           class="flex flex-col items-start gap-2"
         >
           <!-- image view-->

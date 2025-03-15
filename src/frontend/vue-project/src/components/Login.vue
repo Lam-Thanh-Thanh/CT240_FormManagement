@@ -61,7 +61,7 @@ export default {
         AuthService.setToken(response.data); // Lưu token
         localStorage.setItem("token", response.data.token);
         alert("Đăng nhập thành công!");
-
+        console.log("token", response.data.token);
         this.$router.push("/"); //home
       } catch (error) {
         alert("Đăng nhập thất bại!");
