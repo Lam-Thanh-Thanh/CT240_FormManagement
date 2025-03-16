@@ -44,9 +44,10 @@ const router = createRouter({
       component: ProjectCreate,
     },
     {
-      path: "/projects/edit",
+      path: "/projects/:projectId/edit",
       name: "project-edit",
       component: ProjectEdit,
+      props: true,
     },
     {
       path: "/projects/:projectId/forms/create",

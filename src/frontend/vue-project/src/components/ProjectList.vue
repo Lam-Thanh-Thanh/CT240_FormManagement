@@ -62,13 +62,6 @@ export default {
   },
 
   methods: {
-    checkLogin() {
-      this.isLoggedIn = !!AuthService.getToken(); // Kiểm tra token, nếu có thì set isLoggedIn = true
-      if (!this.isLoggedIn) {
-        alert("Bạn cần đăng nhập trước!");
-        router.push("/login"); // Chuyển hướng đến trang đăng nhập
-      }
-    },
     async fetchAllProjects() {
       try {
         // Lấy token từ localStorage

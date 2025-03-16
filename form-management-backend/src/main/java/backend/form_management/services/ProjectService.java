@@ -37,7 +37,7 @@ public class ProjectService {
     }
 
 
-    //update form
+    //update project
     public Project updateProject(String projectId, Project updatedProject) {
         Optional<Project> project = projectRepository.findById(projectId);
         if (project.isPresent()) {

@@ -87,6 +87,8 @@
 <script>
 import ProjectService from "@/services/ProjectService";
 import FormService from "@/services/FormService";
+import router from "@/router"; // Import router để điều hướng
+import { jwtDecode } from "jwt-decode";
 export default {
   props: ["projectId"],
   data() {
@@ -94,12 +96,63 @@ export default {
       open: false,
       project: "",
       forms: [],
+      userId: "",
+      isLoggedIn: "",
     };
   },
+  // async created() {
+  //   await this.getProjectDetails();
+  // },
   async created() {
-    await this.getProjectDetails();
+    const hasAccess = await this.checkLogin();
+    if (hasAccess) {
+      this.getProjectDetails();
+    }
   },
   methods: {
+    async checkLogin() {
+      // Lấy token từ localStorage
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Bạn chưa đăng nhập!");
+        router.push("/login");
+        return false;
+      }
+
+      try {
+        // Giải mã token để lấy userId
+        const decoded = jwtDecode(token);
+        this.userId = decoded.sub; // Đảm bảo key trong token là 'sub' hoặc 'userId'
+
+        // Lấy danh sách tất cả project của userId
+        const response = await ProjectService.getAllProjects(this.userId);
+
+        if (response && response.data) {
+          const userProjects = response.data;
+
+          // Kiểm tra projectId có trong danh sách project của user không
+          const isProjectValid = userProjects.some(
+            (project) => project.id === this.projectId
+          );
+
+          if (!isProjectValid) {
+            alert("Bạn không có quyền truy cập vào dự án này!");
+            router.push("/");
+            return false;
+          }
+          return true;
+        } else {
+          alert("Không thể lấy danh sách dự án!");
+          router.push("/");
+          return false;
+        }
+      } catch (error) {
+        console.error("Lỗi khi kiểm tra đăng nhập:", error);
+        alert("Đã xảy ra lỗi, vui lòng thử lại!");
+        router.push("/login");
+        return false;
+      }
+    },
     formattedDate(createdAt) {
       return new Date(createdAt).toLocaleString("en-US", {
         year: "numeric",
@@ -115,9 +168,6 @@ export default {
       try {
         const response = await ProjectService.getProjectDetials(this.projectId);
         this.project = response.data;
-        //
-        // const response1 = await FormService.getAllFormOfProject(this.projectId);   //id
-        // this.form = response.data;
 
         console.log(response.data);
       } catch (error) {

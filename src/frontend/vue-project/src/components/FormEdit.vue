@@ -103,6 +103,9 @@
 import FormService from "@/services/FormService";
 import Question from "./Question.vue";
 import { v4 as uuidv4 } from "uuid";
+import router from "@/router"; // Import router để điều hướng
+import { jwtDecode } from "jwt-decode";
+import ProjectService from "@/services/ProjectService";
 
 export default {
   components: { Question },
@@ -111,14 +114,62 @@ export default {
     return {
       open: false,
       // oldTitle: "form1",
-      form: {},
+      form: { title: "", description: "" },
+      userId: "",
     };
   },
   async created() {
-    await this.getFormDetails();
+    const hasAccess = await this.checkLogin();
+
+    if (hasAccess) {
+      await this.getFormDetails();
+    }
   },
 
   methods: {
+    async checkLogin() {
+      // Lấy token từ localStorage
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Bạn chưa đăng nhập!");
+        router.push("/login");
+        return false;
+      }
+
+      try {
+        // Giải mã token để lấy userId
+        const decoded = jwtDecode(token);
+        this.userId = decoded.sub; // Đảm bảo key trong token là 'sub' hoặc 'userId'
+
+        // Lấy danh sách tất cả project của userId
+        const response = await ProjectService.getAllProjects(this.userId);
+
+        if (response && response.data) {
+          const userProjects = response.data;
+
+          // Kiểm tra projectId có trong danh sách project của user không
+          const isProjectValid = userProjects.some(
+            (project) => project.id === this.projectId
+          );
+
+          if (!isProjectValid) {
+            alert("Bạn không có quyền truy cập vào dự án này!");
+            router.push("/");
+            return false;
+          }
+          return true;
+        } else {
+          alert("Không thể lấy danh sách dự án!");
+          router.push("/");
+          return false;
+        }
+      } catch (error) {
+        console.error("Lỗi khi kiểm tra đăng nhập:", error);
+        alert("Đã xảy ra lỗi, vui lòng thử lại!");
+        router.push("/login");
+        return false;
+      }
+    },
     formattedDate(createdAt) {
       return new Date(createdAt).toLocaleString("en-US", {
         year: "numeric",
@@ -134,9 +185,16 @@ export default {
       try {
         const response = await FormService.getFormDetails(this.formId);
         this.form = response.data;
+        if (this.form.projectId !== this.projectId) {
+          alert("This form does not exist in the project!!");
+          this.$router.push("/"); // Điều hướng về trang chính để tránh trang trắng
+          return;
+        }
         console.log(response.data);
       } catch (error) {
         console.error("There was an error getting form details:", error);
+        alert("Không thể tải dữ liệu biểu mẫu. Vui lòng thử lại!");
+        this.$router.push("/"); // Điều hướng về trang chính để tránh trang trắng
       }
     },
     async addMoreQuestion() {

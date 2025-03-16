@@ -33,7 +33,7 @@ public class ProjectController {
 //    }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<Project> > getAllProjectsByUserId(@PathVariable("userId") String userId) {
+    public ResponseEntity<List<Project>> getAllProjectsByUserId(@PathVariable("userId") String userId) {
         return new ResponseEntity<>(projectService.getAllProjectsByUserId(userId), HttpStatus.OK);
     }
 
@@ -49,9 +49,9 @@ public class ProjectController {
         return projectService.createProject(project);
     }
 
-@PutMapping("/{projectId}/update")
-public ResponseEntity<Project> updateProject(@PathVariable("projectId") String projectId, @RequestBody Project project) {
-    Project project1 = projectService.updateProject(projectId, project);
+    @PutMapping("/{projectId}/update")
+    public ResponseEntity<Project> updateProject(@PathVariable("projectId") String projectId, @RequestBody Project project) {
+        Project project1 = projectService.updateProject(projectId, project);
 
     return ResponseEntity.ok(project1);
 }
