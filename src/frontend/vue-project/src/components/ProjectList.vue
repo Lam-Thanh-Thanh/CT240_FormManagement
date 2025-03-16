@@ -45,16 +45,18 @@
 import ProjectService from "@/services/ProjectService";
 import { AuthService } from "@/services/authService";
 import router from "@/router"; // Import router để điều hướng
+import { jwtDecode } from "jwt-decode";
 export default {
   data() {
     return {
       projects: [],
       isLoggedIn: false,
+      userId: "",
     };
   },
-  mounted() {
-    this.checkLogin(); // Kiểm tra đăng nhập khi component được mount
-  },
+  // mounted() {
+  //   this.checkLogin(); // Kiểm tra đăng nhập khi component được mount
+  // },
   async created() {
     await this.fetchAllProjects();
   },
@@ -69,8 +71,21 @@ export default {
     },
     async fetchAllProjects() {
       try {
-        const response = await ProjectService.getAllProjects();
+        // Lấy token từ localStorage
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("Bạn cần đăng nhập trước!");
+          router.push("/login"); // Chuyển hướng đến trang đăng nhập
+          return;
+        }
+
+        // Giải mã token để lấy userId
+        const decoded = jwtDecode(token);
+        this.userId = decoded.sub; // Đảm bảo key trong token là 'userId'
+        console.log("User ID:", this.userId); // Kiểm tra userId
+        const response = await ProjectService.getAllProjects(this.userId);
         this.projects = response.data;
+        console.log("API Response:", response); // Kiểm tra dữ liệu trả về
       } catch (error) {
         console.error("There was an error fetching the projects:", error);
       }

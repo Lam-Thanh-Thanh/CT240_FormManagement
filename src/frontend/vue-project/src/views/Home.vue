@@ -14,38 +14,10 @@
       />
     </div>
   </div>
-
-  <!-- Kiểm tra đăng nhập, nếu đã đăng nhập thì hiển thị ProjectList -->
-  <div>
-    <ProjectList />
-  </div>
 </template>
 
 <script>
-import Login from "@/components/Login.vue";
-import ProjectList from "@/components/ProjectList.vue";
-import { AuthService } from "@/services/authService";
-import router from "@/router"; // Import router để điều hướng
-export default {
-  components: { ProjectList, Login },
-  data() {
-    return {
-      // isLoggedIn: false, // Trạng thái đăng nhập
-    };
-  },
-  // mounted() {
-  //   this.checkLogin(); // Kiểm tra đăng nhập khi component được mount
-  // },
-  methods: {
-    // checkLogin() {
-    //   this.isLoggedIn = !!AuthService.getToken(); // Kiểm tra token, nếu có thì set isLoggedIn = true
-    //   if (!this.isLoggedIn) {
-    //     alert("Bạn cần đăng nhập trước!");
-    //     router.push("/login"); // Chuyển hướng đến trang đăng nhập
-    //   }
-    // },
-  },
-};
+export default {};
 </script>
 
 <style lang="scss" scoped></style>

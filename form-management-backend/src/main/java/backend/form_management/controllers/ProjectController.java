@@ -25,17 +25,19 @@ public class ProjectController {
  @Autowired
  private FormService formService;
 
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<List<Project> > getAllProjects(@PathVariable("userId") String userId) {
-//        return new ResponseEntity<>(projectService.getAllProjects(userId), HttpStatus.OK);
+
+
+//    @GetMapping("/")
+//    public ResponseEntity<List<Project> > getAllProjects() {
+//        return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
 //    }
 
-    @GetMapping("/")
-    public ResponseEntity<List<Project> > getAllProjects() {
-        return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<Project> > getAllProjectsByUserId(@PathVariable("userId") String userId) {
+        return new ResponseEntity<>(projectService.getAllProjectsByUserId(userId), HttpStatus.OK);
     }
 
-    @GetMapping("/{projectId}")
+    @GetMapping("/{projectId}/details")
     public ResponseEntity<Optional<Project>> getProjectDetails(@PathVariable("projectId") String projectId) {
         return new ResponseEntity<Optional<Project>>(projectService.getProjectById(projectId), HttpStatus.OK);
     }

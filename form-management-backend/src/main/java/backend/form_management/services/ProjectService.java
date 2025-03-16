@@ -20,8 +20,9 @@ public class ProjectService {
 //    }
 
     //get all projects
-    public List<Project> getAllProjects() {
-        return projectRepository.findAll();
+    public List<Project> getAllProjectsByUserId(String userId) {
+
+        return projectRepository.findAllByUserId(userId);
     }
 
     //get project by id
