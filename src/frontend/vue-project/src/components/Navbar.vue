@@ -42,21 +42,28 @@
             to="/login"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
           >
-            Đăng nhập
+            Login
           </router-link>
           <router-link
             v-if="!isAuthenticated"
             to="/register"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
           >
-            Đăng ký
+            Register
+          </router-link>
+          <router-link
+            v-if="isAuthenticated"
+            to="/account"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+          >
+            Account
           </router-link>
           <button
             v-if="isAuthenticated"
             @click="handleLogout"
             class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
           >
-            Đăng xuất
+            Log out
           </button>
         </div>
       </div>
@@ -84,7 +91,7 @@ export default {
     },
     handleLogout() {
       AuthService.removeToken();
-      this.$router.push("/");
+      this.$router.push("/login");
       this.isDropdownOpen = false;
     },
   },

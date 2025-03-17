@@ -42,9 +42,61 @@
   </div>
 
   <!-- form list -->
-  <div class="flex flex-wrap gap-14 justify-start px-60 py-48 bg-white">
+  <div class="flex flex-wrap gap-14 justify-start px-60 pb-48 pt-24 bg-white">
+    <h2 class="text-3xl text-center font-extrabold w-[100%] mb-5">Form List</h2>
+    <!-- search -->
+    <div class="flex w-[100%] justify-center pb-12">
+      <div class="w-1/3">
+        <div class="relative w-[100%]">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search forms..."
+            class="w-[100%] pl-10 pr-4 py-4 rounded-full text-gray-700 focus:outline-1 focus:outline-gray-300 shadow-md focus:shadow-sm placeholder-gray-500 focus:placeholder-gray-400 transition duration-300 ease-in-out"
+          />
+          <div
+            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+          >
+            <i
+              class="fa-solid fa-magnifying-glass text-gray-300 transition duration-300 ease-in-out"
+            ></i>
+          </div>
+        </div>
+      </div>
+    </div>
     <div
       class="w-[22%] bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
+      v-if="searchQuery"
+      v-for="(form, index) in filteredForms"
+      :key="index"
+    >
+      <button v-on:click="viewFormDetails(form.id)" class="w-full text-left">
+        <div
+          class="font-bold text-lg bg-gray-200 border-2 border-myLightNavy rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
+        >
+          {{ form.title }}
+        </div>
+        <div class="py-3 px-4">
+          <p class="overflow-hidden whitespace-nowrap overflow-ellipsis">
+            {{ form.description }}
+          </p>
+        </div>
+        <!-- delete form -->
+      </button>
+
+      <button
+        type="button"
+        v-on:click="deleteForm(index)"
+        class="float-right pb-3 px-6"
+      >
+        <i
+          class="fa-regular fa-trash-can hover:bg-gray-200 p-2 rounded-full text-gray-400 hover:text-gray-700"
+        ></i>
+      </button>
+    </div>
+    <div
+      class="w-[22%] bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
+      v-if="!searchQuery"
       v-for="(form, index) in project.forms"
       :key="index"
     >
@@ -98,23 +150,29 @@ export default {
       forms: [],
       userId: "",
       isLoggedIn: "",
+      searchQuery: "", // Thêm searchQuery
     };
   },
-  // async created() {
-  //   await this.getProjectDetails();
-  // },
+
   async created() {
     const hasAccess = await this.checkLogin();
     if (hasAccess) {
       this.getProjectDetails();
     }
   },
+  computed: {
+    filteredForms() {
+      return this.project.forms.filter((form) =>
+        form.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+  },
   methods: {
     async checkLogin() {
       // Lấy token từ localStorage
       const token = localStorage.getItem("token");
       if (!token) {
-        alert("Bạn chưa đăng nhập!");
+        alert("You need to login first!");
         router.push("/login");
         return false;
       }
@@ -136,13 +194,13 @@ export default {
           );
 
           if (!isProjectValid) {
-            alert("Bạn không có quyền truy cập vào dự án này!");
+            alert("You don't have permission to access this project!");
             router.push("/");
             return false;
           }
           return true;
         } else {
-          alert("Không thể lấy danh sách dự án!");
+          alert("Cannot get the project list!");
           router.push("/");
           return false;
         }

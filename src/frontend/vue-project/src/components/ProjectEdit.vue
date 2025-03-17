@@ -35,6 +35,7 @@
         <button
           type="submit"
           class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
+          v-on:click="updateProject()"
         >
           Save
         </button>
@@ -69,7 +70,7 @@ export default {
       // Lấy token từ localStorage
       const token = localStorage.getItem("token");
       if (!token) {
-        alert("Bạn chưa đăng nhập!");
+        alert("You need to login first!");
         router.push("/login");
         return false;
       }
@@ -91,13 +92,13 @@ export default {
           );
 
           if (!isProjectValid) {
-            alert("Bạn không có quyền truy cập vào dự án này!");
+            alert("You don't have permission to access this project!");
             router.push("/");
             return false;
           }
           return true;
         } else {
-          alert("Không thể lấy danh sách dự án!");
+          alert("Cannot get the project list!");
           router.push("/");
           return false;
         }
@@ -129,13 +130,24 @@ export default {
         console.error("There was an error getting project details:", error);
       }
     },
-    updateProject() {
-      //herreeeeee
+    async updateProject() {
+      try {
+        const response = await ProjectService.updateProject(
+          this.projectId,
+          this.project
+        );
+        console.log("Project updated:", this.project);
+        alert("Project is updated successfully!!");
+        this.$router.push({
+          name: "project-details",
+          params: { projectId: this.projectId },
+        });
+      } catch (error) {
+        console.error("There was an error updating project:", error);
+      }
     },
   },
 };
 </script>
 
-<style scoped>
-/* Bạn có thể thêm CSS tùy chỉnh ở đây nếu cần */
-</style>
+<style scoped></style>

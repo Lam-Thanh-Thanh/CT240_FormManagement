@@ -11,6 +11,9 @@ export default {
   createProject(projectData) {
     return apiClient.post("/create", projectData);
   },
+  updateProject(projectId, projectData) {
+    return apiClient.put(`/${projectId}/update`, projectData);
+  },
   getAllProjects(userId) {
     return apiClient.get(`/${userId}`);
   },

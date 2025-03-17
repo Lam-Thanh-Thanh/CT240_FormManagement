@@ -24,6 +24,13 @@
       :key="qIndex"
       class="shadow-lg shadow-myLightGray p-14 rounded border-t-pink-800 border-t-4 mb-20"
     >
+      <!-- image question -->
+      <img
+        v-if="question.imageUrl"
+        :src="question.imageUrl"
+        alt="question image"
+        class="w-48 h-auto rounded"
+      />
       <!-- content -->
       <div class="flex row justify-between items-start">
         <p class="font-semibold">{{ question.content }}</p>
@@ -35,27 +42,46 @@
         :key="index"
         class="mt-7"
       >
-        <p class="font-bold">Response {{ index + 1 }}:</p>
         <!-- Thêm số thứ tự -->
+        <p class="font-bold">Response {{ index + 1 }}:</p>
 
-        <!-- Nếu không có câu trả lời-->
+        <!-- user Id -->
+        <p class="font-bold">User: {{ answer.userId }}</p>
 
         <!-- Nếu là câu trả lời dạng text -->
         <div v-if="answer.answerText">
           <p class="bg-gray-100 p-2 rounded my-1">{{ answer.answerText }}</p>
         </div>
 
-        <!-- Nếu là câu trả lời multiple-choice -->
+        <!-- Nếu là câu trả lời checkbox -->
         <div
           v-else-if="answer.selectedOptions && answer.selectedOptions.length"
         >
           <div class="bg-gray-100 p-2 rounded my-1">
-            <p
+            <div
               v-for="(option, optIndex) in answer.selectedOptions"
               :key="optIndex"
             >
-              {{ option }}
-            </p>
+              <img
+                v-if="option.imageUrl"
+                :src="option.imageUrl"
+                alt="checkbox image"
+                class="w-48 h-auto rounded"
+              />
+              {{ option.optionContent }}
+            </div>
+          </div>
+        </div>
+        <!-- Nếu là câu trả lời radio -->
+        <div v-else-if="answer.oneOption">
+          <div class="bg-gray-100 p-2 rounded my-1">
+            <img
+              v-if="answer.oneOption.imageUrl"
+              :src="answer.oneOption.imageUrl"
+              alt="radio image"
+              class="w-48 h-auto rounded"
+            />
+            {{ answer.oneOption.optionContent }}
           </div>
         </div>
 
@@ -69,6 +95,7 @@
             />
           </div>
         </div>
+        <!-- Nếu không có câu trả lời-->
         <div v-else>
           <p class="bg-gray-100 p-2 rounded my-1"><strong>No answer</strong></p>
         </div>
@@ -136,8 +163,10 @@ export default {
 
       this.responses.forEach((response) => {
         response.answers.forEach((answer) => {
+          answer.userId = response.userId; //
           if (answer.questionId === questionId) {
             answers.push(answer);
+            console.log(answer);
           }
         });
       });

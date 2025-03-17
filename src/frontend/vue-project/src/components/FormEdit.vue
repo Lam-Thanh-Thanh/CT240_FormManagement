@@ -12,7 +12,7 @@
         </button>
         <div class="shadow-lg rounded-md py-4 bg-white" v-if="open">
           <div class="bg-white hover:bg-yellow-300 px-7 py-2 border-b-gray-100">
-            <button class="" v-on:click="formExport">View Results</button>
+            <button class="" v-on:click="formExport">Export</button>
           </div>
           <div class="bg-white hover:bg-yellow-300 px-7 py-2 border-b-gray-100">
             <button class="" v-on:click="viewResponses">Responses</button>
@@ -131,7 +131,7 @@ export default {
       // Lấy token từ localStorage
       const token = localStorage.getItem("token");
       if (!token) {
-        alert("Bạn chưa đăng nhập!");
+        alert("You need to login first!");
         router.push("/login");
         return false;
       }
@@ -153,13 +153,13 @@ export default {
           );
 
           if (!isProjectValid) {
-            alert("Bạn không có quyền truy cập vào dự án này!");
+            alert("You don't have permission to access this project!");
             router.push("/");
             return false;
           }
           return true;
         } else {
-          alert("Không thể lấy danh sách dự án!");
+          alert("Cannot get the project list!");
           router.push("/");
           return false;
         }
