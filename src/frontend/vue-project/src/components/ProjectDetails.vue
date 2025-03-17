@@ -1,32 +1,27 @@
 <template>
-  <!-- dropdown -->
-  <div class="flex gap-16 items-start mx-60 my-32 justify-between">
-    <h1 class="text-4xl font-extrabold">Project Details</h1>
-    <div class="text-right">
-      <button
-        v-on:click="open = !open"
-        class="bg-zinc-200 rounded-full px-2 py-1 m-2 hover:shadow-lg"
-      >
-        <i class="fa-solid fa-ellipsis"></i>
-      </button>
-      <div class="shadow-lg" v-if="open">
-        <div class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2">
-          <button class="">View Results</button>
-        </div>
-
-        <div class="hover:bg-zinc-200 px-2 py-1 border-b-gray-100 border-b-2">
-          <button class="">Edit Infomation</button>
-        </div>
-        <div class="hover:bg-red-400 px-2 py-1">
-          <button class="">Delete</button>
+  <div class="py-20 px-60 border-b">
+    <div class="flex gap-16 items-start justify-between">
+      <h1 class="text-4xl font-extrabold">Project Details</h1>
+      <!-- dropdown -->
+      <div class="text-center">
+        <button
+          v-on:click="open = !open"
+          class="bg-zinc-200 rounded-full px-2 py-1 m-2 hover:shadow-lg"
+        >
+          <i class="fa-solid fa-ellipsis"></i>
+        </button>
+        <div class="shadow-lg rounded-md py-4 bg-white" v-if="open">
+          <div class="hover:bg-yellow-300 px-10 py-1">
+            <button class="" v-on:click="editProject">Edit</button>
+          </div>
+          <div class="hover:bg-red-500 px-10 py-1 hover:text-white">
+            <button class="" v-on:click="deleteProject">Delete</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="mt-0 m-40">
     <!-- project information -->
-    <div class="text-left mx-20 my-32">
+    <div class="text-left mt-9">
       <div class="pb-3">
         <span class="font-bold pr-2">Name:</span>
         <span class="">{{ project.name }}</span>
@@ -36,60 +31,116 @@
         <span class="">{{ project.description }}</span>
       </div>
       <div class="pb-3">
-        <span class="font-bold pr-2">Date created:</span>
-        <span class="">Date</span>
+        <span class="font-bold pr-2">Created at:</span>
+        <span class="">{{ formattedDate(project.createdAt) }}</span>
+      </div>
+      <div class="pb-3">
+        <span class="font-bold pr-2">Update at:</span>
+        <span class="">{{ formattedDate(project.lastModifiedAt) }}</span>
       </div>
     </div>
+  </div>
 
-    <!-- form list -->
-    <div class="flex flex-wrap gap-14 justify-start mx-20 mt-32 mb-48">
-      <div
-        class="w-[22%] bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
-        v-for="(form, index) in project.forms"
-        :key="index"
-      >
-        <button v-on:click="viewFormDetails(form.id)" class="w-full text-left">
+  <!-- form list -->
+  <div class="flex flex-wrap gap-14 justify-start px-60 pb-48 pt-24 bg-white">
+    <h2 class="text-3xl text-center font-extrabold w-[100%] mb-5">Form List</h2>
+    <!-- search -->
+    <div class="flex w-[100%] justify-center pb-12">
+      <div class="w-1/3">
+        <div class="relative w-[100%]">
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search forms..."
+            class="w-[100%] pl-10 pr-4 py-4 rounded-full text-gray-700 focus:outline-1 focus:outline-gray-300 shadow-md focus:shadow-sm placeholder-gray-500 focus:placeholder-gray-400 transition duration-300 ease-in-out"
+          />
           <div
-            class="font-bold text-lg bg-gray-200 border-2 border-myLightNavy rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
+            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
           >
-            {{ form.title }}
+            <i
+              class="fa-solid fa-magnifying-glass text-gray-300 transition duration-300 ease-in-out"
+            ></i>
           </div>
-          <div class="py-3 px-4">
-            <p class="overflow-hidden whitespace-nowrap overflow-ellipsis">
-              {{ form.description }}
-            </p>
-            <p class="">Date:</p>
-          </div>
-          <!-- delete form -->
-        </button>
-
-        <button
-          type="button"
-          v-on:click="deleteForm(index)"
-          class="float-right pb-3 px-6"
-        >
-          <i
-            class="fa-regular fa-trash-can hover:bg-gray-200 p-2 rounded-full text-gray-400 hover:text-gray-700"
-          ></i>
-        </button>
+        </div>
       </div>
-      <!-- create new -->
+    </div>
+    <div
+      class="w-[22%] bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
+      v-if="searchQuery"
+      v-for="(form, index) in filteredForms"
+      :key="index"
+    >
+      <button v-on:click="viewFormDetails(form.id)" class="w-full text-left">
+        <div
+          class="font-bold text-lg bg-gray-200 border-2 border-myLightNavy rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
+        >
+          {{ form.title }}
+        </div>
+        <div class="py-3 px-4">
+          <p class="overflow-hidden whitespace-nowrap overflow-ellipsis">
+            {{ form.description }}
+          </p>
+        </div>
+        <!-- delete form -->
+      </button>
 
       <button
-        v-on:click="addForm"
-        class="w-[15%] px-6 py-4 bg-white shadow-md hover:shadow-lg rounded-2xl"
+        type="button"
+        v-on:click="deleteForm(index)"
+        class="float-right pb-3 px-6"
       >
-        <p class="text-xl mb-2">Add form</p>
-        <i class="fa-solid fa-plus"></i>
+        <i
+          class="fa-regular fa-trash-can hover:bg-gray-200 p-2 rounded-full text-gray-400 hover:text-gray-700"
+        ></i>
       </button>
     </div>
-    <!-- edit delete -->
+    <div
+      class="w-[22%] bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
+      v-if="!searchQuery"
+      v-for="(form, index) in project.forms"
+      :key="index"
+    >
+      <button v-on:click="viewFormDetails(form.id)" class="w-full text-left">
+        <div
+          class="font-bold text-lg bg-gray-200 border-2 border-myLightNavy rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
+        >
+          {{ form.title }}
+        </div>
+        <div class="py-3 px-4">
+          <p class="overflow-hidden whitespace-nowrap overflow-ellipsis">
+            {{ form.description }}
+          </p>
+        </div>
+        <!-- delete form -->
+      </button>
+
+      <button
+        type="button"
+        v-on:click="deleteForm(index)"
+        class="float-right pb-3 px-6"
+      >
+        <i
+          class="fa-regular fa-trash-can hover:bg-gray-200 p-2 rounded-full text-gray-400 hover:text-gray-700"
+        ></i>
+      </button>
+    </div>
+    <!-- create new -->
+
+    <button
+      v-on:click="addForm"
+      class="w-[15%] px-6 py-4 bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
+    >
+      <p class="text-xl mb-2">Add form</p>
+      <i class="fa-solid fa-plus"></i>
+    </button>
   </div>
 </template>
 
 <script>
 import ProjectService from "@/services/ProjectService";
 import FormService from "@/services/FormService";
+import router from "@/router"; // Import router để điều hướng
+import { jwtDecode } from "jwt-decode";
 export default {
   props: ["projectId"],
   data() {
@@ -97,19 +148,84 @@ export default {
       open: false,
       project: "",
       forms: [],
+      userId: "",
+      isLoggedIn: "",
+      searchQuery: "", // Thêm searchQuery
     };
   },
+
   async created() {
-    await this.getProjectDetails();
+    const hasAccess = await this.checkLogin();
+    if (hasAccess) {
+      this.getProjectDetails();
+    }
+  },
+  computed: {
+    filteredForms() {
+      return this.project.forms.filter((form) =>
+        form.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
   },
   methods: {
+    async checkLogin() {
+      // Lấy token từ localStorage
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You need to login first!");
+        router.push("/login");
+        return false;
+      }
+
+      try {
+        // Giải mã token để lấy userId
+        const decoded = jwtDecode(token);
+        this.userId = decoded.sub; // Đảm bảo key trong token là 'sub' hoặc 'userId'
+
+        // Lấy danh sách tất cả project của userId
+        const response = await ProjectService.getAllProjects(this.userId);
+
+        if (response && response.data) {
+          const userProjects = response.data;
+
+          // Kiểm tra projectId có trong danh sách project của user không
+          const isProjectValid = userProjects.some(
+            (project) => project.id === this.projectId
+          );
+
+          if (!isProjectValid) {
+            alert("You don't have permission to access this project!");
+            router.push("/");
+            return false;
+          }
+          return true;
+        } else {
+          alert("Cannot get the project list!");
+          router.push("/");
+          return false;
+        }
+      } catch (error) {
+        console.error("Lỗi khi kiểm tra đăng nhập:", error);
+        alert("Đã xảy ra lỗi, vui lòng thử lại!");
+        router.push("/login");
+        return false;
+      }
+    },
+    formattedDate(createdAt) {
+      return new Date(createdAt).toLocaleString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        timeZoneName: "short",
+      });
+    },
     async getProjectDetails() {
       try {
         const response = await ProjectService.getProjectDetials(this.projectId);
         this.project = response.data;
-        //
-        // const response1 = await FormService.getAllFormOfProject(this.projectId);   //id
-        // this.form = response.data;
 
         console.log(response.data);
       } catch (error) {
@@ -138,8 +254,23 @@ export default {
         this.project.forms[index].id
       );
       this.project.forms.splice(index, 1);
+      alert("Form is deleted successfully!!");
+      console.log(response.data);
+    },
+    async deleteProject() {
+      const response = await ProjectService.deleteProject(this.project.id);
 
       console.log(response.data);
+      alert("Project is deleted successfully!!");
+      this.$router.push({
+        name: "project-list",
+      });
+    },
+    async editProject() {
+      this.$router.push({
+        name: "project-edit",
+        params: { projectId: this.projectId },
+      });
     },
   },
 };

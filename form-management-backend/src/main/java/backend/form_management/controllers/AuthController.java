@@ -36,7 +36,7 @@ public class AuthController {
         Optional<User> foundUser = userRepository.findByUsername(user.getUsername());
 
         if (foundUser.isPresent() && passwordEncoder.matches(user.getPassword(), foundUser.get().getPassword())) {
-            String token = jwtUtil.generateToken(user.getUsername());
+            String token = jwtUtil.generateToken(foundUser.get().getId());
             return ResponseEntity.ok(Map.of("token", token));
         }
         return ResponseEntity.status(401).body(Map.of("error", "Invalid credentials"));

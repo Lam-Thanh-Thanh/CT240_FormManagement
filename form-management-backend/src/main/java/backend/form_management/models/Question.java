@@ -19,6 +19,9 @@ public class Question {
     private String content;
     private String formId;
     private String type;    //
+        private String imageUrl;
+    private String publicId;
+
     private List<Option> options;
 //    private List<Answer> answers;
 

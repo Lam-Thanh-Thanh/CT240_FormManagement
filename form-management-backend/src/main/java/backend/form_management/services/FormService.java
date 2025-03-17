@@ -1,13 +1,11 @@
 package backend.form_management.services;
 
-import backend.form_management.models.Form;
-import backend.form_management.models.Option;
-import backend.form_management.models.Question;
-import backend.form_management.models.Response;
+import backend.form_management.models.*;
 import backend.form_management.repositories.FormRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -22,14 +20,14 @@ public class FormService {
     @Autowired
     private ResponseService responseService;
 
-
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
 
     //get form by id
     public Optional<Form> getFormById(String formId) {
         return formRepository.findById(formId);
     }
-
 
 
     //create a form in the project
@@ -45,7 +43,6 @@ public class FormService {
         }
         return newForm;
     }
-
 
 
     //update form
@@ -67,7 +64,6 @@ public class FormService {
 //                        question.setId(UUID.randomUUID().toString());
 //                    }
 //            }
-
             existingForm.setTitle(updatedForm.getTitle());
             existingForm.setDescription(updatedForm.getDescription());
             existingForm.setQuestions(updatedForm.getQuestions());
@@ -91,23 +87,35 @@ public class FormService {
     }
 
     //delete form
-    public void deleteForm(String formId) {
-        formRepository.deleteById(formId);
-        List<Response> responses = responseService.getAllResponsesByFormId(formId);
-        for (Response response : responses) {
-          responseService.deleteResponse(response.getId());
+    public void deleteForm(String formId) throws IOException {
+        Optional<Form> optionalForm = formRepository.findById(formId);
+        if (optionalForm.isPresent()) {
+            Form existingForm = optionalForm.get();
+            //delete form
+            formRepository.deleteById(formId);
+                //delete all responses of form
+            List<Response> responses = responseService.getAllResponsesByFormId(formId);
+            for (Response response : responses) {
+                responseService.deleteResponse(response.getId());
+            }
+                //delete all image of form
+                    //image of question
+            List<Question> questions = existingForm.getQuestions();
+            for (Question question : questions) {
+                cloudinaryService.deleteFile(question.getPublicId());
+                        //image of option
+                List<Option> options = question.getOptions();
+                for (Option option : options) {
+                    cloudinaryService.deleteFile(option.getPublicId());
+                }
+            }
+
+
         }
     }
 
     //delete form of project
-    public List<Form> getAllFormsOfProject(String projectId) {
+    public List<Form> getAllFormsOfProject (String projectId){
         return formRepository.findAllByProjectId(projectId);
     }
-
-
-    //add question  -> update
-
-
-
-
 }

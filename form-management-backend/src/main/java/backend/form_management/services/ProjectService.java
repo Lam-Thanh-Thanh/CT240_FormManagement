@@ -3,7 +3,6 @@ package backend.form_management.services;
 import backend.form_management.models.Form;
 import backend.form_management.models.Project;
 import backend.form_management.repositories.ProjectRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +20,9 @@ public class ProjectService {
 //    }
 
     //get all projects
-    public List<Project> getAllProjects() {
-        return projectRepository.findAll();
+    public List<Project> getAllProjectsByUserId(String userId) {
+
+        return projectRepository.findAllByUserId(userId);
     }
 
     //get project by id
@@ -36,10 +36,20 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-//    public Project createProject(Project project) {
-//        return projectRepository.save(project);
-//    }
 
+    //update project
+    public Project updateProject(String projectId, Project updatedProject) {
+        Optional<Project> project = projectRepository.findById(projectId);
+        if (project.isPresent()) {
+            Project existingProject = project.get();
+            existingProject.setName(updatedProject.getName());
+            existingProject.setDescription(updatedProject.getDescription());
+            return projectRepository.save(existingProject);
+        }  else {
+            throw new RuntimeException("Form not found");
+        }
+
+    }
 
 
     //add form to project

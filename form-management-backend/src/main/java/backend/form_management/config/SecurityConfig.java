@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .requestMatchers("/projects/**").permitAll() // Mở quyền truy cập API project
                 .requestMatchers("/api/responses/**").permitAll()
                 .requestMatchers("/api/reports/**").permitAll()
+                            .requestMatchers("/api/users/**").permitAll()    //mở quyền get user
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 // .anyRequest().authenticated()
             )

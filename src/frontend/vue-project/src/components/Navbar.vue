@@ -25,25 +25,45 @@
       >
       <!-- Biểu tượng User -->
       <div class="relative">
-        <button @click="toggleDropdown" class="text-xl font-bold pl-7 hover:text-gray-900 focus:outline-none">
+        <button
+          @click="toggleDropdown"
+          class="text-xl font-bold pl-7 hover:text-gray-900 focus:outline-none"
+        >
           <i class="fa-regular fa-user"></i>
         </button>
 
         <!-- Dropdown Menu -->
-        <div v-if="isDropdownOpen"
-          class="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg py-2 z-50">
-          <router-link v-if="!isAuthenticated" to="/login"
-            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-            Đăng nhập
+        <div
+          v-if="isDropdownOpen"
+          class="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg py-2 z-50"
+        >
+          <router-link
+            v-if="!isAuthenticated"
+            to="/login"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+          >
+            Login
           </router-link>
-          <router-link v-if="!isAuthenticated" to="/register"
-            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-            Đăng ký
+          <router-link
+            v-if="!isAuthenticated"
+            to="/register"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+          >
+            Register
           </router-link>
-          <button v-if="isAuthenticated"
+          <router-link
+            v-if="isAuthenticated"
+            to="/account"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+          >
+            Account
+          </router-link>
+          <button
+            v-if="isAuthenticated"
             @click="handleLogout"
-            class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
-            Đăng xuất
+            class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+          >
+            Log out
           </button>
         </div>
       </div>
@@ -71,7 +91,7 @@ export default {
     },
     handleLogout() {
       AuthService.removeToken();
-      this.$router.push("/");
+      this.$router.push("/login");
       this.isDropdownOpen = false;
     },
   },

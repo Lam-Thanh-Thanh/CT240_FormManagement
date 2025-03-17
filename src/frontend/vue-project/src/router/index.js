@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import ProjectList from "@/components/ProjectList.vue";
 import ProjectDetails from "@/components/ProjectDetails.vue";
-
+import ProjectEdit from "@/components/ProjectEdit.vue";
 import ProjectCreate from "@/components/ProjectCreate.vue";
 import FormCreate from "@/components/FormCreate.vue";
 import FormEdit from "@/components/FormEdit.vue";
@@ -12,6 +12,7 @@ import FormResponses from "@/components/FormResponses.vue";
 //THANH
 import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
+import Account from "@/components/Account.vue";
 
 
 const router = createRouter({
@@ -45,6 +46,12 @@ const router = createRouter({
       component: ProjectCreate,
     },
     {
+      path: "/projects/:projectId/edit",
+      name: "project-edit",
+      component: ProjectEdit,
+      props: true,
+    },
+    {
       path: "/projects/:projectId/forms/create",
       name: "form-create",
       component: FormCreate,
@@ -61,6 +68,11 @@ const router = createRouter({
       name: "form-responses",
       component: FormResponses,
       props: true,
+    },
+    {
+      path: "/account",
+      name: "account",
+      component: Account,
     },
     /*----------------------------*/
     {

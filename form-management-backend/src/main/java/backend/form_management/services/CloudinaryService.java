@@ -22,6 +22,8 @@ public class CloudinaryService {
         return uploadResult.get("url").toString();
     }
 
+
+
     public String deleteFile(String publicId) throws IOException {
         Map result = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
         return result.get("result").toString();

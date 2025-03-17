@@ -1,43 +1,35 @@
 <template>
-  <!-- dropdown -->
-  <div class="flex gap-16 items-start mx-72 my-32 mb-20 justify-between">
-    <h1 class="text-4xl font-extrabold">Form edit</h1>
-    <div class="text-right">
-      <button
-        v-on:click="open = !open"
-        class="bg-zinc-200 rounded-full px-2 py-1 m-2 hover:shadow-lg"
-      >
-        <i class="fa-solid fa-ellipsis"></i>
-      </button>
-      <div class="shadow-lg" v-if="open">
-        <div class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2">
-          <button class="" v-on:click="formExport">View Results</button>
-        </div>
-        <div class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2">
-          <button class="" v-on:click="viewResponses">Responses</button>
-        </div>
-        <div class="hover:bg-red-400 px-2 py-1">
-          <button class="">Delete</button>
+  <div class="py-20 px-80 border-b">
+    <div class="flex gap-16 items-start justify-between">
+      <h1 class="text-4xl font-extrabold">{{ form.title }}</h1>
+      <!-- dropdown -->
+      <div class="text-right">
+        <button
+          v-on:click="open = !open"
+          class="bg-zinc-200 rounded-full px-2 py-1 m-2 hover:shadow-lg"
+        >
+          <i class="fa-solid fa-ellipsis"></i>
+        </button>
+        <div class="shadow-lg rounded-md py-4 bg-white" v-if="open">
+          <div class="bg-white hover:bg-yellow-300 px-7 py-2 border-b-gray-100">
+            <button class="" v-on:click="formExport">Export</button>
+          </div>
+          <div class="bg-white hover:bg-yellow-300 px-7 py-2 border-b-gray-100">
+            <button class="" v-on:click="viewResponses">Responses</button>
+          </div>
+          <div class="bg-white hover:bg-red-500 px-7 py-2 hover:text-white">
+            <button class="" v-on:click="deleteForm">Delete</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="mt-0 m-40">
     <!-- Form information -->
-    <div class="text-left mx-32 my-20">
-      <div class="pb-3">
-        <span class="font-bold pr-2">Title:</span>
-        <span class=""> {{ form.title }}</span>
-      </div>
+    <div class="text-left pt-10">
       <div class="pb-3">
         <span class="font-bold pr-2">Description:</span>
         <span class="">{{ form.description }}</span>
       </div>
-      <div class="pb-3">
-        <span class="font-bold pr-2">Project Name:</span>
-        <span class=""> ..</span>
-      </div>
+
       <div class="pb-3">
         <span class="font-bold pr-2">Created at:</span>
         <span class="">{{ formattedDate(form.createdAt) }}</span>
@@ -47,7 +39,9 @@
         <span class="">{{ formattedDate(form.lastModifiedAt) }}</span>
       </div>
     </div>
+  </div>
 
+  <div class="p-40 bg-white">
     <form @submit.prevent="updateForm" colass="space-y-4">
       <!-- Tên form -->
       <div
@@ -109,6 +103,9 @@
 import FormService from "@/services/FormService";
 import Question from "./Question.vue";
 import { v4 as uuidv4 } from "uuid";
+import router from "@/router"; // Import router để điều hướng
+import { jwtDecode } from "jwt-decode";
+import ProjectService from "@/services/ProjectService";
 
 export default {
   components: { Question },
@@ -117,14 +114,62 @@ export default {
     return {
       open: false,
       // oldTitle: "form1",
-      form: {},
+      form: { title: "", description: "" },
+      userId: "",
     };
   },
   async created() {
-    await this.getFormDetails();
+    const hasAccess = await this.checkLogin();
+
+    if (hasAccess) {
+      await this.getFormDetails();
+    }
   },
 
   methods: {
+    async checkLogin() {
+      // Lấy token từ localStorage
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You need to login first!");
+        router.push("/login");
+        return false;
+      }
+
+      try {
+        // Giải mã token để lấy userId
+        const decoded = jwtDecode(token);
+        this.userId = decoded.sub; // Đảm bảo key trong token là 'sub' hoặc 'userId'
+
+        // Lấy danh sách tất cả project của userId
+        const response = await ProjectService.getAllProjects(this.userId);
+
+        if (response && response.data) {
+          const userProjects = response.data;
+
+          // Kiểm tra projectId có trong danh sách project của user không
+          const isProjectValid = userProjects.some(
+            (project) => project.id === this.projectId
+          );
+
+          if (!isProjectValid) {
+            alert("You don't have permission to access this project!");
+            router.push("/");
+            return false;
+          }
+          return true;
+        } else {
+          alert("Cannot get the project list!");
+          router.push("/");
+          return false;
+        }
+      } catch (error) {
+        console.error("Lỗi khi kiểm tra đăng nhập:", error);
+        alert("Đã xảy ra lỗi, vui lòng thử lại!");
+        router.push("/login");
+        return false;
+      }
+    },
     formattedDate(createdAt) {
       return new Date(createdAt).toLocaleString("en-US", {
         year: "numeric",
@@ -140,9 +185,16 @@ export default {
       try {
         const response = await FormService.getFormDetails(this.formId);
         this.form = response.data;
+        if (this.form.projectId !== this.projectId) {
+          alert("This form does not exist in the project!!");
+          this.$router.push("/"); // Điều hướng về trang chính để tránh trang trắng
+          return;
+        }
         console.log(response.data);
       } catch (error) {
         console.error("There was an error getting form details:", error);
+        alert("Không thể tải dữ liệu biểu mẫu. Vui lòng thử lại!");
+        this.$router.push("/"); // Điều hướng về trang chính để tránh trang trắng
       }
     },
     async addMoreQuestion() {
@@ -151,8 +203,10 @@ export default {
         content: "",
         formId: this.formId,
         type: "text",
+        imageUrl: "",
+        publicId: "",
+
         options: [],
-        // answer: [],
 
         open: false,
       };
@@ -173,7 +227,20 @@ export default {
       );
 
       console.log("Form updated:", this.form);
-      alert("Project đã được update thành công!");
+      alert("Form is updated successfully!!");
+    },
+
+    async deleteForm() {
+      const response = await FormService.deleteFormOfProject(
+        this.projectId,
+        this.formId
+      );
+      alert("Form is deleted successfully!!");
+      console.log(response.data);
+      this.$router.push({
+        name: "project-details",
+        params: { projectId: this.projectId },
+      });
     },
 
     formExport() {

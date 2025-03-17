@@ -1,13 +1,11 @@
 <template>
-  <div class="mb-60">
-    <h1 class="text-center m-32 mb-20 text-4xl font-extrabold">
-      Creating a form
-    </h1>
+  <div class="my-40">
+    <h1 class="text-center text-4xl font-extrabold">Creating a form</h1>
 
     <form @submit.prevent="submitForm" class="space-y-4">
       <!-- Tên form -->
       <div
-        class="p-6 bg-white rounded-lg shadow-md mt-0 my-40 m-80 border-t-pink-800 border-t-8"
+        class="p-6 bg-white rounded-lg shadow-md mx-80 border-t-pink-800 border-t-8 my-20"
       >
         <div class="my-5 mx-3">
           <label for="formTitle" class="block font-medium">Title:</label>
@@ -86,7 +84,7 @@ export default {
       );
 
       console.log("Form submitted:", this.form);
-      alert("Project đã được thêm thành công!");
+      alert("Form is created successfully!!");
       this.resetForm();
       this.$router.push({
         name: "project-details",
@@ -111,7 +109,8 @@ export default {
         formId: "",
         type: "text",
         options: [],
-        // answer: [],
+        imageUrl: "",
+        publicId: "",
 
         open: false,
       });

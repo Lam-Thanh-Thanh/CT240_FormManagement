@@ -1,43 +1,41 @@
 <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-      <h2 class="text-2xl font-semibold text-center text-gray-700">
-        Đăng Nhập
-      </h2>
+      <h2 class="text-2xl font-bold text-center text-gray-700">LOGIN</h2>
       <form @submit.prevent="handleLogin" class="mt-4">
         <div>
           <label class="block text-sm font-medium text-gray-600"
-            >Tên đăng nhập</label
+            >Username</label
           >
           <input
             v-model="user.username"
             type="text"
-            class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-1 focus:ring-pink-700"
             required
           />
         </div>
         <div class="mt-4">
           <label class="block text-sm font-medium text-gray-600"
-            >Mật khẩu</label
+            >Password</label
           >
           <input
             v-model="user.password"
             type="password"
-            class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            class="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-1 focus:ring-pink-700"
             required
           />
         </div>
         <button
           type="submit"
-          class="w-full mt-6 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+          class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out w-full my-6"
         >
-          Đăng nhập
+          Login
         </button>
       </form>
       <p class="mt-4 text-center text-sm text-gray-600">
-        Chưa có tài khoản?
-        <router-link to="/register" class="text-blue-500 hover:underline"
-          >Đăng ký</router-link
+        Don't have an account?
+        <router-link to="/register" class="text-pink-700 hover:underline"
+          >Register here</router-link
         >
       </p>
     </div>
@@ -61,8 +59,8 @@ export default {
         AuthService.setToken(response.data); // Lưu token
         localStorage.setItem("token", response.data.token);
         alert("Đăng nhập thành công!");
-
-        this.$router.push("/"); //home
+        console.log("token", response.data.token);
+        this.$router.push("/projects"); //project list
       } catch (error) {
         alert("Đăng nhập thất bại!");
       }

@@ -11,11 +11,14 @@ export default {
   createProject(projectData) {
     return apiClient.post("/create", projectData);
   },
-  getAllProjects() {
-    return apiClient.get(`/`);
+  updateProject(projectId, projectData) {
+    return apiClient.put(`/${projectId}/update`, projectData);
+  },
+  getAllProjects(userId) {
+    return apiClient.get(`/${userId}`);
   },
   getProjectDetials(projectId) {
-    return apiClient.get(`/${projectId}`);
+    return apiClient.get(`/${projectId}/details`);
   },
   deleteProject(projectId) {
     return apiClient.delete(`/${projectId}`);

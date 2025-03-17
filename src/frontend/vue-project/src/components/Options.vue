@@ -3,11 +3,16 @@
   <div
     v-for="(option, index) in options"
     :key="option.id"
-    class="flex flex-col justify-between gap-5"
+    class="flex flex-col justify-between gap-1 mb-14"
   >
     <!-- image view-->
     <div v-if="option.imageUrl" class="w-[80%] relative">
-      <img :src="option.imageUrl" alt="Uploaded" width="100%" />
+      <img
+        :src="option.imageUrl"
+        alt="Uploaded"
+        width="100%"
+        class="rounded-md"
+      />
 
       <button
         type="button"

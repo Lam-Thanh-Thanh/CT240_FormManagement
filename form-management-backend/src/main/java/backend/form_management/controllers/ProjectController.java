@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,17 +25,19 @@ public class ProjectController {
  @Autowired
  private FormService formService;
 
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<List<Project> > getAllProjects(@PathVariable("userId") String userId) {
-//        return new ResponseEntity<>(projectService.getAllProjects(userId), HttpStatus.OK);
+
+
+//    @GetMapping("/")
+//    public ResponseEntity<List<Project> > getAllProjects() {
+//        return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
 //    }
 
-    @GetMapping("/")
-    public ResponseEntity<List<Project> > getAllProjects() {
-        return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<Project>> getAllProjectsByUserId(@PathVariable("userId") String userId) {
+        return new ResponseEntity<>(projectService.getAllProjectsByUserId(userId), HttpStatus.OK);
     }
 
-    @GetMapping("/{projectId}")
+    @GetMapping("/{projectId}/details")
     public ResponseEntity<Optional<Project>> getProjectDetails(@PathVariable("projectId") String projectId) {
         return new ResponseEntity<Optional<Project>>(projectService.getProjectById(projectId), HttpStatus.OK);
     }
@@ -44,10 +47,15 @@ public class ProjectController {
         return projectService.createProject(project);
     }
 
+    @PutMapping("/{projectId}/update")
+    public ResponseEntity<Project> updateProject(@PathVariable("projectId") String projectId, @RequestBody Project project) {
+        Project project1 = projectService.updateProject(projectId, project);
 
+    return ResponseEntity.ok(project1);
+}
 
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<String> deleteProject(@PathVariable("projectId") String projectId) {
+    public ResponseEntity<String> deleteProject(@PathVariable("projectId") String projectId) throws IOException {
         projectService.deleteProject(projectId);
         List<Form> forms = formService.getAllFormsOfProject(projectId);
         for (Form form : forms) {
