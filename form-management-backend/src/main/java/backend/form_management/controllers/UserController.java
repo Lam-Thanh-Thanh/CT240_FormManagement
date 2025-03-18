@@ -5,6 +5,9 @@ import backend.form_management.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.http.ResponseEntity;
+import java.util.Map;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -14,12 +17,13 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
-
-    // Lấy danh sách tất cả người dùng
     @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return ResponseEntity.ok(users);
     }
+    // Lấy danh sách tất cả người dùng
+
 
     // Lấy user theo ID
     @GetMapping("/{id}")
@@ -34,20 +38,26 @@ public class UserController {
     }
 
     // Cập nhật thông tin user
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable String id, @RequestBody User updatedUser) {
-        return userRepository.findById(id).map(user -> {
-            user.setUsername(updatedUser.getUsername());
-            user.setPassword(updatedUser.getPassword());
-            user.setRoles(updatedUser.getRoles());
-            return userRepository.save(user);
-        }).orElseGet(() -> userRepository.save(updatedUser));
+    @PutMapping("/{id}/role")
+    public ResponseEntity<User> updateUserRole(@PathVariable String id, @RequestBody Map<String, String> request) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+// Cập nhật vai trò dạng String
+user.setRole(request.get("role"));
+            userRepository.save(user);
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     // Xóa user theo ID
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable String id) {
-        userRepository.deleteById(id);
-        return "User deleted with id: " + id;
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

@@ -13,7 +13,9 @@ import FormResponses from "@/components/FormResponses.vue";
 import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
 import Account from "@/components/Account.vue";
-
+import AdminDashboard from "@/components/AdminDashboard.vue";
+import UserManagement from "@/components/UserManagement.vue";
+import ProjectManagement from "@/components/ProjectManagement.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -85,6 +87,9 @@ const router = createRouter({
       name: "register",
       component: Register,
     },
+    { path: "/admin", component: AdminDashboard },
+  { path: "/admin/users", component: UserManagement },
+  { path: "/admin/projects", component: ProjectManagement },
     {
       path: "/s/:shortCode",
       name: "short-url",

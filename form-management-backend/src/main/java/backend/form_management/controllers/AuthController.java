@@ -26,7 +26,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Collections.singleton("USER"));
+        user.setRole("USER"); // ✅ Sửa lỗi: Truyền String thay vì Set<String>
         userRepository.save(user);
         return ResponseEntity.ok(Map.of("message", "User registered successfully"));
     }
