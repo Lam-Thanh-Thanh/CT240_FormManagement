@@ -23,6 +23,17 @@
           >Projects</span
         ></router-link
       >
+      <router-link
+      v-if="isAdmin"
+      to="/admin"        
+      class="text-xl font-normal px-7 hover:text-gray-900"
+      >
+        <span
+          class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out"
+          >Administration
+          </span
+        ></router-link
+      >
       <!-- Biểu tượng User -->
       <div class="relative">
         <button
@@ -83,6 +94,9 @@ export default {
   computed: {
     isAuthenticated() {
       return AuthService.isAuthenticated();
+    },
+    isAdmin() {
+      return AuthService.getUserRole() === "ADMIN";
     },
   },
   methods: {

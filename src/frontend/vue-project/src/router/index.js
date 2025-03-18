@@ -13,7 +13,8 @@ import FormResponses from "@/components/FormResponses.vue";
 import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
 import Account from "@/components/Account.vue";
-
+import AdminDashboard from "@/components/AdminDashboard.vue";
+import { AuthService } from "@/services/authService";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -84,6 +85,18 @@ const router = createRouter({
       path: "/register",
       name: "register",
       component: Register,
+    },
+    {
+      path: "/admin",
+      component: AdminDashboard,
+      beforeEnter: (to, from, next) => {
+        if (!AuthService.isAuthenticated() || !AuthService.isAdmin()) {
+          alert("Bạn không có quyền truy cập!");
+          next("/");
+        } else {
+          next();
+        }
+      },
     },
     {
       path: "/s/:shortCode",

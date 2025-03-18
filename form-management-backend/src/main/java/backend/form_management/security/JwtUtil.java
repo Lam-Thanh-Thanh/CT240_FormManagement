@@ -8,6 +8,9 @@ import javax.crypto.SecretKey;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import java.util.Date;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
 
 @Component
 public class JwtUtil {
@@ -19,13 +22,13 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes); // Trả về kiểu SecretKey
     }
     //get role
-    public String generateToken(String userId) {
+    public String generateToken(String userId, Set<String> roles) {
         return Jwts.builder()
                 .subject(userId)
-                //.subject(roles)
+                .claim("role", roles) // 👉 Thêm role vào token
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(getSigningKey(), Jwts.SIG.HS256) // Dùng đúng kiểu SecretKey + HS256
+                .signWith(getSigningKey(), Jwts.SIG.HS256)
                 .compact();
     }
 
@@ -33,6 +36,20 @@ public class JwtUtil {
         JwtParser parser = Jwts.parser().verifyWith(getSigningKey()).build(); // Đúng kiểu SecretKey
         return parser.parseSignedClaims(token).getPayload().getSubject(); // Đổi parseClaimsJws thành parseSignedClaims
     }
+    public Set<String> extractRoles(String token) {
+        JwtParser parser = Jwts.parser().verifyWith(getSigningKey()).build();
+        Claims claims = parser.parseSignedClaims(token).getPayload();
+        
+        // Chuyển đổi danh sách roles từ List<Object> sang Set<String>
+        List<?> rawRoles = claims.get("roles", List.class);
+        Set<String> roles = new HashSet<>();
+        for (Object role : rawRoles) {
+            roles.add(role.toString());
+        }
+        
+        return roles;
+    }
+    
 
     public boolean validateToken(String token, UserDetails userDetails) {
         try {
