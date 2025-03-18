@@ -32,15 +32,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody User user) {
-    Optional<User> foundUser = userRepository.findByUsername(user.getUsername());
+    public ResponseEntity<?> login(@RequestBody User user) {
+        Optional<User> foundUser = userRepository.findByUsername(user.getUsername());
 
-    if (foundUser.isPresent() && passwordEncoder.matches(user.getPassword(), foundUser.get().getPassword())) {
-        User loggedInUser = foundUser.get();
-        String token = jwtUtil.generateToken(loggedInUser.getId(), loggedInUser.getRoles()); // Thêm roles vào token
-        return ResponseEntity.ok(Map.of("token", token));
+        if (foundUser.isPresent() && passwordEncoder.matches(user.getPassword(), foundUser.get().getPassword())) {
+            String token = jwtUtil.generateToken(foundUser.get().getId());
+            return ResponseEntity.ok(Map.of("token", token));
+        }
+        return ResponseEntity.status(401).body(Map.of("error", "Invalid credentials"));
     }
-    return ResponseEntity.status(401).body(Map.of("error", "Invalid credentials"));
-}
-
 }
