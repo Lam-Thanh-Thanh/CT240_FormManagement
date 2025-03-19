@@ -23,6 +23,14 @@
           >Projects</span
         ></router-link
       >
+      <router-link
+        to="/admin"
+        class="text-xl font-normal px-7 hover:text-gray-900"
+        ><span
+          class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out"
+          >Admin</span
+        ></router-link
+      >
       <!-- Biểu tượng User -->
       <div class="relative">
         <button

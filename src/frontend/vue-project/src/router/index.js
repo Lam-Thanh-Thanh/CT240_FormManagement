@@ -13,7 +13,7 @@ import FormResponses from "@/components/FormResponses.vue";
 import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
 import Account from "@/components/Account.vue";
-
+import TestAdmin from "@/components/TestAdmin.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,6 +74,12 @@ const router = createRouter({
       name: "account",
       component: Account,
     },
+    {
+      path: "/admin",
+      name: "amin",
+      component: TestAdmin,
+    },
+
     /*----------------------------*/
     {
       path: "/login",
@@ -90,8 +96,10 @@ const router = createRouter({
       name: "short-url",
       beforeEnter: async (to, from, next) => {
         try {
-          const response = await axios.get(`http://localhost:8080/api/url/${to.params.shortCode}`);
-    
+          const response = await axios.get(
+            `http://localhost:8080/api/url/${to.params.shortCode}`
+          );
+
           if (response.data && response.data.originalUrl) {
             console.log("Chuyển hướng đến:", response.data.originalUrl);
             window.location.replace(response.data.originalUrl); // Dùng replace để tránh lưu vào lịch sử
@@ -103,9 +111,8 @@ const router = createRouter({
           console.error("Lỗi khi lấy URL gốc:", error);
           next("/"); // Nếu lỗi, quay về trang chủ
         }
-      }
-    }
-    ,
+      },
+    },
   ],
 });
 

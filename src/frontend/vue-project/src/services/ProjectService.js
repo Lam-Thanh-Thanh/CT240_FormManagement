@@ -14,7 +14,8 @@ export default {
   updateProject(projectId, projectData) {
     return apiClient.put(`/${projectId}/update`, projectData);
   },
-  getAllProjects(userId) {
+
+  getAllProjectsOfUser(userId) {
     return apiClient.get(`/${userId}`);
   },
   getProjectDetials(projectId) {
@@ -22,5 +23,9 @@ export default {
   },
   deleteProject(projectId) {
     return apiClient.delete(`/${projectId}`);
+  },
+
+  getAllProjects() {
+    return apiClient.get(`/`);
   },
 };

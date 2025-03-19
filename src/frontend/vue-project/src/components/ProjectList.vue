@@ -136,7 +136,7 @@ export default {
         const decoded = jwtDecode(token);
         this.userId = decoded.sub; // Đảm bảo key trong token là 'userId'
         console.log("User ID:", this.userId); // Kiểm tra userId
-        const response = await ProjectService.getAllProjects(this.userId);
+        const response = await ProjectService.getAllProjectsOfUser(this.userId);
         this.projects = response.data;
         console.log("API Response:", response); // Kiểm tra dữ liệu trả về
       } catch (error) {
