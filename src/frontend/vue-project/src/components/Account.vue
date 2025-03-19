@@ -1,21 +1,18 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
     <div class="bg-white shadow-lg rounded-lg p-6 w-96">
       <div class="flex flex-col items-center m-6">
-        <img
+        <img :src="avatarPreview || user.avatar || defaultAvatar"
           class="w-24 h-24 rounded-full border-4 border-pink-700"
-          src=""
-          alt=""
         />
         <h2 class="mt-4 text-xl font-semibold text-gray-700">
-          {{ user.username }}
+          {{ user.fullName }}
         </h2>
-        <p class="text-gray-500">@example.com</p>
+        <p class="text-gray-500">{{ user.email}}</p>
       </div>
       <div class="m-4">
-        <button
-          class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out w-full"
-        >
+        <button @click="goToEditProfile"
+          class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out w-full">
           Edit Profile
         </button>
       </div>
@@ -35,12 +32,16 @@ export default {
         username: "",
       },
       userId: "",
+      defaultAvatar: "https://www.w3schools.com/howto/img_avatar.png",
     };
   },
   async created() {
     await this.getUserInfo();
   },
   methods: {
+    goToEditProfile() {
+    this.$router.push(`/edit-profile/${this.userId}`);
+    },
     async checkLogin() {
       // Lấy token từ localStorage
       const token = localStorage.getItem("token");
@@ -70,8 +71,12 @@ export default {
 
       try {
         const response = await UserService.getUserById(this.userId);
-        this.user.username = response.data.username;
-        console.log("username", response.data.username);
+        this.user.fullName = response.data.fullName;
+        console.log("fullName", response.data.fullName);
+        this.user.email = response.data.email;
+        console.log("email", response.data.email);
+        this.user.avatar = response.data.avatar;
+        console.log("avatar", response.data.avatar);
       } catch (error) {
         console.error("There was an error getting user infomation:", error);
         alert("Không thể tải thông tin user. Vui lòng thử lại!");

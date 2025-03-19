@@ -16,6 +16,7 @@ import Account from "@/components/Account.vue";
 import AdminDashboard from "@/components/AdminDashboard.vue";
 import UserManagement from "@/components/UserManagement.vue";
 import ProjectManagement from "@/components/ProjectManagement.vue";
+import EditProfile from "@/components/EditProfile.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -90,6 +91,12 @@ const router = createRouter({
     { path: "/admin", component: AdminDashboard },
   { path: "/admin/users", component: UserManagement },
   { path: "/admin/projects", component: ProjectManagement },
+  {
+    path: "/edit-profile/:id",
+    name: "EditProfile",
+    component: EditProfile,
+    meta: { requiresAuth: true },
+  },
     {
       path: "/s/:shortCode",
       name: "short-url",

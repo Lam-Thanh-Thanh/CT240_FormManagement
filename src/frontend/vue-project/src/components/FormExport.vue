@@ -18,11 +18,11 @@
               <button class="">button</button>
             </div>
             <div class="hover:bg-blue-300 px-2 py-1 border-b-gray-100 border-b-2">
-              <button @click="copyLink">Sao chép liên kết</button>
+              <button @click="copyLink">Copy link</button>
             </div>
 
             <div class="hover:bg-green-300 px-2 py-1 border-b-gray-100 border-b-2">
-              <button @click="generateQRCode">Tạo mã QR</button>
+              <button @click="generateQRCode">Create QR code</button>
             </div>
 
             
@@ -54,7 +54,7 @@
         <button @click="closeQRCodeModal" class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full">
           ✖
         </button>
-        <h3 class="text-xl font-bold my-4">Mã QR của bạn:</h3>
+        <h3 class="text-xl font-bold my-4">Your QR code:</h3>
         <img :src="qrCode" alt="QR Code" class="w-40 h-40 mx-auto" />
       </div>
     </div>

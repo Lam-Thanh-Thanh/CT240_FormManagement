@@ -11,6 +11,9 @@ const apiClient = axios.create({
 });
 
 export default {
+  updateUser(id, userData) {
+    return apiClient.put(`/${id}`, userData);
+  },
   getUserById(id) {
     return apiClient.get(`/${id}`);
   },

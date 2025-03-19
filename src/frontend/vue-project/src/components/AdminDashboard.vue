@@ -1,13 +1,13 @@
 <template>
     <div class="admin-dashboard">
-      <h1 class="text-3xl font-bold mb-6">Trang Quản Trị Admin</h1>
+      <h1 class="text-3xl font-bold mb-6">Administration Panel</h1>
       
       <div class="flex gap-6">
         <button @click="goToUsers" class="admin-button bg-blue-500 hover:bg-blue-700">
-          Quản lý User
+          UserManagement
         </button>
         <button @click="goToProjects" class="admin-button bg-green-500 hover:bg-green-700">
-          Quản lý Project
+          ProjectManagement
         </button>
       </div>
     </div>
