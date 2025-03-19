@@ -112,8 +112,12 @@ export default {
   },
   computed: {
     filteredProjects() {
-      return this.projects.filter((project) =>
-        project.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      return this.projects.filter(
+        (project) =>
+          project.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          project.description
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase())
       );
     },
   },

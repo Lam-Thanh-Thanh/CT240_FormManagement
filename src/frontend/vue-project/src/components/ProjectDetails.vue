@@ -95,7 +95,7 @@
       </button>
     </div>
     <div
-      class="w-[22%] bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
+      class="w-[20%] bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
       v-if="!searchQuery"
       v-for="(form, index) in project.forms"
       :key="index"
@@ -128,7 +128,7 @@
 
     <button
       v-on:click="addForm"
-      class="w-[15%] px-6 py-4 bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
+      class="w-[20%] px-6 py-4 bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
     >
       <p class="text-xl mb-2">Add form</p>
       <i class="fa-solid fa-plus"></i>

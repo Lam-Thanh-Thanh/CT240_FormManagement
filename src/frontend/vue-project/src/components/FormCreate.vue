@@ -14,6 +14,7 @@
             id="formTitle"
             v-model="form.title"
             class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
+            required
           />
         </div>
 
@@ -71,10 +72,25 @@ export default {
         title: "",
         description: "",
         projectId: "",
-        questions: [],
+        questions: [
+          {
+            id: uuidv4(),
+            content: "",
+            formId: this.formId,
+            type: "text",
+
+            fileUrl: "", ////////////////////////////////////
+            publicId: "",
+            resourceType: "",
+            options: [],
+
+            open: false,
+          },
+        ], //mac dinh mot cau hoi
       },
     };
   },
+
   methods: {
     async submitForm() {
       // Xử lý dữ liệu form ở đây
@@ -99,9 +115,7 @@ export default {
         quetions: [],
       };
     },
-    creatForm() {
-      //updateFormOfProject  api  formData   save form - save question - save option
-    },
+
     addMoreQuestion() {
       this.form.questions.push({
         id: uuidv4(),
@@ -109,9 +123,9 @@ export default {
         formId: "",
         type: "text",
         options: [],
-        imageUrl: "",
-        publicId: "",
 
+        publicId: "",
+        resourceType: "",
         open: false,
       });
       console.log("Added question:", this.form.questions);

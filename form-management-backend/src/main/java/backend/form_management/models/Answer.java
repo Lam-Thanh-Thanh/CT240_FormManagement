@@ -18,7 +18,8 @@ public class Answer {
     private List<Option> selectedOptions; // Nếu là dạng checkbox
     private Option oneOption; // Nếu là dạng radio
 
-    private String imageUrl;
+    private String fileUrl;
     private String publicId;
+    private String resourceType;
 
 }

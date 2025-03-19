@@ -58,8 +58,8 @@ public class FormController {
         return ResponseEntity.ok("Form deleted successfully");
     }
 
-    @PostMapping("/upload-image")
-    public ResponseEntity<String> uploadImage( @RequestParam("file") MultipartFile file) {
+    @PostMapping("/upload-file")
+    public ResponseEntity<String> uploadFile( @RequestParam("file") MultipartFile file) {
         try {
             String imageUrl = cloudinaryService.uploadFile(file);
             return ResponseEntity.ok(imageUrl);
@@ -68,14 +68,16 @@ public class FormController {
         }
     }
 
-    @DeleteMapping("/delete-image")
-    public ResponseEntity<String> deleteImage(@RequestParam String publicId) {
+
+
+    @DeleteMapping("/delete-file")
+    public ResponseEntity<String> deleteFile(@RequestParam String publicId, @RequestParam String resourceType) {
         try {
-            String result = cloudinaryService.deleteFile(publicId);
-            if ("ok".equals(result)) {
-                return ResponseEntity.ok("Image deleted successfully");
+            String result = cloudinaryService.deleteFile(publicId, resourceType);
+            if ("Xóa thành công!".equals(result)) {
+                return ResponseEntity.ok("File deleted successfully");
             } else {
-                return ResponseEntity.badRequest().body("Failed to delete image");
+                return ResponseEntity.badRequest().body("Failed to delete file");
             }
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error: " + e.getMessage());

@@ -13,19 +13,16 @@
           </button>
           <div class="shadow-lg" v-if="open">
             <div
-              class="hover:bg-yellow-300 px-2 py-1 border-b-gray-100 border-b-2"
+              class="hover:bg-blue-300 px-2 py-1 border-b-gray-100 border-b-2"
             >
-              <button class="">button</button>
-            </div>
-            <div class="hover:bg-blue-300 px-2 py-1 border-b-gray-100 border-b-2">
               <button @click="copyLink">Sao chép liên kết</button>
             </div>
 
-            <div class="hover:bg-green-300 px-2 py-1 border-b-gray-100 border-b-2">
+            <div
+              class="hover:bg-green-300 px-2 py-1 border-b-gray-100 border-b-2"
+            >
               <button @click="generateQRCode">Tạo mã QR</button>
             </div>
-
-            
           </div>
         </div>
       </div>
@@ -47,18 +44,24 @@
       </div>
     </div>
 
-      <!-- Thanh -->
+    <!-- Thanh -->
     <!-- Modal hiển thị QR Code -->
-    <div v-if="showQRCode" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div
+      v-if="showQRCode"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+    >
       <div class="bg-white p-6 rounded-lg shadow-lg text-center relative w-96">
-        <button @click="closeQRCodeModal" class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full">
+        <button
+          @click="closeQRCodeModal"
+          class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full"
+        >
           ✖
         </button>
         <h3 class="text-xl font-bold my-4">Mã QR của bạn:</h3>
         <img :src="qrCode" alt="QR Code" class="w-40 h-40 mx-auto" />
       </div>
     </div>
-      <!-- Thanh -->
+    <!-- Thanh -->
 
     <div class="py-40 bg-white">
       <!-- question -->
@@ -67,14 +70,27 @@
         :key="question.id"
         class="mx-80 mb-20 shadow-myLightGray shadow-md border- p-14 rounded hover:border-t-4 hover:border-t-pink-800 hover:border hover:border-pink-800 border-t-pink-800 border-t-4 transition duration-300 ease-in-out"
       >
-        <!-- image view-->
-        <div v-if="question.imageUrl" class="w-[80%] relative">
-          <img
-            :src="question.imageUrl"
-            alt="Uploaded"
+        <!-- file view   -->
+        <div
+          v-if="question.fileUrl"
+          class="w-[90%] relative flex items-center gap-5"
+        >
+          <iframe
+            :src="question.fileUrl"
             width="100%"
-            class="rounded-md"
-          />
+            height="200px"
+            class="border rounded-md"
+          ></iframe>
+          <!-- Nút tải xuống -->
+          <div class="mt-2">
+            <a
+              :href="question.fileUrl"
+              download
+              class="text-blue-600 underline"
+            >
+              View
+            </a>
+          </div>
         </div>
         <!-- content -->
         <div class="flex row justify-between items-start my-5">
@@ -91,9 +107,24 @@
             :key="option.id"
             class="flex flex-col gap-2"
           >
-            <!-- image view-->
-            <div v-if="option.imageUrl" class="w-[70%]">
-              <img :src="option.imageUrl" alt="Uploaded" width="100%" />
+            <!-- file view   -->
+            <div v-if="option.fileUrl" class="w-[80%] relative">
+              <iframe
+                :src="option.fileUrl"
+                width="100%"
+                height="200px"
+                class="border rounded-md"
+              ></iframe>
+              <!-- Nút tải xuống -->
+              <div class="mt-2">
+                <a
+                  :href="option.fileUrl"
+                  download
+                  class="text-blue-600 underline"
+                >
+                  View
+                </a>
+              </div>
             </div>
             <!-- question.type -->
             <div class="flex gap-4">
@@ -117,14 +148,24 @@
             :key="option.id"
             class="flex flex-col items-start gap-2"
           >
-            <!-- image view-->
-            <div v-if="option.imageUrl" class="w-[70%]">
-              <img
-                :src="option.imageUrl"
-                alt="Uploaded"
+            <!-- file view   -->
+            <div v-if="option.fileUrl" class="w-[80%] relative">
+              <iframe
+                :src="option.fileUrl"
                 width="100%"
-                class="rounded-md"
-              />
+                height="200px"
+                class="border rounded-md"
+              ></iframe>
+              <!-- Nút tải xuống -->
+              <div class="mt-2">
+                <a
+                  :href="option.fileUrl"
+                  download
+                  class="text-blue-600 underline"
+                >
+                  View
+                </a>
+              </div>
             </div>
             <!-- question.type -->
             <div class="flex gap-4">
@@ -246,26 +287,26 @@ export default {
   },
   methods: {
     // THANH
-     // Sao chép liên kết
-      copyLink() {
-        navigator.clipboard.writeText(this.currentLink).then(() => {
-          alert("Đã sao chép liên kết!");
-        });
-      },
+    // Sao chép liên kết
+    copyLink() {
+      navigator.clipboard.writeText(this.currentLink).then(() => {
+        alert("Đã sao chép liên kết!");
+      });
+    },
 
-      // Tạo mã QR và hiển thị ảnh
-      async generateQRCode() {
-        try {
-          const qrData = await QRCode.toDataURL(this.currentLink);
-          this.qrCode = qrData;
-          this.showQRCode = true; // Hiển thị modal
-        } catch (error) {
-          console.error("Lỗi khi tạo mã QR:", error);
-        }
-      },
-      closeQRCodeModal() {
-        this.showQRCode = false; // Đóng modal
-      },
+    // Tạo mã QR và hiển thị ảnh
+    async generateQRCode() {
+      try {
+        const qrData = await QRCode.toDataURL(this.currentLink);
+        this.qrCode = qrData;
+        this.showQRCode = true; // Hiển thị modal
+      } catch (error) {
+        console.error("Lỗi khi tạo mã QR:", error);
+      }
+    },
+    closeQRCodeModal() {
+      this.showQRCode = false; // Đóng modal
+    },
     // THANH
     formattedDate(createdAt) {
       return new Date(createdAt).toLocaleString("en-US", {

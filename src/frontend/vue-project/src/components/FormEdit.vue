@@ -114,7 +114,11 @@ export default {
     return {
       open: false,
       // oldTitle: "form1",
-      form: { title: "", description: "" },
+      form: {
+        title: "",
+        description: "",
+        questions: [],
+      },
       userId: "",
     };
   },
@@ -203,9 +207,10 @@ export default {
         content: "",
         formId: this.formId,
         type: "text",
-        imageUrl: "",
-        publicId: "",
 
+        fileUrl: "", ////////////////////////////////////
+        publicId: "",
+        resourceType: "",
         options: [],
 
         open: false,

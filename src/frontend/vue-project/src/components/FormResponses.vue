@@ -24,13 +24,24 @@
       :key="qIndex"
       class="shadow-lg shadow-myLightGray p-14 rounded border-t-pink-800 border-t-4 mb-20"
     >
-      <!-- image question -->
-      <img
-        v-if="question.imageUrl"
-        :src="question.imageUrl"
-        alt="question image"
-        class="w-48 h-auto rounded"
-      />
+      <!-- file view question   -->
+      <div
+        v-if="question.fileUrl"
+        class="w-[90%] relative flex items-center gap-5"
+      >
+        <iframe
+          :src="question.fileUrl"
+          width="100%"
+          height="200px"
+          class="border rounded-md"
+        ></iframe>
+        <!-- Nút tải xuống -->
+        <div class="mt-2">
+          <a :href="question.fileUrl" download class="text-blue-600 underline">
+            View
+          </a>
+        </div>
+      </div>
       <!-- content -->
       <div class="flex row justify-between items-start">
         <p class="font-semibold">{{ question.content }}</p>
@@ -72,6 +83,17 @@
             </div>
           </div>
         </div>
+
+        <!-- Nếu là câu trả lời dạng ảnh -->
+        <div v-else-if="answer.imageUrl">
+          <div class="bg-gray-100 p-2 rounded my-1">
+            <img
+              :src="answer.imageUrl"
+              alt="User uploaded image"
+              class="w-48 h-auto rounded"
+            />
+          </div>
+        </div>
         <!-- Nếu là câu trả lời radio -->
         <div v-else-if="answer.oneOption">
           <div class="bg-gray-100 p-2 rounded my-1">
@@ -82,17 +104,6 @@
               class="w-48 h-auto rounded"
             />
             {{ answer.oneOption.optionContent }}
-          </div>
-        </div>
-
-        <!-- Nếu là câu trả lời dạng ảnh -->
-        <div v-else-if="answer.imageUrl">
-          <div class="bg-gray-100 p-2 rounded my-1">
-            <img
-              :src="answer.imageUrl"
-              alt="User uploaded image"
-              class="w-48 h-auto rounded"
-            />
           </div>
         </div>
         <!-- Nếu không có câu trả lời-->

@@ -91,24 +91,31 @@ public class FormService {
         Optional<Form> optionalForm = formRepository.findById(formId);
         if (optionalForm.isPresent()) {
             Form existingForm = optionalForm.get();
-            //delete form
-            formRepository.deleteById(formId);
-                //delete all responses of form
-            List<Response> responses = responseService.getAllResponsesByFormId(formId);
-            for (Response response : responses) {
-                responseService.deleteResponse(response.getId());
-            }
+
                 //delete all image of form
                     //image of question
             List<Question> questions = existingForm.getQuestions();
             for (Question question : questions) {
-                cloudinaryService.deleteFile(question.getPublicId());
+                if(!question.getPublicId().isEmpty()) {
+                    cloudinaryService.deleteFile(question.getPublicId(), question.getResourceType());
+                }
+
                         //image of option
                 List<Option> options = question.getOptions();
                 for (Option option : options) {
-                    cloudinaryService.deleteFile(option.getPublicId());
+                    if (!option.getPublicId().isEmpty() ) {
+                        cloudinaryService.deleteFile(option.getPublicId(), option.getResourceType());
+                    }
                 }
             }
+
+            //delete all responses of form
+            List<Response> responses = responseService.getAllResponsesByFormId(formId);
+            for (Response response : responses) {
+                responseService.deleteResponse(response.getId());
+            }
+            //delete form
+            formRepository.deleteById(formId);
 
 
         }

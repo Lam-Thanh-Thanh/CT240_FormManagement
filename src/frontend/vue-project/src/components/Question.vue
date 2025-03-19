@@ -12,18 +12,27 @@
           class="w-[95%] mx-5 my-10 shadow-myLightGray shadow-md hover:border hover:border-pink-800 hover:border-l-4 hover:borde-l-pink-800 border-l-pink-800 border-l-4 transition duration-300 ease-in-out rounded flex flex-row items-center justify-between p-10"
         >
           <div class="w-[100%]">
-            <!-- image view   -->
-            <div v-if="question.imageUrl" class="w-[80%] relative">
-              <img
-                :src="question.imageUrl"
-                alt="Uploaded"
+            <!-- file view   -->
+            <div v-if="question.fileUrl" class="w-[80%] relative">
+              <iframe
+                :src="question.fileUrl"
                 width="100%"
-                class="rounded-md"
-              />
-
+                height="200px"
+                class="border rounded-md"
+              ></iframe>
+              <!-- Nút tải xuống -->
+              <div class="mt-2">
+                <a
+                  :href="question.fileUrl"
+                  download
+                  class="text-blue-600 underline"
+                >
+                  View
+                </a>
+              </div>
               <button
                 type="button"
-                @click="removeImage(question)"
+                @click="removeFile(question)"
                 class="absolute -top-2 -right-2 bg-gray-300 text-black rounded-full"
               >
                 <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
@@ -39,18 +48,22 @@
                   class="w-full font-semibold border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
                   rows="2"
                   placeholder="Question title"
+                  required
                 ></textarea>
               </div>
-              <!-- image upload for question -->
+              <!-- file upload for question -->
               <div class="absolute right-36">
-                <label :for="'file-upload-' + question.id" class="upload-label">
+                <label
+                  :for="'image-upload-' + question.id"
+                  class="upload-label"
+                >
                   <i class="fa-regular fa-image"></i>
                 </label>
                 <input
-                  :id="'file-upload-' + question.id"
+                  :id="'image-upload-' + question.id"
                   type="file"
-                  @change="addImageToQuestion($event, question)"
-                  accept="image/*"
+                  @change="addFileToQuestion($event, question)"
+                  accept="image/*,video/*,audio/*, .pdf"
                   class="hidden"
                 />
               </div>
@@ -211,18 +224,24 @@ export default {
         id: uuidv4(),
         questionId: question.id,
         optionContent: "",
-        imageUrl: "",
+        fileUrl: "",
         publicId: "",
+        resourceType: "",
       });
 
       console.log("Added question:", question.options);
     },
 
     async deleteQuestion(index) {
-      this.questions.splice(index, 1);
+      if (this.questions.length > 1) {
+        this.questions.splice(index, 1);
+        console.log("Deleted question:", this.questions);
+      } else {
+        alert("The form must have at least one question!");
+      }
     },
     // add image to question
-    async addImageToQuestion(event, question) {
+    async addFileToQuestion(event, question) {
       const file = event.target.files[0];
 
       if (!file) {
@@ -236,25 +255,40 @@ export default {
       console.log("FormData content:", formData.get("file")); // Kiểm tra dữ liệu gửi đi
 
       try {
-        const response = await CloudinaryService.uploadImage(formData);
+        const response = await CloudinaryService.uploadFile(formData);
         const parts = response.data.split("/");
         const fileName = parts.pop().split(".")[0]; // Lấy tên file không có đuôi mở rộng
+
+        // Xác định loại file từ MIME type
+        let resourceType = "image"; // Mặc định là image
+        if (file.type.startsWith("video/") || file.type.startsWith("audio/")) {
+          resourceType = "video";
+        }
+
         console.log("question: ", question);
-        question.imageUrl = response.data;
+        question.fileUrl = response.data;
         question.publicId = fileName;
+        question.resourceType = resourceType; // Lưu loại file  ////////////////////////////
+
+        console.log("Uploaded file type:", resourceType);
       } catch (error) {
         console.error("Image upload failed", error);
       }
       // Reset input file sau khi xử lý xong
       event.target.value = null;
     },
-    async removeImage(question) {
-      if (!question.imageUrl) return;
+
+    async removeFile(question) {
+      if (!question.fileUrl) return;
 
       try {
-        await CloudinaryService.deleteImage(question.publicId);
-        question.imageUrl = ""; // Xóa ảnh trong UI khi thành công
+        await CloudinaryService.deleteFile(
+          question.publicId,
+          question.resourceType
+        );
+        question.fileUrl = ""; // Xóa ảnh trong UI khi thành công
         question.publicId = "";
+        question.resourceType = "";
         console.log("Image deleted successfully");
       } catch (error) {
         console.error("Error deleting image", error);

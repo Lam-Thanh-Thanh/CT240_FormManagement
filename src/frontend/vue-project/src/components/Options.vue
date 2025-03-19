@@ -5,18 +5,24 @@
     :key="option.id"
     class="flex flex-col justify-between gap-1 mb-14"
   >
-    <!-- image view-->
-    <div v-if="option.imageUrl" class="w-[80%] relative">
-      <img
-        :src="option.imageUrl"
-        alt="Uploaded"
+    <!-- file view-->
+    <!-- file view   -->
+    <div v-if="option.fileUrl" class="w-[80%] relative">
+      <iframe
+        :src="option.fileUrl"
         width="100%"
-        class="rounded-md"
-      />
-
+        height="200px"
+        class="border rounded-md"
+      ></iframe>
+      <!-- Nút tải xuống -->
+      <div class="mt-2">
+        <a :href="option.fileUrl" download class="text-blue-600 underline">
+          View
+        </a>
+      </div>
       <button
         type="button"
-        @click="removeImage(option)"
+        @click="removeFile(option)"
         class="absolute -top-2 -right-2 bg-gray-300 text-black rounded-full"
       >
         <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
@@ -34,18 +40,18 @@
           placeholder="Text..."
         />
       </div>
-      <!--add image, delete button -->
+      <!--add File, delete button -->
       <div class="w-[20%] m-5 text-center flex justify-around">
-        <div>
-          <!-- Icon thay thế nút Choose File -->
-          <label :for="'file-upload-' + option.id" class="upload-label">
+        <!-- file upload for question -->
+        <div class="">
+          <label :for="'image-upload-' + option.id" class="upload-label">
             <i class="fa-regular fa-image"></i>
           </label>
           <input
-            :id="'file-upload-' + option.id"
+            :id="'image-upload-' + option.id"
             type="file"
-            @change="addImageToOption($event, option)"
-            accept="image/*"
+            @change="addFileToOption($event, option)"
+            accept="image/*,video/*,audio/*, .pdf"
             class="hidden"
           />
         </div>
@@ -76,8 +82,9 @@ export default {
       this.options.splice(index, 1);
     },
 
-    //add image
-    async addImageToOption(event, option) {
+    //add File
+    // add image to question
+    async addFileToOption(event, option) {
       const file = event.target.files[0];
 
       if (!file) {
@@ -91,12 +98,22 @@ export default {
       console.log("FormData content:", formData.get("file")); // Kiểm tra dữ liệu gửi đi
 
       try {
-        const response = await CloudinaryService.uploadImage(formData);
+        const response = await CloudinaryService.uploadFile(formData);
         const parts = response.data.split("/");
         const fileName = parts.pop().split(".")[0]; // Lấy tên file không có đuôi mở rộng
-        console.log("option", option);
-        option.imageUrl = response.data;
+
+        // Xác định loại file từ MIME type
+        let resourceType = "image"; // Mặc định là image
+        if (file.type.startsWith("video/") || file.type.startsWith("audio/")) {
+          resourceType = "video";
+        }
+
+        console.log("option: ", option);
+        option.fileUrl = response.data;
         option.publicId = fileName;
+        option.resourceType = resourceType; // Lưu loại file  ////////////////////////////
+
+        console.log("Uploaded file type:", resourceType);
       } catch (error) {
         console.error("Image upload failed", error);
       }
@@ -104,13 +121,17 @@ export default {
       event.target.value = null;
     },
 
-    async removeImage(option) {
-      if (!option.imageUrl) return;
+    async removeFile(option) {
+      if (!option.fileUrl) return;
 
       try {
-        await CloudinaryService.deleteImage(option.publicId);
-        option.imageUrl = ""; // Xóa ảnh trong UI khi thành công
+        await CloudinaryService.deleteFile(
+          option.publicId,
+          option.resourceType
+        );
+        option.fileUrl = ""; // Xóa ảnh trong UI khi thành công
         option.publicId = "";
+        option.resourceType = "";
         console.log("Image deleted successfully");
       } catch (error) {
         console.error("Error deleting image", error);
