@@ -120,7 +120,7 @@
         class="float-right pb-3 px-6"
       >
         <i
-          class="fa-regular fa-trash-can hover:bg-gray-200 p-2 rounded-full text-gray-400 hover:text-gray-700"
+          class="fa-regular fa-trash-can hover:bg-gray-200 p-2 rounded-full text-gray-400 hover:text-gray-700 transition duration-300 ease-in-out"
         ></i>
       </button>
     </div>
@@ -249,22 +249,41 @@ export default {
       } catch (error) {}
     },
     async deleteForm(index) {
-      const response = await FormService.deleteFormOfProject(
-        this.projectId,
-        this.project.forms[index].id
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this form?"
       );
-      this.project.forms.splice(index, 1);
-      alert("Form is deleted successfully!!");
-      console.log(response.data);
+      if (confirmDelete) {
+        try {
+          const response = await FormService.deleteFormOfProject(
+            this.projectId,
+            this.project.forms[index].id
+          );
+          this.project.forms.splice(index, 1);
+          alert("Form is deleted successfully!!");
+          console.log(response.data);
+        } catch (error) {
+          console.error("Error deleting form:", error);
+          alert("Failed to delete the form. Please try again.");
+        }
+      }
     },
     async deleteProject() {
-      const response = await ProjectService.deleteProject(this.project.id);
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this project?"
+      );
+      if (confirmDelete) {
+        try {
+          const response = await ProjectService.deleteProject(this.project.id);
+          console.log(response.data);
+          alert("Project is deleted successfully!!");
 
-      console.log(response.data);
-      alert("Project is deleted successfully!!");
-      this.$router.push({
-        name: "project-list",
-      });
+          // Chuyển hướng về danh sách dự án sau khi xóa thành công
+          this.$router.push({ name: "project-list" });
+        } catch (error) {
+          console.error("Error deleting project:", error);
+          alert("Failed to delete the project. Please try again.");
+        }
+      }
     },
     async editProject() {
       this.$router.push({

@@ -11,17 +11,15 @@
           >
             <i class="fa-solid fa-ellipsis"></i>
           </button>
-          <div class="shadow-lg" v-if="open">
+          <div class="shadow-lg rounded-md py-7 bg-white" v-if="open">
             <div
-              class="hover:bg-blue-300 px-2 py-1 border-b-gray-100 border-b-2"
+              class="hover:bg-yellow-300 px-7 py-2 border-b-gray-100 border-b"
             >
-              <button @click="copyLink">Sao chép liên kết</button>
+              <button @click="copyLink">Copy Link</button>
             </div>
 
-            <div
-              class="hover:bg-green-300 px-2 py-1 border-b-gray-100 border-b-2"
-            >
-              <button @click="generateQRCode">Tạo mã QR</button>
+            <div class="hover:bg-yellow-300 px-5 py-2">
+              <button @click="generateQRCode">Create QR</button>
             </div>
           </div>
         </div>
@@ -73,7 +71,7 @@
         <!-- file view   -->
         <div
           v-if="question.fileUrl"
-          class="w-[90%] relative flex items-center gap-5"
+          class="w-[90%] relative flex items-center gap-x-14"
         >
           <iframe
             :src="question.fileUrl"
@@ -86,14 +84,14 @@
             <a
               :href="question.fileUrl"
               download
-              class="text-blue-600 underline"
+              class="text-gray-900 rounded-full border border-gray-400 p-1 hover:bg-gray-100 transition duration-300 ease-in-out"
             >
-              View
+              <i class="fa-solid fa-arrow-right"></i>
             </a>
           </div>
         </div>
         <!-- content -->
-        <div class="flex row justify-between items-start my-5">
+        <div class="flex row justify-between items-start my-10">
           <div class="w-[80%]">
             <p class="font-semibold">{{ question.content }}</p>
           </div>

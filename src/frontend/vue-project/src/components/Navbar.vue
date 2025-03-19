@@ -35,7 +35,7 @@
       <div class="relative">
         <button
           @click="toggleDropdown"
-          class="text-xl font-bold pl-7 hover:text-gray-900 focus:outline-none"
+          class="text-xl font-bold pl-3 hover:text-gray-900 focus:outline-none"
         >
           <i class="fa-regular fa-user"></i>
         </button>

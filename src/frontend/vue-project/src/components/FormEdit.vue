@@ -233,21 +233,34 @@ export default {
 
       console.log("Form updated:", this.form);
       alert("Form is updated successfully!!");
+      // Reload trang sau khi cập nhật thành công
+      window.location.reload();
     },
 
     async deleteForm() {
-      const response = await FormService.deleteFormOfProject(
-        this.projectId,
-        this.formId
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this form?"
       );
-      alert("Form is deleted successfully!!");
-      console.log(response.data);
-      this.$router.push({
-        name: "project-details",
-        params: { projectId: this.projectId },
-      });
-    },
+      if (confirmDelete) {
+        try {
+          const response = await FormService.deleteFormOfProject(
+            this.projectId,
+            this.formId
+          );
+          alert("Form is deleted successfully!!");
+          console.log(response.data);
 
+          // Chuyển hướng về trang chi tiết dự án sau khi xóa thành công
+          this.$router.push({
+            name: "project-details",
+            params: { projectId: this.projectId },
+          });
+        } catch (error) {
+          console.error("Error deleting form:", error);
+          alert("Failed to delete the form. Please try again.");
+        }
+      }
+    },
     formExport() {
       try {
         this.$router.push({

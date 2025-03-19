@@ -13,7 +13,10 @@
         >
           <div class="w-[100%]">
             <!-- file view   -->
-            <div v-if="question.fileUrl" class="w-[80%] relative">
+            <div
+              v-if="question.fileUrl"
+              class="w-[90%] relative flex gap-10 items-center"
+            >
               <iframe
                 :src="question.fileUrl"
                 width="100%"
@@ -25,9 +28,9 @@
                 <a
                   :href="question.fileUrl"
                   download
-                  class="text-blue-600 underline"
+                  class="text-gray-900 rounded-full border border-gray-400 p-1 hover:bg-gray-100 transition duration-300 ease-in-out"
                 >
-                  View
+                  <i class="fa-solid fa-arrow-right"></i>
                 </a>
               </div>
               <button
@@ -40,7 +43,7 @@
             </div>
 
             <!-- content -->
-            <div class="flex row justify-between relative">
+            <div class="flex row justify-between relative my-10">
               <div class="w-[78%]">
                 <textarea
                   id="projectDescription"
@@ -142,7 +145,7 @@
                 <div>
                   <button
                     v-on:click="addMoreOption(question)"
-                    class=""
+                    class="px-1 border border-gray-600 rounded-sm hover:bg-gray-100 transition duration-300 ease-in-out"
                     type="button"
                   >
                     More option

@@ -7,7 +7,10 @@
   >
     <!-- file view-->
     <!-- file view   -->
-    <div v-if="option.fileUrl" class="w-[80%] relative">
+    <div
+      v-if="option.fileUrl"
+      class="w-[80%] relative flex gap-10 items-center"
+    >
       <iframe
         :src="option.fileUrl"
         width="100%"
@@ -16,8 +19,12 @@
       ></iframe>
       <!-- Nút tải xuống -->
       <div class="mt-2">
-        <a :href="option.fileUrl" download class="text-blue-600 underline">
-          View
+        <a
+          :href="option.fileUrl"
+          download
+          class="text-gray-900 rounded-full border border-gray-400 p-1 hover:bg-gray-100 transition duration-300 ease-in-out"
+        >
+          <i class="fa-solid fa-arrow-right"></i>
         </a>
       </div>
       <button

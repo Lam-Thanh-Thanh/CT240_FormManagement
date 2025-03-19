@@ -160,12 +160,22 @@ export default {
       } catch (error) {}
     },
     async deleteProject(index) {
-      const response = await ProjectService.deleteProject(
-        this.projects[index].id
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this project?"
       );
-      this.projects.splice(index, 1);
-      console.log(response.data);
-      alert("Project is deleted successfully!!");
+      if (confirmDelete) {
+        try {
+          const response = await ProjectService.deleteProject(
+            this.projects[index].id
+          );
+          this.projects.splice(index, 1);
+          console.log(response.data);
+          alert("Project deleted successfully!");
+        } catch (error) {
+          console.error("Error deleting project:", error);
+          alert("Failed to delete the project. Please try again.");
+        }
+      }
     },
   },
 };
