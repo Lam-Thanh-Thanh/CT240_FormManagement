@@ -57,7 +57,9 @@
         <p class="font-bold">Response {{ index + 1 }}:</p>
 
         <!-- user Id -->
-        <p class="font-bold">User: {{ answer.userId }}</p>
+        <p class="font-bold">
+          User: {{ usersCache[answer.userId]?.username || "Loading..." }}
+        </p>
 
         <!-- Nếu là câu trả lời dạng text -->
         <div v-if="answer.answerText">
@@ -74,9 +76,9 @@
               :key="optIndex"
             >
               <img
-                v-if="option.imageUrl"
-                :src="option.imageUrl"
-                alt="checkbox image"
+                v-if="option.fileUrl"
+                :src="option.fileUrl"
+                alt="checkbox file"
                 class="w-48 h-auto rounded"
               />
               {{ option.optionContent }}
@@ -84,12 +86,12 @@
           </div>
         </div>
 
-        <!-- Nếu là câu trả lời dạng ảnh -->
-        <div v-else-if="answer.imageUrl">
+        <!-- Nếu là câu trả lời dạng file -->
+        <div v-else-if="answer.fileUrl">
           <div class="bg-gray-100 p-2 rounded my-1">
             <img
-              :src="answer.imageUrl"
-              alt="User uploaded image"
+              :src="answer.fileUrl"
+              alt="User uploaded file"
               class="w-48 h-auto rounded"
             />
           </div>
@@ -98,9 +100,9 @@
         <div v-else-if="answer.oneOption">
           <div class="bg-gray-100 p-2 rounded my-1">
             <img
-              v-if="answer.oneOption.imageUrl"
-              :src="answer.oneOption.imageUrl"
-              alt="radio image"
+              v-if="answer.oneOption.fileUrl"
+              :src="answer.oneOption.fileUrl"
+              alt="radio file"
               class="w-48 h-auto rounded"
             />
             {{ answer.oneOption.optionContent }}
@@ -117,6 +119,7 @@
 
 <script>
 import FormService from "@/services/FormService";
+import UserService from "@/services/UserService";
 
 export default {
   props: ["formId"],
@@ -127,12 +130,16 @@ export default {
         questions: [],
       },
       responses: [], //all responses of form
-      // answers: [], //answers of a question
+      usersCache: {}, // Cache user
     };
   },
   async created() {
     await this.getFormDetails();
     await this.getResponsesOfForm();
+    // Lấy thông tin user của tất cả responses
+    this.responses.forEach(async (response) => {
+      await this.getUserById(response.userId);
+    });
   },
   methods: {
     formattedDate(createdAt) {
@@ -183,6 +190,14 @@ export default {
       });
 
       return answers;
+    },
+
+    async getUserById(userId) {
+      if (!this.usersCache[userId]) {
+        const response = await UserService.getUserById(userId);
+        this.usersCache[userId] = response.data; // Lưu vào cache
+      }
+      return this.usersCache[userId];
     },
   },
 };

@@ -204,35 +204,32 @@
           class="flex flex-row items-center gap-4 justify-between"
         >
           <!-- image view-->
-          <div
-            v-if="response.answers[qIndex].imageUrl"
-            class="w-[80%] relative"
-          >
+          <div v-if="response.answers[qIndex].fileUrl" class="w-[80%] relative">
             <img
-              :src="response.answers[qIndex].imageUrl"
+              :src="response.answers[qIndex].fileUrl"
               alt="Uploaded"
               width="100%"
             />
 
             <button
               type="button"
-              @click="removeImage(response.answers[qIndex])"
+              @click="removeFile(response.answers[qIndex])"
               class="absolute -top-2 -right-2 bg-gray-300 text-black rounded-full"
             >
               <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
             </button>
           </div>
-          <!--add image, delete button -->
-          <div>
-            <!-- Icon thay thế nút Choose File -->
-            <label :for="image - answer" class="upload-label">
+
+          <!-- file upload for answer -->
+          <div class="">
+            <label :for="'image-upload-' + question.id" class="upload-label">
               <i class="fa-regular fa-image"></i>
             </label>
             <input
-              :id="image - answer"
+              :id="'image-upload-' + question.id"
               type="file"
-              @change="addImageAnswer($event, response.answers[qIndex])"
-              accept="image/*"
+              @change="addFileToAnswer($event, response.answers[qIndex])"
+              accept="image/*,video/*,audio/*, .pdf"
               class="hidden"
             />
           </div>
@@ -333,8 +330,9 @@ export default {
           answerText: "",
           oneOption: {},
           selectedOptions: [],
-          imageUrl: "",
+          fileUrl: "",
           publicId: "",
+          resourceType: "",
         }));
 
         console.log(response.data);
@@ -399,7 +397,7 @@ export default {
       }));
     },
     // add image answer
-    async addImageAnswer(event, answer) {
+    async addFileToAnswer(event, answer) {
       const file = event.target.files[0];
 
       if (!file) {
@@ -413,25 +411,39 @@ export default {
       console.log("FormData content:", formData.get("file")); // Kiểm tra dữ liệu gửi đi
 
       try {
-        const response = await CloudinaryService.uploadImage(formData);
+        const response = await CloudinaryService.uploadFile(formData);
         const parts = response.data.split("/");
         const fileName = parts.pop().split(".")[0]; // Lấy tên file không có đuôi mở rộng
-        console.log("answer", answer);
-        answer.imageUrl = response.data;
+
+        // Xác định loại file từ MIME type
+        let resourceType = "image"; // Mặc định là image
+        if (file.type.startsWith("video/") || file.type.startsWith("audio/")) {
+          resourceType = "video";
+        }
+
+        console.log("option: ", answer);
+        answer.fileUrl = response.data;
         answer.publicId = fileName;
+        answer.resourceType = resourceType; // Lưu loại file  ////////////////////////////
+
+        console.log("Uploaded file type:", resourceType);
       } catch (error) {
         console.error("Image upload failed", error);
       }
       // Reset input file sau khi xử lý xong
       event.target.value = null;
     },
-    async removeImage(answer) {
-      if (!answer.imageUrl) return;
+    async removeFile(answer) {
+      if (!answer.fileUrl) return;
 
       try {
-        await CloudinaryService.deleteImage(answer.publicId);
-        answer.imageUrl = ""; // Xóa ảnh trong UI khi thành công
+        await CloudinaryService.deleteFile(
+          answer.publicId,
+          answer.resourceType
+        );
+        answer.fileUrl = ""; // Xóa ảnh trong UI khi thành công
         answer.publicId = "";
+        answer.resourceType = "";
         console.log("Image deleted successfully");
       } catch (error) {
         console.error("Error deleting image", error);
