@@ -28,7 +28,8 @@
                 <a
                   :href="question.fileUrl"
                   download
-                  class="text-gray-900 rounded-full border border-gray-400 p-1 hover:bg-gray-100 transition duration-300 ease-in-out"
+                  class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+                  title="View"
                 >
                   <i class="fa-solid fa-arrow-right"></i>
                 </a>
@@ -36,13 +37,14 @@
               <button
                 type="button"
                 @click="removeFile(question)"
-                class="absolute -top-2 -right-2 bg-gray-300 text-black rounded-full"
+                class="absolute top-0 right-0 bg-gray-300 text-black rounded-full"
+                title="Remove"
               >
                 <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
               </button>
             </div>
             <!-- pdf -->
-            <div v-if="question.textUrl">
+            <div v-if="question.textUrl" class="my-5">
               <a
                 :href="backendUrl + question.textUrl"
                 download
@@ -172,7 +174,7 @@
               </div>
             </div>
             <!-- type -->
-            <div class="mt-5">
+            <div class="mt-20">
               <!-- option -->
               <div
                 v-if="question.type === 'radio' || question.type === 'checkbox'"

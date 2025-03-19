@@ -86,14 +86,14 @@
             <a
               :href="question.fileUrl"
               download
-              class="text-gray-900 rounded-full border border-gray-400 p-1 hover:bg-gray-100 transition duration-300 ease-in-out"
+              class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
             >
               <i class="fa-solid fa-arrow-right"></i>
             </a>
           </div>
         </div>
         <!-- content -->
-        <div class="flex row justify-between items-start my-10">
+        <div class="flex row justify-between items-start my-5">
           <div class="w-[80%]">
             <p class="font-semibold">{{ question.content }}</p>
           </div>
@@ -201,15 +201,30 @@
 
         <div
           v-if="question.type === 'file'"
-          class="flex flex-row items-center gap-4 justify-between"
+          class="flex flex-col items-center gap-7 justify-center"
         >
           <!-- image view-->
-          <div v-if="response.answers[qIndex].fileUrl" class="w-[80%] relative">
-            <img
+          <div
+            v-if="response.answers[qIndex].fileUrl"
+            class="w-[80%] relative flex items-center gap-10"
+          >
+            <iframe
               :src="response.answers[qIndex].fileUrl"
-              alt="Uploaded"
               width="100%"
-            />
+              height="200px"
+              class="border rounded-md"
+            ></iframe>
+            <!-- Nút tải xuống -->
+            <div class="mt-2">
+              <a
+                :href="question.fileUrl"
+                download
+                class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+                title="View"
+              >
+                <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
 
             <button
               type="button"
@@ -219,17 +234,71 @@
               <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
             </button>
           </div>
+          <!-- pdf -->
+          <div v-if="response.answers[qIndex].textUrl" class="my-5">
+            <a
+              :href="backendUrl + response.answers[qIndex].textUrl"
+              download
+              title="Download to view this file"
+            >
+              <i
+                v-if="getFileIcon(response.answers[qIndex].textUrl) === 'pdf'"
+                class="fa-regular fa-file-pdf text-5xl"
+              ></i>
+              <i
+                v-else-if="
+                  getFileIcon(response.answers[qIndex].textUrl) === 'doc'
+                "
+                class="fa-solid fa-file-word text-5xl"
+              ></i>
+              <i
+                v-else-if="
+                  getFileIcon(response.answers[qIndex].textUrl) === 'xls'
+                "
+                class="fa-regular fa-file-excel text-5xl"
+              ></i>
+              <i
+                v-else-if="
+                  getFileIcon(response.answers[qIndex].textUrl) === 'file'
+                "
+                class="fa-regular fa-file text-5xl"
+              >
+                ></i
+              >
 
+              Download to view
+            </a>
+          </div>
           <!-- file upload for answer -->
-          <div class="">
-            <label :for="'image-upload-' + question.id" class="upload-label">
-              <i class="fa-regular fa-image"></i>
+          <div class="" title="Upload image file">
+            <label
+              :for="'image-upload-' + question.id"
+              class="upload-label border border-gray-500 p-3 rounded-md hover:border-pink-800 hover:text-pink-800 shadow-md transition duration-300 ease-in-out"
+            >
+              <i class="fa-regular fa-image text-2xl mx-2"></i> Image, Video,
+              Audio
             </label>
             <input
               :id="'image-upload-' + question.id"
               type="file"
               @change="addFileToAnswer($event, response.answers[qIndex])"
-              accept="image/*,video/*,audio/*, .pdf"
+              accept="image/*,video/*,audio/*"
+              class="hidden"
+            />
+          </div>
+          <!-- pdf upload for answer ----------------------------------------------------->
+          <div class="" title="Upload text file">
+            <label
+              :for="'file-upload-' + question.id"
+              class="upload-label border border-gray-500 p-3 rounded-md hover:border-pink-800 hover:text-pink-800 shadow-md transition duration-300 ease-in-out"
+            >
+              <i class="fa-solid fa-upload text-2xl"></i> Word, PDF, Excel
+            </label>
+            <input
+              :id="'file-upload-' + question.id"
+              type="file"
+              @change="uploadPdf($event, response.answers[qIndex])"
+              accept=".doc,.pdf,.xlsx"
               class="hidden"
             />
           </div>
@@ -260,6 +329,7 @@ import QRCode from "qrcode";
 import ThanksForSubmit from "./ThanksForSubmit.vue";
 import router from "@/router"; // Import router để điều hướng
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 export default {
   props: ["formId"],
   components: { ThanksForSubmit },
@@ -278,6 +348,7 @@ export default {
       currentLink: `http://localhost:5173/${this.formId}`, // Link gốc
       qrCode: "", // Ảnh QR Code
       showQRCode: false, // Biến kiểm soát hiển thị QR Code
+      backendUrl: "http://localhost:8080/api/files/",
     };
   },
   async created() {
@@ -334,6 +405,7 @@ export default {
           fileUrl: "",
           publicId: "",
           resourceType: "",
+          textUrl: "",
         }));
 
         console.log(response.data);
@@ -393,8 +465,10 @@ export default {
         answerText: "",
         oneOption: {},
         selectedOptions: [],
-        imageUrl: "",
+        fileUrl: "",
         publicId: "",
+        resourceType: "",
+        textUrl: "",
       }));
     },
     // add image answer
@@ -449,6 +523,37 @@ export default {
       } catch (error) {
         console.error("Error deleting image", error);
       }
+    },
+    // add pdf to question --------------------------------------------------------------------------
+    async uploadPdf(event, answer) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/files/upload",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+
+        answer.textUrl = response.data;
+      } catch (error) {
+        console.error("Error uploading PDF", error);
+      }
+    },
+    getFileIcon(url) {
+      if (!url) return "/icons/default-file.png"; // Icon mặc định
+
+      if (url.endsWith(".pdf")) return "pdf";
+      if (url.endsWith(".doc") || url.endsWith(".docx")) return "doc";
+      if (url.endsWith(".xls") || url.endsWith(".xlsx")) return "xls";
+
+      return "file"; // Trường hợp file không xác định
     },
   },
 };

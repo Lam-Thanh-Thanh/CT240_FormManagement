@@ -10,6 +10,7 @@
     <div
       v-if="option.fileUrl"
       class="w-[80%] relative flex gap-10 items-center"
+      title="View "
     >
       <iframe
         :src="option.fileUrl"
@@ -22,7 +23,7 @@
         <a
           :href="option.fileUrl"
           download
-          class="text-gray-900 rounded-full border border-gray-400 p-1 hover:bg-gray-100 transition duration-300 ease-in-out"
+          class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
         >
           <i class="fa-solid fa-arrow-right"></i>
         </a>
@@ -31,6 +32,7 @@
         type="button"
         @click="removeFile(option)"
         class="absolute -top-2 -right-2 bg-gray-300 text-black rounded-full"
+        title="Remove"
       >
         <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
       </button>
@@ -45,6 +47,7 @@
           v-model="option.optionContent"
           class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
           placeholder="Text..."
+          required
         />
       </div>
       <!--add File, delete button -->

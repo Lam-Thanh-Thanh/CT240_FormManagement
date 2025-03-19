@@ -38,8 +38,13 @@
         ></iframe>
         <!-- Nút tải xuống -->
         <div class="mt-2">
-          <a :href="question.fileUrl" download class="text-blue-600 underline">
-            View
+          <a
+            :href="question.fileUrl"
+            download
+            class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+            title="View"
+          >
+            <i class="fa-solid fa-arrow-right"></i>
           </a>
         </div>
       </div>
@@ -89,12 +94,25 @@
 
         <!-- Nếu là câu trả lời dạng file -->
         <div v-else-if="answer.fileUrl">
-          <div class="bg-gray-100 p-2 rounded my-1">
-            <img
+          <div
+            class="bg-gray-100 p-2 rounded my-1 flex gap-20 items-center px-24"
+          >
+            <iframe
               :src="answer.fileUrl"
-              alt="User uploaded file"
-              class="w-48 h-auto rounded"
-            />
+              width="100%"
+              height="200px"
+              class="border rounded-md"
+            ></iframe>
+            <!-- Nút tải xuống -->
+            <div class="mt-2">
+              <a
+                :href="answer.fileUrl"
+                class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+                title="View"
+              >
+                <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
           </div>
         </div>
         <!-- Nếu là câu trả lời radio -->
