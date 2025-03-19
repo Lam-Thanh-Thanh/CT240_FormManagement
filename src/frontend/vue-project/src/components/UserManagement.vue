@@ -1,12 +1,12 @@
 <template>
     <div class="user-management">
-      <h1 class="text-center p-20 text-4xl font-extrabold ">UserManagement</h1>
+      <h1 class="text-center p-20 text-4xl font-extrabold ">User Management</h1>
 
       <table class="table-auto w-full border-collapse border border-gray-300">
         <thead>
           <tr class="bg-gray-200">
             <th class="border border-gray-300 px-4 py-2">ID</th>
-            <th class="border border-gray-300 px-4 py-2">UserName</th>
+            <th class="border border-gray-300 px-4 py-2">User Name</th>
             <th class="border border-gray-300 px-4 py-2">Email</th>
             <th class="border border-gray-300 px-4 py-2">Role</th>
             <th class="border border-gray-300 px-4 py-2">Activity</th>
