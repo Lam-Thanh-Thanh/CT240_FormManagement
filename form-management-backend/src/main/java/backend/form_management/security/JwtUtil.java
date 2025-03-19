@@ -19,19 +19,23 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes); // Trả về kiểu SecretKey
     }
     //get role
-    public String generateToken(String userId) {
+    public String generateToken(String userId, String role) {
         return Jwts.builder()
                 .subject(userId)
-                //.subject(roles)
+                .claim("role", role)  // Thêm role vào payload
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(getSigningKey(), Jwts.SIG.HS256) // Dùng đúng kiểu SecretKey + HS256
+                .signWith(getSigningKey(), Jwts.SIG.HS256) 
                 .compact();
     }
 
     public String extractUsername(String token) {
         JwtParser parser = Jwts.parser().verifyWith(getSigningKey()).build(); // Đúng kiểu SecretKey
         return parser.parseSignedClaims(token).getPayload().getSubject(); // Đổi parseClaimsJws thành parseSignedClaims
+    }
+    public String extractUserRole(String token) {
+        JwtParser parser = Jwts.parser().verifyWith(getSigningKey()).build();
+        return parser.parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {

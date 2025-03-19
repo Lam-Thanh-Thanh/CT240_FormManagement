@@ -18,6 +18,8 @@ import AdminDashboard from "@/components/AdminDashboard.vue";
 import UserManagement from "@/components/UserManagement.vue";
 import ProjectManagement from "@/components/ProjectManagement.vue";
 import EditProfile from "@/components/EditProfile.vue";
+import { AuthService } from "@/services/authService";
+import {jwtDecode} from "jwt-decode";
 
 
 const router = createRouter({
@@ -124,5 +126,27 @@ const router = createRouter({
     },
   ],
 });
+router.beforeEach((to, from, next) => {
+  const token = AuthService.getToken();
 
+  if (to.path.startsWith("/admin")) {
+    if (!token) {
+      alert("You need to log in with ADMIN role!");
+      return next("/login");
+    }
+
+    try {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.role !== "ADMIN") {
+        alert("You do not have access!");
+        return next("/");
+      }
+    } catch (error) {
+      console.error("Lỗi giải mã token:", error);
+      return next("/login");
+    }
+  }
+
+  next();
+});
 export default router;

@@ -57,10 +57,10 @@ export default {
     async handleRegister() {
       try {
         await register(this.user);
-        alert("Đăng ký thành công! Vui lòng đăng nhập.");
+        alert("Registration successful! Please login.");
         this.$router.push("/login");
       } catch (error) {
-        alert("Đăng ký thất bại!");
+        alert("Registration failed!");
       }
     },
   },

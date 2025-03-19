@@ -1,3 +1,5 @@
+import {jwtDecode} from "jwt-decode";
+
 export const AuthService = {
   getToken() {
     return localStorage.getItem("token");
@@ -10,5 +12,16 @@ export const AuthService = {
   },
   isAuthenticated() {
     return !!localStorage.getItem("token");
+  },
+  getUserRole() {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const decodedToken = jwtDecode(token);
+      return decodedToken.role;
+    } catch (error) {
+      console.error("Lỗi giải mã token:", error);
+      return null;
+    }
   },
 };

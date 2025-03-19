@@ -53,18 +53,25 @@ export default {
     };
   },
   methods: {
-    async handleLogin() {
-      try {
-        const response = await login(this.user);
-        AuthService.setToken(response.data); // Lưu token
-        localStorage.setItem("token", response.data.token);
-        alert("Log in successfully!");
-        console.log("token", response.data.token);
-        this.$router.push("/projects"); //project list
-      } catch (error) {
-        alert("Login failed!");
+  async handleLogin() {
+    try {
+      const response = await login(this.user);
+      AuthService.setToken(response.data.token); 
+      const role = AuthService.getUserRole();
+      
+      alert("Log in successfully!");
+      console.log("token", response.data.token);
+      console.log(role);
+
+      if (role === "ADMIN") {
+        this.$router.push("/admin");
+      } else {
+        this.$router.push("/projects");
       }
-    },
+    } catch (error) {
+      alert("Login failed!");
+    }
   },
+},
 };
 </script>

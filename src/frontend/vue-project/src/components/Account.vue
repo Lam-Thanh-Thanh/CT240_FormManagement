@@ -46,7 +46,7 @@ export default {
       // Lấy token từ localStorage
       const token = localStorage.getItem("token");
       if (!token) {
-        alert("Bạn chưa đăng nhập!");
+        alert("You need to login first!");
         router.push("/login");
         return false;
       }
