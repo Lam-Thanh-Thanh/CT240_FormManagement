@@ -19,6 +19,9 @@ public class FormService {
 
     @Autowired
     private ResponseService responseService;
+    @Autowired
+    private FileStorageService fileStorageService;
+
 
     @Autowired
     private CloudinaryService cloudinaryService;
@@ -99,6 +102,9 @@ public class FormService {
                 if(!question.getPublicId().isEmpty()) {
                     cloudinaryService.deleteFile(question.getPublicId(), question.getResourceType());
                 }
+                if(!question.getTextUrl().isEmpty()) {
+                    fileStorageService.deleteFile(question.getTextUrl());
+                }
 
                         //image of option
                 List<Option> options = question.getOptions();
@@ -106,12 +112,14 @@ public class FormService {
                     if (!option.getPublicId().isEmpty() ) {
                         cloudinaryService.deleteFile(option.getPublicId(), option.getResourceType());
                     }
+
                 }
             }
 
             //delete all responses of form
             List<Response> responses = responseService.getAllResponsesByFormId(formId);
             for (Response response : responses) {
+
                 responseService.deleteResponse(response.getId());
             }
             //delete form

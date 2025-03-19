@@ -25,6 +25,8 @@ public class ResponseService {
     private ResponseRepository responseRepository;
     @Autowired
     private CloudinaryService cloudinaryService;
+    @Autowired
+    private FileStorageService fileStorageService;
 
 
 
@@ -63,7 +65,13 @@ public class ResponseService {
             Response existingResponse = optionalResponse.get();
             List<Answer> answers = existingResponse.getAnswers();
             for (Answer answer : answers) {
-                cloudinaryService.deleteFile(answer.getPublicId(), answer.getResourceType());
+                if (!answer.getPublicId().isEmpty()) {
+                    cloudinaryService.deleteFile(answer.getPublicId(), answer.getResourceType());
+                }
+                if (answer.getTextUrl() != null && !answer.getTextUrl().isEmpty()) {
+                    fileStorageService.deleteFile(answer.getTextUrl());
+
+                }
             }
 
         }

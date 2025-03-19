@@ -65,4 +65,25 @@ public class FileStorageService {
         return  resource;
     }
 
+    public boolean deleteFile(String filename) throws IOException {
+        Path filePath = getFilePath(filename);
+
+        if (!Files.exists(filePath)) {
+            System.out.println("File does not exist: " + filePath);
+            return false;
+        }
+
+        if (!Files.isRegularFile(filePath)) {
+            System.out.println("Not a file, skipping deletion: " + filePath);
+            return false;
+        }
+
+        try {
+            System.out.println("Not a file, skipping deletion: " + filePath);
+            return Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            throw new IOException("Could not delete file: " + filename, e);
+        }
+    }
+
 }

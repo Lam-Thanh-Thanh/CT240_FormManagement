@@ -44,4 +44,18 @@ public class FileController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping("/{filename}")
+    public ResponseEntity<String> deleteFile(@PathVariable String filename) {
+        try {
+            boolean deleted = fileStorageService.deleteFile(filename);
+            if (deleted) {
+                return ResponseEntity.ok("File deleted successfully: " + filename);
+            } else {
+                return ResponseEntity.status(404).body("File not found: " + filename);
+            }
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Error deleting file: " + e.getMessage());
+        }
+    }
 }

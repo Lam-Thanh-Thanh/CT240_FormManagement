@@ -28,7 +28,7 @@
       <!-- file view question   -->
       <div
         v-if="question.fileUrl"
-        class="w-[90%] relative flex items-center gap-5"
+        class="w-[100%] relative flex items-center gap-5"
       >
         <iframe
           :src="question.fileUrl"
@@ -49,7 +49,7 @@
         </div>
       </div>
       <!-- content -->
-      <div class="flex row justify-between items-start">
+      <div class="flex row justify-between items-start mt-5 mb-14">
         <p class="font-semibold">{{ question.content }}</p>
       </div>
 
@@ -60,10 +60,10 @@
         class="mt-7"
       >
         <!-- Thêm số thứ tự -->
-        <p class="font-bold">Response {{ index + 1 }}:</p>
+        <p class="font-bold text-gray-500">Response {{ index + 1 }}:</p>
 
         <!-- user Id -->
-        <p class="font-bold">
+        <p class="font-bold text-gray-500">
           User: {{ usersCache[answer.userId]?.username || "Loading..." }}
         </p>
 
@@ -95,12 +95,12 @@
         <!-- Nếu là câu trả lời dạng file -->
         <div v-else-if="answer.fileUrl">
           <div
-            class="bg-gray-100 p-2 rounded my-1 flex gap-20 items-center px-24"
+            class="bg-gray-50 rounded my-1 flex gap-20 items-center py-4 px-40 border"
           >
             <iframe
               :src="answer.fileUrl"
-              width="100%"
-              height="200px"
+              width="80%"
+              height="150px"
               class="border rounded-md"
             ></iframe>
             <!-- Nút tải xuống -->
@@ -114,6 +114,39 @@
               </a>
             </div>
           </div>
+        </div>
+        <!-- pdf -->
+        <div
+          v-if="answer.textUrl"
+          class="my-5 relative p-4 px-6 border rounded-full"
+        >
+          <a
+            :href="backendUrl + answer.textUrl"
+            download
+            title="Download to view this file"
+            class="hover:border-pink-800 hover:text-pink-800 transition duration-300 ease-in-out"
+          >
+            <i
+              v-if="getFileIcon(answer.textUrl) === 'pdf'"
+              class="fa-regular fa-file-pdf text-5xl"
+            ></i>
+            <i
+              v-else-if="getFileIcon(answer.textUrl) === 'doc'"
+              class="fa-solid fa-file-word text-5xl"
+            ></i>
+            <i
+              v-else-if="getFileIcon(answer.textUrl) === 'xls'"
+              class="fa-regular fa-file-excel text-5xl"
+            ></i>
+            <i
+              v-else-if="getFileIcon(answer.textUrl) === 'file'"
+              class="fa-regular fa-file text-5xl"
+            >
+              ></i
+            >
+
+            Download to view
+          </a>
         </div>
         <!-- Nếu là câu trả lời radio -->
         <div v-else-if="answer.oneOption">
@@ -150,6 +183,8 @@ export default {
       },
       responses: [], //all responses of form
       usersCache: {}, // Cache user
+
+      backendUrl: "http://localhost:8080/api/files/",
     };
   },
   async created() {
@@ -217,6 +252,15 @@ export default {
         this.usersCache[userId] = response.data; // Lưu vào cache
       }
       return this.usersCache[userId];
+    },
+    getFileIcon(url) {
+      if (!url) return "/icons/default-file.png"; // Icon mặc định
+
+      if (url.endsWith(".pdf")) return "pdf";
+      if (url.endsWith(".doc") || url.endsWith(".docx")) return "doc";
+      if (url.endsWith(".xls") || url.endsWith(".xlsx")) return "xls";
+
+      return "file"; // Trường hợp file không xác định
     },
   },
 };
