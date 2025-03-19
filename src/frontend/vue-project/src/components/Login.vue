@@ -58,11 +58,11 @@ export default {
         const response = await login(this.user);
         AuthService.setToken(response.data); // Lưu token
         localStorage.setItem("token", response.data.token);
-        alert("Đăng nhập thành công!");
+        alert("Log in successfully!");
         console.log("token", response.data.token);
         this.$router.push("/projects"); //project list
       } catch (error) {
-        alert("Đăng nhập thất bại!");
+        alert("Login failed!");
       }
     },
   },

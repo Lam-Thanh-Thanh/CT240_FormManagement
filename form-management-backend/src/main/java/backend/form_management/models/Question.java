@@ -19,7 +19,10 @@ public class Question {
     private String content;
     private String formId;
     private String type;    //
-        private String imageUrl;
+
+        private String fileUrl;   //////////////////////////////////////
+        private String resourceType;   //////////////////////////////////////
+
     private String publicId;
 
     private List<Option> options;

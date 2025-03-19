@@ -6,7 +6,7 @@
       <div class="p-6 bg-white rounded-lg shadow-md my-20 mx-80">
         <!-- Tên Project -->
         <div class="mb-2">
-          <label for="projectName" class="block">Name</label>
+          <label for="projectName" class="block font-bold">Name</label>
           <input
             type="text"
             id="projectName"
@@ -18,7 +18,9 @@
 
         <!-- Mô tả Project -->
         <div class="mb-2">
-          <label for="projectDescription" class="block">Description</label>
+          <label for="projectDescription" class="block font-bold"
+            >Description</label
+          >
           <textarea
             id="projectDescription"
             v-model="project.description"

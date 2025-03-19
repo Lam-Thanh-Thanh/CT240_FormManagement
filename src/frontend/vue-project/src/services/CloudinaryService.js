@@ -9,12 +9,13 @@ const apiClient = axios.create({
 });
 
 export default {
-  uploadImage(imageFile) {
-    return apiClient.post(`/upload-image`, imageFile);
+  uploadFile(file) {
+    return apiClient.post(`/upload-file`, file);
   },
-  deleteImage(publicId) {
-    return apiClient.delete("/delete-image", {
-      params: { publicId },
+
+  deleteFile(publicId, resourceType) {
+    return apiClient.delete("/delete-file", {
+      params: { publicId, resourceType },
     });
   },
 };

@@ -17,7 +17,9 @@ public class Option {
 
     private String questionId;
     private String optionContent;
-    private String imageUrl;
+    private String fileUrl;
     private String publicId;
+    private String resourceType; /////////////
+
 
 }

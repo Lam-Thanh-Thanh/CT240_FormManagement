@@ -24,13 +24,24 @@
       :key="qIndex"
       class="shadow-lg shadow-myLightGray p-14 rounded border-t-pink-800 border-t-4 mb-20"
     >
-      <!-- image question -->
-      <img
-        v-if="question.imageUrl"
-        :src="question.imageUrl"
-        alt="question image"
-        class="w-48 h-auto rounded"
-      />
+      <!-- file view question   -->
+      <div
+        v-if="question.fileUrl"
+        class="w-[90%] relative flex items-center gap-5"
+      >
+        <iframe
+          :src="question.fileUrl"
+          width="100%"
+          height="200px"
+          class="border rounded-md"
+        ></iframe>
+        <!-- Nút tải xuống -->
+        <div class="mt-2">
+          <a :href="question.fileUrl" download class="text-blue-600 underline">
+            View
+          </a>
+        </div>
+      </div>
       <!-- content -->
       <div class="flex row justify-between items-start">
         <p class="font-semibold">{{ question.content }}</p>
@@ -46,7 +57,9 @@
         <p class="font-bold">Response {{ index + 1 }}:</p>
 
         <!-- user Id -->
-        <p class="font-bold">User: {{ answer.userId }}</p>
+        <p class="font-bold">
+          User: {{ usersCache[answer.userId]?.username || "Loading..." }}
+        </p>
 
         <!-- Nếu là câu trả lời dạng text -->
         <div v-if="answer.answerText">
@@ -63,36 +76,36 @@
               :key="optIndex"
             >
               <img
-                v-if="option.imageUrl"
-                :src="option.imageUrl"
-                alt="checkbox image"
+                v-if="option.fileUrl"
+                :src="option.fileUrl"
+                alt="checkbox file"
                 class="w-48 h-auto rounded"
               />
               {{ option.optionContent }}
             </div>
           </div>
         </div>
+
+        <!-- Nếu là câu trả lời dạng file -->
+        <div v-else-if="answer.fileUrl">
+          <div class="bg-gray-100 p-2 rounded my-1">
+            <img
+              :src="answer.fileUrl"
+              alt="User uploaded file"
+              class="w-48 h-auto rounded"
+            />
+          </div>
+        </div>
         <!-- Nếu là câu trả lời radio -->
         <div v-else-if="answer.oneOption">
           <div class="bg-gray-100 p-2 rounded my-1">
             <img
-              v-if="answer.oneOption.imageUrl"
-              :src="answer.oneOption.imageUrl"
-              alt="radio image"
+              v-if="answer.oneOption.fileUrl"
+              :src="answer.oneOption.fileUrl"
+              alt="radio file"
               class="w-48 h-auto rounded"
             />
             {{ answer.oneOption.optionContent }}
-          </div>
-        </div>
-
-        <!-- Nếu là câu trả lời dạng ảnh -->
-        <div v-else-if="answer.imageUrl">
-          <div class="bg-gray-100 p-2 rounded my-1">
-            <img
-              :src="answer.imageUrl"
-              alt="User uploaded image"
-              class="w-48 h-auto rounded"
-            />
           </div>
         </div>
         <!-- Nếu không có câu trả lời-->
@@ -106,6 +119,7 @@
 
 <script>
 import FormService from "@/services/FormService";
+import UserService from "@/services/UserService";
 
 export default {
   props: ["formId"],
@@ -116,12 +130,16 @@ export default {
         questions: [],
       },
       responses: [], //all responses of form
-      // answers: [], //answers of a question
+      usersCache: {}, // Cache user
     };
   },
   async created() {
     await this.getFormDetails();
     await this.getResponsesOfForm();
+    // Lấy thông tin user của tất cả responses
+    this.responses.forEach(async (response) => {
+      await this.getUserById(response.userId);
+    });
   },
   methods: {
     formattedDate(createdAt) {
@@ -172,6 +190,14 @@ export default {
       });
 
       return answers;
+    },
+
+    async getUserById(userId) {
+      if (!this.usersCache[userId]) {
+        const response = await UserService.getUserById(userId);
+        this.usersCache[userId] = response.data; // Lưu vào cache
+      }
+      return this.usersCache[userId];
     },
   },
 };

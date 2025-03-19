@@ -23,11 +23,19 @@
           >Projects</span
         ></router-link
       >
+      <router-link
+        to="/admin"
+        class="text-xl font-normal px-7 hover:text-gray-900"
+        ><span
+          class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out"
+          >Admin</span
+        ></router-link
+      >
       <!-- Biểu tượng User -->
       <div class="relative">
         <button
           @click="toggleDropdown"
-          class="text-xl font-bold pl-7 hover:text-gray-900 focus:outline-none"
+          class="text-xl font-bold pl-3 hover:text-gray-900 focus:outline-none"
         >
           <i class="fa-regular fa-user"></i>
         </button>

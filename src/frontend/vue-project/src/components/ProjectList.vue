@@ -112,8 +112,12 @@ export default {
   },
   computed: {
     filteredProjects() {
-      return this.projects.filter((project) =>
-        project.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      return this.projects.filter(
+        (project) =>
+          project.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          project.description
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase())
       );
     },
   },
@@ -132,7 +136,7 @@ export default {
         const decoded = jwtDecode(token);
         this.userId = decoded.sub; // Đảm bảo key trong token là 'userId'
         console.log("User ID:", this.userId); // Kiểm tra userId
-        const response = await ProjectService.getAllProjects(this.userId);
+        const response = await ProjectService.getAllProjectsOfUser(this.userId);
         this.projects = response.data;
         console.log("API Response:", response); // Kiểm tra dữ liệu trả về
       } catch (error) {
@@ -156,12 +160,22 @@ export default {
       } catch (error) {}
     },
     async deleteProject(index) {
-      const response = await ProjectService.deleteProject(
-        this.projects[index].id
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this project?"
       );
-      this.projects.splice(index, 1);
-      console.log(response.data);
-      alert("Project is deleted successfully!!");
+      if (confirmDelete) {
+        try {
+          const response = await ProjectService.deleteProject(
+            this.projects[index].id
+          );
+          this.projects.splice(index, 1);
+          console.log(response.data);
+          alert("Project deleted successfully!");
+        } catch (error) {
+          console.error("Error deleting project:", error);
+          alert("Failed to delete the project. Please try again.");
+        }
+      }
     },
   },
 };
