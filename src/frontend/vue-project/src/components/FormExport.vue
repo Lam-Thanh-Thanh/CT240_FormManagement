@@ -8,10 +8,11 @@
           <button
             v-on:click="open = !open"
             class="bg-zinc-200 rounded-full px-2 py-1 m-2 hover:shadow-lg"
+            title="More Options"
           >
             <i class="fa-solid fa-ellipsis"></i>
           </button>
-          <div class="shadow-lg rounded-md py-7 bg-white" v-if="open">
+          <div class="shadow-lg rounded-md py-4 bg-white" v-if="open">
             <div
               class="hover:bg-yellow-300 px-7 py-2 border-b-gray-100 border-b"
             >
@@ -29,6 +30,7 @@
         <div class="pb-3">
           <span class="font-bold pr-2">Description:</span>
           <span class="">{{ form.description }}</span>
+          <span v-if="!form.description" class="">No description ...</span>
         </div>
 
         <div class="pb-3">
@@ -55,7 +57,7 @@
         >
           ✖
         </button>
-        <h3 class="text-xl font-bold my-4">Mã QR của bạn:</h3>
+        <h3 class="text-xl font-bold my-4">Your QR code:</h3>
         <img :src="qrCode" alt="QR Code" class="w-40 h-40 mx-auto" />
       </div>
     </div>
@@ -239,6 +241,7 @@
           v-on:click="submitForm()"
           type="submit"
           class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
+          title="Submit form"
         >
           Submit
         </button>
@@ -285,7 +288,7 @@ export default {
     // Sao chép liên kết
     copyLink() {
       navigator.clipboard.writeText(this.currentLink).then(() => {
-        alert("Đã sao chép liên kết!");
+        alert("Copied link!");
       });
     },
 

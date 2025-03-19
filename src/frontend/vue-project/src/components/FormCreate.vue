@@ -82,6 +82,7 @@ export default {
             fileUrl: "", ////////////////////////////////////
             publicId: "",
             resourceType: "",
+            textUrl: "",
             options: [],
 
             open: false,
@@ -126,6 +127,7 @@ export default {
 
         publicId: "",
         resourceType: "",
+        textUrl: "",
         open: false,
       });
       console.log("Added question:", this.form.questions);

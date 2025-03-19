@@ -7,6 +7,7 @@
         <button
           v-on:click="open = !open"
           class="bg-zinc-200 rounded-full px-2 py-1 m-2 hover:shadow-lg"
+          title="More options"
         >
           <i class="fa-solid fa-ellipsis"></i>
         </button>
@@ -28,6 +29,7 @@
       <div class="pb-3">
         <span class="font-bold pr-2">Description:</span>
         <span class="">{{ form.description }}</span>
+        <span v-if="!form.description" class=""> No description ...</span>
       </div>
 
       <div class="pb-3">
@@ -45,7 +47,7 @@
     <form @submit.prevent="updateForm" colass="space-y-4">
       <!-- Tên form -->
       <div
-        class="p-6 bg-white rounded-lg shadow-md mt-0 my-40 m-44 border-t-pink-800 border-t-8"
+        class="p-6 bg-white rounded-lg shadow-md mt-0 my-40 m-44 mb-20 border-t-pink-800 border-t-8"
       >
         <div class="my-5 mx-3">
           <label for="formTitle" class="block font-medium">Title:</label>
@@ -54,6 +56,7 @@
             id="formTitle"
             v-model="form.title"
             class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
+            title="Enter question tiltle"
           />
         </div>
 
@@ -67,6 +70,7 @@
             v-model="form.description"
             class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-2 focus:border-b-pink-700 focus:border-opacity-45"
             rows="3"
+            title="Enter question description"
           ></textarea>
         </div>
         <div>
@@ -80,6 +84,7 @@
               v-on:click="addMoreQuestion"
               class="hover:bg-pink-800 hover:text-white text-pink-800 px-2 py-1 rounded-full border-pink-800 border transition duration-300 ease-in-out"
               type="button"
+              title="Add more question"
             >
               <i class="fa-solid fa-plus"></i>
             </button>
@@ -91,6 +96,7 @@
         <button
           type="submit"
           class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
+          title="Save edited form"
         >
           Save
         </button>
@@ -211,6 +217,7 @@ export default {
         fileUrl: "", ////////////////////////////////////
         publicId: "",
         resourceType: "",
+        textUrl: "",
         options: [],
 
         open: false,

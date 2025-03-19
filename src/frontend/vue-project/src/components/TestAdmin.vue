@@ -25,13 +25,17 @@
         </tr>
       </tbody>
     </table>
+    <UploadFile />
   </div>
 </template>
 
 <script>
 import ProjectService from "@/services/ProjectService";
-
+import UploadFile from "./UploadFile.vue";
 export default {
+  components: {
+    UploadFile,
+  },
   data() {
     return {
       projects: [],

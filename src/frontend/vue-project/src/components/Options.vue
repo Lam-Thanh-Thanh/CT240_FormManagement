@@ -50,7 +50,7 @@
       <!--add File, delete button -->
       <div class="w-[20%] m-5 text-center flex justify-around">
         <!-- file upload for question -->
-        <div class="">
+        <div class="" title="Upload image file">
           <label :for="'image-upload-' + option.id" class="upload-label">
             <i class="fa-regular fa-image"></i>
           </label>
@@ -58,12 +58,17 @@
             :id="'image-upload-' + option.id"
             type="file"
             @change="addFileToOption($event, option)"
-            accept="image/*,video/*,audio/*, .pdf"
+            accept="image/*,video/*,audio/*"
             class="hidden"
           />
         </div>
         <!-- delete -->
-        <button v-on:click="deleteOption(index)" class="" type="button">
+        <button
+          v-on:click="deleteOption(index)"
+          class=""
+          type="button"
+          title="Remove option"
+        >
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>

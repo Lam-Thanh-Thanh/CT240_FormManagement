@@ -8,6 +8,7 @@
       <div class="pb-3">
         <span class="font-bold pr-2">Description:</span>
         <span class="">{{ form.description }}</span>
+        <span v-if="!form.description" class=""> No description ...</span>
       </div>
       <div class="pb-3">
         <span class="font-bold pr-2">Created at:</span>
