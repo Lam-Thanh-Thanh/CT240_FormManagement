@@ -81,21 +81,23 @@
               v-for="(option, optIndex) in answer.selectedOptions"
               :key="optIndex"
             >
-              <iframe
-                :src="option.fileUrl"
-                width="100%"
-                height="200px"
-                class="border rounded-md"
-              ></iframe>
-              <!-- Nút tải xuống -->
-              <div class="mt-2">
-                <a
-                  :href="option.fileUrl"
-                  download
-                  class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
-                >
-                  <i class="fa-solid fa-arrow-right"></i>
-                </a>
+              <div v-if="option.fileUrl">
+                <iframe
+                  :src="option.fileUrl"
+                  width="100%"
+                  height="200px"
+                  class="border rounded-md"
+                ></iframe>
+                <!-- Nút tải xuống -->
+                <div class="mt-2">
+                  <a
+                    :href="option.fileUrl"
+                    download
+                    class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+                  >
+                    <i class="fa-solid fa-arrow-right"></i>
+                  </a>
+                </div>
               </div>
 
               {{ option.optionContent }}
@@ -160,21 +162,23 @@
         <!-- Nếu là câu trả lời radio -->
         <div v-else-if="answer.oneOption.id">
           <div class="bg-gray-100 p-2 rounded my-1">
-            <iframe
-              :src="answer.oneOption.fileUrl"
-              width="100%"
-              height="200px"
-              class="border rounded-md"
-            ></iframe>
-            <!-- Nút tải xuống -->
-            <div class="mt-2">
-              <a
-                :href="answer.oneOption.fileUrl"
-                download
-                class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
-              >
-                <i class="fa-solid fa-arrow-right"></i>
-              </a>
+            <div v-if="answer.oneOption.fileUrl">
+              <iframe
+                :src="answer.oneOption.fileUrl"
+                width="100%"
+                height="200px"
+                class="border rounded-md"
+              ></iframe>
+              <!-- Nút tải xuống -->
+              <div class="mt-2">
+                <a
+                  :href="answer.oneOption.fileUrl"
+                  download
+                  class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+                >
+                  <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
             </div>
 
             {{ answer.oneOption.optionContent }}

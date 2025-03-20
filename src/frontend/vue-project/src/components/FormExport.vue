@@ -92,6 +92,45 @@
             </a>
           </div>
         </div>
+        <div
+          v-if="question.textUrl"
+          class="my-5 relative p-4 px-6 border rounded-full"
+        >
+          <a
+            :href="backendUrl + question.textUrl"
+            download
+            title="Download to view this file"
+            class="hover:border-pink-800 hover:text-pink-800 transition duration-300 ease-in-out"
+          >
+            <i
+              v-if="getFileIcon(question.textUrl) === 'pdf'"
+              class="fa-regular fa-file-pdf text-5xl"
+            ></i>
+            <i
+              v-else-if="getFileIcon(question.textUrl) === 'doc'"
+              class="fa-solid fa-file-word text-5xl"
+            ></i>
+            <i
+              v-else-if="getFileIcon(question.textUrl) === 'xls'"
+              class="fa-regular fa-file-excel text-5xl"
+            ></i>
+            <i
+              v-else-if="getFileIcon(question.textUrl) === 'file'"
+              class="fa-regular fa-file text-5xl"
+            >
+              ></i
+            >
+
+            Download to view
+          </a>
+          <button
+            type="button"
+            @click="removePdf(response.answers[qIndex])"
+            class="absolute top-0 right-0 bg-slate-200 border transition duration-300 ease-in-out rounded-full"
+          >
+            <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
+          </button>
+        </div>
         <!-- content -->
         <div class="flex row justify-between items-start my-5">
           <div class="w-[80%]">
