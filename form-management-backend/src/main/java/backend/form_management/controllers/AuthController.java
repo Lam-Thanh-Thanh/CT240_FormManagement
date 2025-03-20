@@ -41,4 +41,9 @@ public class AuthController {
         }
         return ResponseEntity.status(401).body(Map.of("error", "Invalid credentials"));
     }
+    @GetMapping("/check-username")
+public ResponseEntity<?> checkUsername(@RequestParam String username) {
+    boolean exists = userRepository.existsByUsername(username);
+    return ResponseEntity.ok(Map.of("exists", exists));
+}
 }

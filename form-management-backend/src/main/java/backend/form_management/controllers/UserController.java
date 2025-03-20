@@ -96,4 +96,6 @@ user.setRole(request.get("role"));
         }
         return ResponseEntity.notFound().build();
     }
+
+
 }
