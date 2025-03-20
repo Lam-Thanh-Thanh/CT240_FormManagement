@@ -24,7 +24,7 @@
         <div v-if="showRoleFilter"
           class="absolute top-full left-0 mt-1 bg-white border p-2 rounded shadow-md min-w-[210px]">
           <p @click="setRoleFilter('')" class="cursor-pointer px-2 py-1 hover:bg-gray-100">
-            Tất cả vai trò
+            All roles
           </p>
           <p @click="setRoleFilter('USER')" class="cursor-pointer px-2 py-1 hover:bg-gray-100">
             USER
@@ -78,7 +78,7 @@
           </td>
           <td class="border border-gray-300 px-4 py-2">
             <button @click="deleteUser(user.id)" class="bg-red-500 text-white px-3 py-1 rounded">
-              Xóa
+              Delete
             </button>
           </td>
         </tr>
@@ -138,17 +138,17 @@ export default {
     async updateRole(user) {
       try {
         await userService.updateUserRole(user.id, user.role);
-        alert("Cập nhật vai trò thành công!");
+        alert("Role update successful!");
       } catch (error) {
         console.error("Lỗi khi cập nhật vai trò:", error);
       }
     },
     async deleteUser(id) {
-      if (confirm("Bạn có chắc chắn muốn xóa user này không?")) {
+      if (confirm("Are you sure you want to delete this user?")) {
         try {
           await userService.deleteUser(id);
           this.users = this.users.filter(user => user.id !== id);
-          alert("Xóa người dùng thành công!");
+          alert("User deleted successfully!");
         } catch (error) {
           console.error("Lỗi khi xóa user:", error);
         }

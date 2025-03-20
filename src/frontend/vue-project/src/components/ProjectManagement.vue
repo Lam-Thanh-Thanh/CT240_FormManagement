@@ -68,7 +68,7 @@
           <td class="border p-2">{{ formattedDate(project.createdAt) }}</td>
           <td class="border p-2">
             <button @click="deleteProject(project.id)" class="bg-red-500 text-white px-3 py-1 rounded">
-              Xóa
+              Delete
             </button>
           </td>
         </tr>
@@ -140,11 +140,11 @@ export default {
     },
 
     async deleteProject(id) {
-      if (confirm("Bạn có chắc chắn muốn xóa project này không?")) {
+      if (confirm("Are you sure you want to delete this project?")) {
         try {
           await ProjectService.deleteProject(id);
           this.projects = this.projects.filter(project => project.id !== id);
-          alert("Xóa project thành công!");
+          alert("Deleted project successfully!");
         } catch (error) {
           console.error("Lỗi khi xóa project:", error);
         }

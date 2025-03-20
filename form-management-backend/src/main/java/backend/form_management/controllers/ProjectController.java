@@ -27,10 +27,10 @@ public class ProjectController {
 
 
 
-//    @GetMapping("/")
-//    public ResponseEntity<List<Project> > getAllProjects() {
-//        return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
-//    }
+   @GetMapping("/")
+   public ResponseEntity<List<Project> > getAllProjects() {
+       return new ResponseEntity<>(projectService.getAllProjects(), HttpStatus.OK);
+   }
 
     @GetMapping("/{userId}")
     public ResponseEntity<List<Project>> getAllProjectsByUserId(@PathVariable("userId") String userId) {
