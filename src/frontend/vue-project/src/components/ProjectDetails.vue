@@ -176,8 +176,12 @@ export default {
   },
   computed: {
     filteredForms() {
-      return this.project.forms.filter((form) =>
-        form.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      return this.project.forms.filter(
+        (form) =>
+          form.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          form.description
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase())
       );
     },
   },
