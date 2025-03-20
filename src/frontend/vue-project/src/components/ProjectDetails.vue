@@ -7,6 +7,7 @@
         <button
           v-on:click="open = !open"
           class="bg-zinc-200 rounded-full px-2 py-1 m-2 hover:shadow-lg"
+          title="More options"
         >
           <i class="fa-solid fa-ellipsis"></i>
         </button>
@@ -42,7 +43,7 @@
   </div>
 
   <!-- form list -->
-  <div class="flex flex-wrap gap-14 justify-start px-60 pb-48 pt-24 bg-white">
+  <div class="flex flex-wrap gap-14 justify-start px-60 pb-48 pt-32 bg-white">
     <h2 class="text-3xl text-center font-extrabold w-[100%] mb-5">Form List</h2>
     <!-- search -->
     <div class="flex w-[100%] justify-center pb-12">
@@ -53,6 +54,7 @@
             type="text"
             placeholder="Search forms..."
             class="w-[100%] pl-10 pr-4 py-4 rounded-full text-gray-700 focus:outline-1 focus:outline-gray-300 shadow-md focus:shadow-sm placeholder-gray-500 focus:placeholder-gray-400 transition duration-300 ease-in-out"
+            title="Search"
           />
           <div
             class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
@@ -100,7 +102,11 @@
       v-for="(form, index) in project.forms"
       :key="index"
     >
-      <button v-on:click="viewFormDetails(form.id)" class="w-full text-left">
+      <button
+        v-on:click="viewFormDetails(form.id)"
+        class="w-full text-left"
+        title="Click to view form details"
+      >
         <div
           class="font-bold text-lg bg-gray-200 border-2 border-myLightNavy rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
         >
@@ -110,6 +116,12 @@
           <p class="overflow-hidden whitespace-nowrap overflow-ellipsis">
             {{ form.description }}
           </p>
+          <p
+            v-if="!form.description"
+            class="overflow-hidden whitespace-nowrap overflow-ellipsis"
+          >
+            No description ...
+          </p>
         </div>
         <!-- delete form -->
       </button>
@@ -118,6 +130,7 @@
         type="button"
         v-on:click="deleteForm(index)"
         class="float-right pb-3 px-6"
+        title="Remove form"
       >
         <i
           class="fa-regular fa-trash-can hover:bg-gray-200 p-2 rounded-full text-gray-400 hover:text-gray-700 transition duration-300 ease-in-out"
@@ -129,6 +142,7 @@
     <button
       v-on:click="addForm"
       class="w-[20%] px-6 py-4 bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
+      title="Add more form"
     >
       <p class="text-xl mb-2">Add form</p>
       <i class="fa-solid fa-plus"></i>
@@ -162,8 +176,12 @@ export default {
   },
   computed: {
     filteredForms() {
-      return this.project.forms.filter((form) =>
-        form.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      return this.project.forms.filter(
+        (form) =>
+          form.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          form.description
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase())
       );
     },
   },
@@ -183,7 +201,7 @@ export default {
         this.userId = decoded.sub; // Đảm bảo key trong token là 'sub' hoặc 'userId'
 
         // Lấy danh sách tất cả project của userId
-        const response = await ProjectService.getAllProjects(this.userId);
+        const response = await ProjectService.getAllProjectsOfUser(this.userId);
 
         if (response && response.data) {
           const userProjects = response.data;

@@ -83,7 +83,7 @@ export default {
         this.userId = decoded.sub; // Đảm bảo key trong token là 'sub' hoặc 'userId'
 
         // Lấy danh sách tất cả project của userId
-        const response = await ProjectService.getAllProjects(this.userId);
+        const response = await ProjectService.getAllProjectsOfUser(this.userId);
 
         if (response && response.data) {
           const userProjects = response.data;

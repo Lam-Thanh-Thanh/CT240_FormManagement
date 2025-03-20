@@ -8,10 +8,11 @@
           <button
             v-on:click="open = !open"
             class="bg-zinc-200 rounded-full px-2 py-1 m-2 hover:shadow-lg"
+            title="More Options"
           >
             <i class="fa-solid fa-ellipsis"></i>
           </button>
-          <div class="shadow-lg rounded-md py-7 bg-white" v-if="open">
+          <div class="shadow-lg rounded-md py-4 bg-white" v-if="open">
             <div
               class="hover:bg-yellow-300 px-7 py-2 border-b-gray-100 border-b"
             >
@@ -29,6 +30,7 @@
         <div class="pb-3">
           <span class="font-bold pr-2">Description:</span>
           <span class="">{{ form.description }}</span>
+          <span v-if="!form.description" class="">No description ...</span>
         </div>
 
         <div class="pb-3">
@@ -71,7 +73,7 @@
         <!-- file view   -->
         <div
           v-if="question.fileUrl"
-          class="w-[90%] relative flex items-center gap-x-14"
+          class="w-[90%] relative flex items-center gap-x-10"
         >
           <iframe
             :src="question.fileUrl"
@@ -80,18 +82,18 @@
             class="border rounded-md"
           ></iframe>
           <!-- Nút tải xuống -->
-          <div class="mt-2">
+          <div class="mt-2" title="View">
             <a
               :href="question.fileUrl"
               download
-              class="text-gray-900 rounded-full border border-gray-400 p-1 hover:bg-gray-100 transition duration-300 ease-in-out"
+              class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
             >
               <i class="fa-solid fa-arrow-right"></i>
             </a>
           </div>
         </div>
         <!-- content -->
-        <div class="flex row justify-between items-start my-10">
+        <div class="flex row justify-between items-start my-5">
           <div class="w-[80%]">
             <p class="font-semibold">{{ question.content }}</p>
           </div>
@@ -106,7 +108,10 @@
             class="flex flex-col gap-2"
           >
             <!-- file view   -->
-            <div v-if="option.fileUrl" class="w-[80%] relative">
+            <div
+              v-if="option.fileUrl"
+              class="w-[80%] relative flex gap-10 items-center"
+            >
               <iframe
                 :src="option.fileUrl"
                 width="100%"
@@ -117,10 +122,10 @@
               <div class="mt-2">
                 <a
                   :href="option.fileUrl"
-                  download
-                  class="text-blue-600 underline"
+                  class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+                  title="View"
                 >
-                  View
+                  <i class="fa-solid fa-arrow-right"></i>
                 </a>
               </div>
             </div>
@@ -147,7 +152,10 @@
             class="flex flex-col items-start gap-2"
           >
             <!-- file view   -->
-            <div v-if="option.fileUrl" class="w-[80%] relative">
+            <div
+              v-if="option.fileUrl"
+              class="w-[80%] relative flex gap-10 items-center"
+            >
               <iframe
                 :src="option.fileUrl"
                 width="100%"
@@ -155,18 +163,18 @@
                 class="border rounded-md"
               ></iframe>
               <!-- Nút tải xuống -->
-              <div class="mt-2">
+              <div class="mt-2" title="View">
                 <a
-                  :href="option.fileUrl"
+                  :href="question.fileUrl"
                   download
-                  class="text-blue-600 underline"
+                  class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
                 >
-                  View
+                  <i class="fa-solid fa-arrow-right"></i>
                 </a>
               </div>
             </div>
             <!-- question.type -->
-            <div class="flex gap-4">
+            <div class="flex gap-10 mt-1">
               <input
                 type="checkbox"
                 :value="option"
@@ -199,37 +207,119 @@
 
         <div
           v-if="question.type === 'file'"
-          class="flex flex-row items-center gap-4 justify-between"
+          class="flex flex-col items-center gap-7 justify-center"
         >
           <!-- image view-->
-          <div v-if="response.answers[qIndex].fileUrl" class="w-[80%] relative">
-            <img
+          <div
+            v-if="response.answers[qIndex].fileUrl"
+            class="w-[80%] relative flex items-center gap-10"
+          >
+            <iframe
               :src="response.answers[qIndex].fileUrl"
-              alt="Uploaded"
               width="100%"
-            />
+              height="200px"
+              class="border rounded-md"
+            ></iframe>
+            <!-- Nút tải xuống -->
+            <div class="mt-2">
+              <a
+                :href="response.answers[qIndex].fileUrl"
+                class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+                title="View"
+              >
+                <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
 
             <button
               type="button"
               @click="removeFile(response.answers[qIndex])"
-              class="absolute -top-2 -right-2 bg-gray-300 text-black rounded-full"
+              class="absolute top-0 right-0 bg-gray-300 text-black rounded-full"
             >
               <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
             </button>
           </div>
+          <!-- pdf -->
+          <div
+            v-if="response.answers[qIndex].textUrl"
+            class="my-5 relative p-4 px-6 border rounded-full"
+          >
+            <a
+              :href="backendUrl + response.answers[qIndex].textUrl"
+              download
+              title="Download to view this file"
+              class="hover:border-pink-800 hover:text-pink-800 transition duration-300 ease-in-out"
+            >
+              <i
+                v-if="getFileIcon(response.answers[qIndex].textUrl) === 'pdf'"
+                class="fa-regular fa-file-pdf text-5xl"
+              ></i>
+              <i
+                v-else-if="
+                  getFileIcon(response.answers[qIndex].textUrl) === 'doc'
+                "
+                class="fa-solid fa-file-word text-5xl"
+              ></i>
+              <i
+                v-else-if="
+                  getFileIcon(response.answers[qIndex].textUrl) === 'xls'
+                "
+                class="fa-regular fa-file-excel text-5xl"
+              ></i>
+              <i
+                v-else-if="
+                  getFileIcon(response.answers[qIndex].textUrl) === 'file'
+                "
+                class="fa-regular fa-file text-5xl"
+              >
+                ></i
+              >
 
+              Download to view
+            </a>
+            <button
+              type="button"
+              @click="removePdf(response.answers[qIndex])"
+              class="absolute top-0 right-0 bg-slate-200 border transition duration-300 ease-in-out rounded-full"
+            >
+              <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
+            </button>
+          </div>
+          <!-- upload -->
           <!-- file upload for answer -->
-          <div class="">
-            <label :for="'image-upload-' + question.id" class="upload-label">
-              <i class="fa-regular fa-image"></i>
-            </label>
-            <input
-              :id="'image-upload-' + question.id"
-              type="file"
-              @change="addFileToAnswer($event, response.answers[qIndex])"
-              accept="image/*,video/*,audio/*, .pdf"
-              class="hidden"
-            />
+          <div class="flex flex-row gap-10">
+            <div class="" title="Upload image file">
+              <label
+                :for="'image-upload-' + question.id"
+                class="upload-label border border-gray-500 p-3 rounded-md hover:border-pink-800 hover:text-pink-800 shadow-md transition duration-300 ease-in-out"
+              >
+                <i class="fa-regular fa-image text-2xl mx-2"></i> Image, Video,
+                Audio
+              </label>
+              <input
+                :id="'image-upload-' + question.id"
+                type="file"
+                @change="addFileToAnswer($event, response.answers[qIndex])"
+                accept="image/*,video/*,audio/*"
+                class="hidden"
+              />
+            </div>
+            <!-- pdf upload for answer ----------------------------------------------------->
+            <div class="" title="Upload text file">
+              <label
+                :for="'file-upload-' + question.id"
+                class="upload-label border border-gray-500 p-3 rounded-md hover:border-pink-800 hover:text-pink-800 shadow-md transition duration-300 ease-in-out"
+              >
+                <i class="fa-solid fa-upload text-2xl"></i> Word, PDF, Excel
+              </label>
+              <input
+                :id="'file-upload-' + question.id"
+                type="file"
+                @change="uploadPdf($event, response.answers[qIndex])"
+                accept=".doc,.pdf,.xlsx"
+                class="hidden"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -239,6 +329,7 @@
           v-on:click="submitForm()"
           type="submit"
           class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out"
+          title="Submit form"
         >
           Submit
         </button>
@@ -257,6 +348,7 @@ import QRCode from "qrcode";
 import ThanksForSubmit from "./ThanksForSubmit.vue";
 import router from "@/router"; // Import router để điều hướng
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 export default {
   props: ["formId"],
   components: { ThanksForSubmit },
@@ -275,6 +367,7 @@ export default {
       currentLink: `http://localhost:5173/${this.formId}`, // Link gốc
       qrCode: "", // Ảnh QR Code
       showQRCode: false, // Biến kiểm soát hiển thị QR Code
+      backendUrl: "http://localhost:8080/api/files/",
     };
   },
   async created() {
@@ -285,7 +378,7 @@ export default {
     // Sao chép liên kết
     copyLink() {
       navigator.clipboard.writeText(this.currentLink).then(() => {
-        alert("Đã sao chép liên kết!");
+        alert("Copied link!");
       });
     },
 
@@ -331,6 +424,7 @@ export default {
           fileUrl: "",
           publicId: "",
           resourceType: "",
+          textUrl: "",
         }));
 
         console.log(response.data);
@@ -390,8 +484,10 @@ export default {
         answerText: "",
         oneOption: {},
         selectedOptions: [],
-        imageUrl: "",
+        fileUrl: "",
         publicId: "",
+        resourceType: "",
+        textUrl: "",
       }));
     },
     // add image answer
@@ -445,6 +541,54 @@ export default {
         console.log("Image deleted successfully");
       } catch (error) {
         console.error("Error deleting image", error);
+      }
+    },
+    // add pdf to question --------------------------------------------------------------------------
+    async uploadPdf(event, answer) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/files/upload",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+
+        answer.textUrl = response.data;
+        // Reset input file sau khi xử lý xong
+        event.target.value = null;
+      } catch (error) {
+        console.error("Error uploading PDF", error);
+      }
+    },
+    getFileIcon(url) {
+      if (!url) return "/icons/default-file.png"; // Icon mặc định
+
+      if (url.endsWith(".pdf")) return "pdf";
+      if (url.endsWith(".doc") || url.endsWith(".docx")) return "doc";
+      if (url.endsWith(".xls") || url.endsWith(".xlsx")) return "xls";
+
+      return "file"; // Trường hợp file không xác định
+    },
+    async removePdf(answer) {
+      try {
+        const response = await axios.delete(
+          `http://localhost:8080/api/files/${answer.textUrl}`
+        );
+        answer.textUrl = "";
+        console.log("Success:", response.data);
+      } catch (error) {
+        if (error.response) {
+          console.error("Error:", error.response.data);
+        } else {
+          console.error("An error occurred while deleting the file.");
+        }
       }
     },
   },

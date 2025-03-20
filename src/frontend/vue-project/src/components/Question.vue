@@ -28,7 +28,8 @@
                 <a
                   :href="question.fileUrl"
                   download
-                  class="text-gray-900 rounded-full border border-gray-400 p-1 hover:bg-gray-100 transition duration-300 ease-in-out"
+                  class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+                  title="View"
                 >
                   <i class="fa-solid fa-arrow-right"></i>
                 </a>
@@ -36,12 +37,52 @@
               <button
                 type="button"
                 @click="removeFile(question)"
-                class="absolute -top-2 -right-2 bg-gray-300 text-black rounded-full"
+                class="absolute top-0 right-0 bg-gray-300 text-black rounded-full"
+                title="Remove"
               >
                 <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
               </button>
             </div>
+            <!-- pdf -->
+            <div
+              v-if="question.textUrl"
+              class="my-5 relative p-4 px-6 border rounded-full w-[45%]"
+            >
+              <a
+                :href="backendUrl + question.textUrl"
+                download
+                title="Download to view this file"
+                class="hover:border-pink-800 hover:text-pink-800 transition duration-300 ease-in-out"
+              >
+                <i
+                  v-if="getFileIcon(question.textUrl) === 'pdf'"
+                  class="fa-regular fa-file-pdf text-5xl"
+                ></i>
+                <i
+                  v-else-if="getFileIcon(question.textUrl) === 'doc'"
+                  class="fa-solid fa-file-word text-5xl"
+                ></i>
+                <i
+                  v-else-if="getFileIcon(question.textUrl) === 'xls'"
+                  class="fa-regular fa-file-excel text-5xl"
+                ></i>
+                <i
+                  v-else-if="getFileIcon(question.textUrl) === 'file'"
+                  class="fa-regular fa-file text-5xl"
+                >
+                  ></i
+                >
 
+                Download to view
+              </a>
+              <button
+                type="button"
+                @click="removePdf(question)"
+                class="absolute top-0 right-0 bg-slate-200 border transition duration-300 ease-in-out rounded-full"
+              >
+                <i class="fa-solid fa-xmark py-0.5 px-1.5"></i>
+              </button>
+            </div>
             <!-- content -->
             <div class="flex row justify-between relative my-10">
               <div class="w-[78%]">
@@ -60,23 +101,36 @@
                   :for="'image-upload-' + question.id"
                   class="upload-label"
                 >
-                  <i class="fa-regular fa-image"></i>
+                  <i class="fa-regular fa-image" title="Upload image file"></i>
                 </label>
                 <input
                   :id="'image-upload-' + question.id"
                   type="file"
                   @change="addFileToQuestion($event, question)"
-                  accept="image/*,video/*,audio/*, .pdf"
+                  accept="image/*,video/*,audio/*"
                   class="hidden"
                 />
               </div>
-
+              <!-- pdf upload for question ----------------------------------------------------->
+              <div class="absolute right-44">
+                <label :for="'file-upload-' + question.id" class="upload-label">
+                  <i class="fa-solid fa-upload" title="Upload text file"></i>
+                </label>
+                <input
+                  :id="'file-upload-' + question.id"
+                  type="file"
+                  @change="uploadPdf($event, question)"
+                  accept=".doc, .pdf, .xlsx"
+                  class="hidden"
+                />
+              </div>
               <!-- dropdown -->
               <div class="text-center w-[18%] absolute right-0">
                 <button
                   v-on:click="question.open = !question.open"
                   class="bg-white outline outline-1 outline-slate-400 rounded-sm px-2 py-2 hover:shadow-sm w-full transition duration-300 ease-in-out flex justify-between"
                   type="button"
+                  title="Choose question type"
                 >
                   Type
                   <i class="fa-solid fa-caret-down"></i>
@@ -131,7 +185,7 @@
               </div>
             </div>
             <!-- type -->
-            <div class="mt-5">
+            <div class="mt-20">
               <!-- option -->
               <div
                 v-if="question.type === 'radio' || question.type === 'checkbox'"
@@ -147,6 +201,7 @@
                     v-on:click="addMoreOption(question)"
                     class="px-1 border border-gray-600 rounded-sm hover:bg-gray-100 transition duration-300 ease-in-out"
                     type="button"
+                    title="Add more option"
                   >
                     More option
                   </button>
@@ -182,7 +237,7 @@
         <!-- delete question -->
         <div class="w-[5%] flex flex-row items-center justify-around">
           <button v-on:click="deleteQuestion(qindex)" class="" type="button">
-            <i class="fa-regular fa-trash-can"></i>
+            <i class="fa-regular fa-trash-can" title="Remove question"></i>
           </button>
         </div>
       </div>
@@ -194,6 +249,7 @@
 import Options from "./Options.vue";
 import { v4 as uuidv4 } from "uuid";
 import CloudinaryService from "@/services/CloudinaryService";
+import axios from "axios";
 export default {
   components: { Options },
   props: {
@@ -202,6 +258,7 @@ export default {
   data() {
     return {
       options: [],
+      backendUrl: "http://localhost:8080/api/files/",
     };
   },
   methods: {
@@ -219,8 +276,16 @@ export default {
     },
 
     async addMoreOption(question) {
-      if (!question.options) {
-        question.options = [];
+      if (question.options.length === 0) {
+        question.options.push({
+          id: uuidv4(),
+          questionId: question.id,
+          optionContent: "",
+          fileUrl: "",
+          publicId: "",
+          resourceType: "",
+          textUrl: "",
+        });
       }
 
       question.options.push({
@@ -230,6 +295,7 @@ export default {
         fileUrl: "",
         publicId: "",
         resourceType: "",
+        textUrl: "",
       });
 
       console.log("Added question:", question.options);
@@ -295,6 +361,53 @@ export default {
         console.log("Image deleted successfully");
       } catch (error) {
         console.error("Error deleting image", error);
+      }
+    },
+
+    // add pdf to question --------------------------------------------------------------------------
+    async uploadPdf(event, question) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/files/upload",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+
+        question.textUrl = response.data;
+      } catch (error) {
+        console.error("Error uploading PDF", error);
+      }
+    },
+    getFileIcon(url) {
+      if (!url) return "/icons/default-file.png"; // Icon mặc định
+
+      if (url.endsWith(".pdf")) return "pdf";
+      if (url.endsWith(".doc") || url.endsWith(".docx")) return "doc";
+      if (url.endsWith(".xls") || url.endsWith(".xlsx")) return "xls";
+
+      return "file"; // Trường hợp file không xác định
+    },
+    async removePdf(question) {
+      try {
+        const response = await axios.delete(
+          `http://localhost:8080/api/files/${question.textUrl}`
+        );
+        question.textUrl = "";
+        console.log("Success:", response.data);
+      } catch (error) {
+        if (error.response) {
+          console.error("Error:", error.response.data);
+        } else {
+          console.error("An error occurred while deleting the file.");
+        }
       }
     },
   },

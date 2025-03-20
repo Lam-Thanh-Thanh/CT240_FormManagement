@@ -22,8 +22,8 @@ public class Question {
 
         private String fileUrl;   //////////////////////////////////////
         private String resourceType;   //////////////////////////////////////
-
     private String publicId;
+    private String textUrl;
 
     private List<Option> options;
 //    private List<Answer> answers;

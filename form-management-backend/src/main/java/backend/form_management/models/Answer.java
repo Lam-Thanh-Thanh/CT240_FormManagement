@@ -21,5 +21,7 @@ public class Answer {
     private String fileUrl;
     private String publicId;
     private String resourceType;
+    private String textUrl;
+
 
 }

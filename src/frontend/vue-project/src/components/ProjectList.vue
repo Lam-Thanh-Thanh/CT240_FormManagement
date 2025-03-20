@@ -9,6 +9,7 @@
           type="text"
           placeholder="Search forms..."
           class="w-[100%] pl-10 pr-4 py-4 rounded-full text-gray-700 focus:outline-1 focus:outline-gray-300 shadow-md focus:shadow-sm placeholder-gray-500 focus:placeholder-gray-400 transition duration-300 ease-in-out"
+          title="Search"
         />
         <div
           class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
@@ -57,7 +58,11 @@
       :key="index"
       class="w-[25%] bg-white shadow-lg hover:shadow-md rounded-2xl text-left transition duration-300 ease-in-out"
     >
-      <button v-on:click="viewProjectDetails(project.id)" class="w-full">
+      <button
+        v-on:click="viewProjectDetails(project.id)"
+        class="w-full"
+        title="Click to view project details"
+      >
         <div
           class="font-bold text-lg bg-pink-50 border-2 border-pink-700 rounded-t-2xl text-center py-2 px-4 overflow-hidden whitespace-nowrap overflow-ellipsis"
         >
@@ -74,6 +79,7 @@
         <button v-on:click="deleteProject(index)">
           <i
             class="fa-regular fa-trash-can hover:bg-gray-200 p-2 rounded-full text-gray-400 hover:text-gray-700"
+            title="Remove project"
           ></i>
         </button>
       </div>
@@ -83,6 +89,7 @@
     <button
       v-on:click="createProject"
       class="w-[25%] px-6 py-4 bg-white shadow-lg hover:shadow-md rounded-2xl transition duration-300 ease-in-out"
+      title="Add more project"
     >
       <p class="text-xl mb-2">Create new</p>
       <i class="fa-solid fa-plus"></i>

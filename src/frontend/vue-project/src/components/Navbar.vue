@@ -11,6 +11,7 @@
       <router-link to="/" class="text-xl font-normal px-7 hover:text-gray-900"
         ><span
           class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out"
+          title="Home"
           >Home</span
         ></router-link
       >
@@ -20,18 +21,22 @@
       >
         <span
           class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out"
+          title="Project Management"
           >Projects</span
         ></router-link
       >
+
        <!-- Hiển thị Admin nếu role là ADMIN -->
        <router-link v-if="isAdmin" to="/admin" class="text-xl font-normal px-7 hover:text-gray-900">
         <span class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out">Admin</span>
       </router-link>
+
       <!-- Biểu tượng User -->
       <div class="relative">
         <button
           @click="toggleDropdown"
           class="text-xl font-bold pl-3 hover:text-gray-900 focus:outline-none"
+          title="Account"
         >
           <i class="fa-regular fa-user"></i>
         </button>

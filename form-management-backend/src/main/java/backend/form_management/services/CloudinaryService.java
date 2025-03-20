@@ -39,9 +39,7 @@ public class CloudinaryService {
 
 
     public String deleteFile(String publicId, String resourceType) throws IOException {
-        if (publicId == null || publicId.isEmpty()) {
-            throw new IllegalArgumentException("publicId không được để trống");
-        }
+
         if (resourceType == null || resourceType.isEmpty()) {
             resourceType = "image"; // Mặc định là ảnh nếu không truyền
         }
