@@ -276,8 +276,16 @@ export default {
     },
 
     async addMoreOption(question) {
-      if (!question.options) {
-        question.options = [];
+      if (question.options.length === 0) {
+        question.options.push({
+          id: uuidv4(),
+          questionId: question.id,
+          optionContent: "",
+          fileUrl: "",
+          publicId: "",
+          resourceType: "",
+          textUrl: "",
+        });
       }
 
       question.options.push({

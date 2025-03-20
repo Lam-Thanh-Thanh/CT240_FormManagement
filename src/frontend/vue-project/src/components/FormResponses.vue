@@ -81,12 +81,23 @@
               v-for="(option, optIndex) in answer.selectedOptions"
               :key="optIndex"
             >
-              <img
-                v-if="option.fileUrl"
+              <iframe
                 :src="option.fileUrl"
-                alt="checkbox file"
-                class="w-48 h-auto rounded"
-              />
+                width="100%"
+                height="200px"
+                class="border rounded-md"
+              ></iframe>
+              <!-- Nút tải xuống -->
+              <div class="mt-2">
+                <a
+                  :href="option.fileUrl"
+                  download
+                  class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+                >
+                  <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
+
               {{ option.optionContent }}
             </div>
           </div>
@@ -117,7 +128,7 @@
         </div>
         <!-- pdf -->
         <div
-          v-if="answer.textUrl"
+          v-else-if="answer.textUrl"
           class="my-5 relative p-4 px-6 border rounded-full"
         >
           <a
@@ -139,24 +150,33 @@
               class="fa-regular fa-file-excel text-5xl"
             ></i>
             <i
-              v-else-if="getFileIcon(answer.textUrl) === 'file'"
+              v-else="getFileIcon(answer.textUrl) === 'file'"
               class="fa-regular fa-file text-5xl"
-            >
-              ></i
-            >
+            ></i>
 
             Download to view
           </a>
         </div>
         <!-- Nếu là câu trả lời radio -->
-        <div v-else-if="answer.oneOption">
+        <div v-else-if="answer.oneOption.id">
           <div class="bg-gray-100 p-2 rounded my-1">
-            <img
-              v-if="answer.oneOption.fileUrl"
+            <iframe
               :src="answer.oneOption.fileUrl"
-              alt="radio file"
-              class="w-48 h-auto rounded"
-            />
+              width="100%"
+              height="200px"
+              class="border rounded-md"
+            ></iframe>
+            <!-- Nút tải xuống -->
+            <div class="mt-2">
+              <a
+                :href="answer.oneOption.fileUrl"
+                download
+                class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+              >
+                <i class="fa-solid fa-arrow-right"></i>
+              </a>
+            </div>
+
             {{ answer.oneOption.optionContent }}
           </div>
         </div>

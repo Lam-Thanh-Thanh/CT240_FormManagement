@@ -108,7 +108,10 @@
             class="flex flex-col gap-2"
           >
             <!-- file view   -->
-            <div v-if="option.fileUrl" class="w-[80%] relative">
+            <div
+              v-if="option.fileUrl"
+              class="w-[80%] relative flex gap-10 items-center"
+            >
               <iframe
                 :src="option.fileUrl"
                 width="100%"
@@ -119,10 +122,10 @@
               <div class="mt-2">
                 <a
                   :href="option.fileUrl"
-                  download
-                  class="text-blue-600 underline"
+                  class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+                  title="View"
                 >
-                  View
+                  <i class="fa-solid fa-arrow-right"></i>
                 </a>
               </div>
             </div>
