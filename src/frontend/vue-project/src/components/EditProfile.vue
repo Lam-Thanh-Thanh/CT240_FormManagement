@@ -61,6 +61,7 @@
 import UserService from "@/services/UserService";
 import { jwtDecode } from "jwt-decode";
 import router from "@/router";
+import defaultAvatarImg from "@/assets/shiba-smug.gif";
 
 export default {
   data() {
@@ -74,7 +75,7 @@ export default {
       avatarPreview: null,
       selectedFile: null,
       userId: "",
-      defaultAvatar: "https://www.w3schools.com/howto/img_avatar.png",
+      defaultAvatar: defaultAvatarImg,
       showPasswordField: false, // Ẩn ô nhập password mặc định
       newPassword: "", // Chỉ dùng khi đổi mật khẩu
     };

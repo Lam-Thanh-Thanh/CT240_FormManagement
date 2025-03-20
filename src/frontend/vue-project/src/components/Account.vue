@@ -24,7 +24,7 @@
 import UserService from "@/services/UserService";
 import router from "@/router"; // Import router để điều hướng
 import { jwtDecode } from "jwt-decode";
-
+import defaultAvatarImg from "@/assets/shiba-smug.gif";
 export default {
   data() {
     return {
@@ -32,7 +32,7 @@ export default {
         username: "",
       },
       userId: "",
-      defaultAvatar: "https://www.w3schools.com/howto/img_avatar.png",
+      defaultAvatar: defaultAvatarImg,
     };
   },
   async created() {

@@ -27,5 +27,7 @@ public class Form {
     private Instant createdAt;  // Ngày tạo tự động
     @LastModifiedDate
     private Instant lastModifiedAt;
+    private Instant expirationDate;  // Thời gian hết hạn của form
+
 //    private List<Response> response;    //
 }

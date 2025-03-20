@@ -30,6 +30,15 @@
             rows="3"
           ></textarea>
         </div>
+        <div class="my-5 mx-3">
+          <label for="expirationDate" class="block font-medium">Expiration Date:</label>
+          <input
+            type="datetime-local"
+            id="expirationDate"
+            v-model="form.expirationDate"
+            class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-pink-700"
+          />
+        </div>
         <div>
           <!-- question -->
           <Question :questions="form.questions"></Question>
@@ -72,6 +81,7 @@ export default {
         title: "",
         description: "",
         projectId: "",
+        expirationDate: "",  // <-- Thêm trường này
         questions: [
           {
             id: uuidv4(),
@@ -95,6 +105,7 @@ export default {
   methods: {
     async submitForm() {
       // Xử lý dữ liệu form ở đây
+      this.form.expirationDate = new Date(this.form.expirationDate).toISOString(); // Chuyển về định dạng ISO
       const response = await FormService.createFormForProject(
         this.projectId,
         this.form
