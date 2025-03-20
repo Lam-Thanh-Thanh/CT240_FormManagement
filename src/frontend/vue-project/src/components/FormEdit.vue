@@ -40,6 +40,12 @@
         <span class="font-bold pr-2">Updated at:</span>
         <span class="">{{ formattedDate(form.lastModifiedAt) }}</span>
       </div>
+      <!-- Thêm Expiration Date -->
+  <div class="pb-3">
+    <span class="font-bold pr-2">Expiration Date:</span>
+    <span v-if="form.expirationDate">{{ formattedDate(form.expirationDate) }}</span>
+    <span v-else> No expiration date set </span>
+  </div>
     </div>
   </div>
 
@@ -72,6 +78,15 @@
             rows="3"
             title="Enter question description"
           ></textarea>
+        </div>
+        <div class="my-5 mx-3">
+          <label for="expirationDate" class="block font-medium">Expiration Date:</label>
+          <input
+            type="datetime-local"
+            id="expirationDate"
+            v-model="form.expirationDate"
+            class="w-full px-3 py-2 border-b-2 focus:outline-none focus:border-b-pink-700"
+          />
         </div>
         <div>
           <!-- question -->
@@ -175,7 +190,7 @@ export default {
         }
       } catch (error) {
         console.error("Lỗi khi kiểm tra đăng nhập:", error);
-        alert("Đã xảy ra lỗi, vui lòng thử lại!");
+        alert("An error occurred, please try again!");
         router.push("/login");
         return false;
       }
@@ -195,6 +210,14 @@ export default {
       try {
         const response = await FormService.getFormDetails(this.formId);
         this.form = response.data;
+         // Chuyển expirationDate từ định dạng ISO sang YYYY-MM-DDTHH:MM để hiển thị đúng trên input datetime-local
+         if (this.form.expirationDate) {
+  const date = new Date(this.form.expirationDate);
+  const localDateTime = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+    .toISOString()
+    .slice(0, 16);
+  this.form.expirationDate = localDateTime;
+}
         if (this.form.projectId !== this.projectId) {
           alert("This form does not exist in the project!!");
           this.$router.push("/"); // Điều hướng về trang chính để tránh trang trắng
@@ -203,7 +226,7 @@ export default {
         console.log(response.data);
       } catch (error) {
         console.error("There was an error getting form details:", error);
-        alert("Không thể tải dữ liệu biểu mẫu. Vui lòng thử lại!");
+        alert("Form data could not be loaded. Please try again!");
         this.$router.push("/"); // Điều hướng về trang chính để tránh trang trắng
       }
     },
@@ -232,17 +255,20 @@ export default {
     },
 
     async updateForm() {
-      const response = await FormService.updateForm(
-        this.projectId,
-        this.formId,
-        this.form
-      );
-
-      console.log("Form updated:", this.form);
-      alert("Form is updated successfully!!");
-      // Reload trang sau khi cập nhật thành công
-      window.location.reload();
-    },
+  try {
+    this.form.expirationDate = new Date(this.form.expirationDate).toISOString(); // Chuyển về định dạng ISO
+    const response = await FormService.updateForm(
+      this.projectId,
+      this.formId,
+      this.form
+    );
+    alert("Form is updated successfully!!");
+    window.location.reload();
+  } catch (error) {
+    console.error("Error updating form:", error);
+    alert("Failed to update form!");
+  }
+},
 
     async deleteForm() {
       const confirmDelete = window.confirm(

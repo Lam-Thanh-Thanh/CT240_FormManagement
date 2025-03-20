@@ -41,6 +41,10 @@
           <span class="font-bold pr-2">Updated at:</span>
           <span class="">{{ formattedDate(form.lastModifiedAt) }}</span>
         </div>
+        <div class="pb-3">
+          <span class="font-bold pr-2">Expiration Date:</span>
+          <span class="">{{ formattedDate(form.expirationDate ) }}</span>
+        </div>
       </div>
     </div>
 
@@ -370,9 +374,10 @@ export default {
       backendUrl: "http://localhost:8080/api/files/",
     };
   },
-  async created() {
-    await this.getFormDetails();
-  },
+async created() {
+  await this.getFormDetails();
+  this.checkExpiration();
+},
   methods: {
     // THANH
     // Sao chép liên kết
@@ -432,7 +437,13 @@ export default {
         console.error("There was an error getting form details:", error);
       }
     },
-
+    checkExpiration() {
+    const now = new Date().toISOString();
+    if (this.form.expirationDate && this.form.expirationDate < now) {
+      alert("This form has expired and is no longer accessible!");
+      this.$router.push("/");
+    }
+  },
     async checkLogin() {
       // Lấy token từ localStorage
       const token = localStorage.getItem("token");
@@ -449,7 +460,7 @@ export default {
         return true;
       } catch (error) {
         console.error("Lỗi khi kiểm tra đăng nhập:", error);
-        alert("Đã xảy ra lỗi, vui lòng thử lại!");
+        alert("An error occurred, please try again!");
         router.push("/login");
         return false;
       }

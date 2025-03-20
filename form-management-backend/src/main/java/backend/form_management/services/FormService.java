@@ -44,6 +44,7 @@ public class FormService {
         if (newForm.getLastModifiedAt() == null) {
             newForm.setLastModifiedAt(form.getCreatedAt());
         }
+        newForm.setExpirationDate(form.getExpirationDate()); // Cập nhật ngày hết hạn
         return newForm;
     }
 
@@ -70,6 +71,7 @@ public class FormService {
             existingForm.setTitle(updatedForm.getTitle());
             existingForm.setDescription(updatedForm.getDescription());
             existingForm.setQuestions(updatedForm.getQuestions());
+            existingForm.setExpirationDate(updatedForm.getExpirationDate()); // Cập nhật ngày hết hạn
 
             // Lưu danh sách questionId mới
             Set<String> newQuestionIds = updatedForm.getQuestions().stream()

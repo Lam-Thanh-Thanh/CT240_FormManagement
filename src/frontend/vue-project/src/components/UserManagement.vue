@@ -92,6 +92,7 @@
 
 <script>
 import userService from "@/services/UserService";
+import defaultAvatarImg from "@/assets/shiba-smug.gif";
 
 export default {
   data() {
@@ -102,7 +103,7 @@ export default {
       searchQuery: "",
       selectedRole: "",
       showRoleFilter: false, // Trạng thái hiển thị bộ lọc role
-      defaultAvatar: "https://www.w3schools.com/howto/img_avatar.png",
+      defaultAvatar: defaultAvatarImg,
     };
   },
   async created() {
