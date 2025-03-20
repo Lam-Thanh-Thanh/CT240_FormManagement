@@ -13,7 +13,6 @@ import FormResponses from "@/components/FormResponses.vue";
 import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
 import Account from "@/components/Account.vue";
-import TestAdmin from "@/components/TestAdmin.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -73,11 +72,6 @@ const router = createRouter({
       path: "/account",
       name: "account",
       component: Account,
-    },
-    {
-      path: "/admin",
-      name: "amin",
-      component: TestAdmin,
     },
 
     /*----------------------------*/

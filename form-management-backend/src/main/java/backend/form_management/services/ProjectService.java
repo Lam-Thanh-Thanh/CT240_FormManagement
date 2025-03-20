@@ -14,10 +14,10 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    //get all projects
-    public List<Project> getAllProjects() {
-        return projectRepository.findAll();
-    }
+//    //get all projects
+//    public List<Project> getAllProjects() {
+//        return projectRepository.findAll();
+//    }
 
     //get all projects
     public List<Project> getAllProjectsByUserId(String userId) {
