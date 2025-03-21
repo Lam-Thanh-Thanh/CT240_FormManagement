@@ -7,29 +7,47 @@
       <!-- Ô tìm kiếm -->
       <div class="relative">
         <span class="absolute left-3 top-2 text-gray-400">
-          🔍
+          <i class="fa-solid fa-magnifying-glass text-orange-700"></i>
         </span>
-        <input type="text" v-model="searchQuery" placeholder="Search by User Name..."
-          class="pl-10 pr-4 py-2 border rounded-full w-64" />
+        <input
+          type="text"
+          v-model="searchQuery"
+          placeholder="Search by User Name..."
+          class="pl-10 pr-4 py-2 border rounded-full w-64"
+        />
       </div>
 
       <!-- Bộ lọc dropdown gói gọn trong div có relative -->
       <div class="relative">
         <!-- Nút mở bộ lọc -->
-        <button @click="toggleRoleFilter" class="bg-gray-200 p-2 rounded-full text-gray-600 hover:bg-gray-300">
-          ⚙️
+        <button
+          @click="toggleRoleFilter"
+          class="bg-gray-200 py-1 px-2 rounded-full text-gray-600 hover:bg-gray-300"
+        >
+          <i class="fa-solid fa-gear"></i>
         </button>
 
         <!-- Menu lọc (căn chỉnh vị trí ngay bên dưới) -->
-        <div v-if="showRoleFilter"
-          class="absolute top-full left-0 mt-1 bg-white border p-2 rounded shadow-md min-w-[210px]">
-          <p @click="setRoleFilter('')" class="cursor-pointer px-2 py-1 hover:bg-gray-100">
+        <div
+          v-if="showRoleFilter"
+          class="absolute top-full left-0 mt-1 bg-white border p-2 rounded shadow-md min-w-[210px]"
+        >
+          <p
+            @click="setRoleFilter('')"
+            class="cursor-pointer px-2 py-1 hover:bg-gray-100"
+          >
             All roles
           </p>
-          <p @click="setRoleFilter('USER')" class="cursor-pointer px-2 py-1 hover:bg-gray-100">
+          <p
+            @click="setRoleFilter('USER')"
+            class="cursor-pointer px-2 py-1 hover:bg-gray-100"
+          >
             USER
           </p>
-          <p @click="setRoleFilter('ADMIN')" class="cursor-pointer px-2 py-1 hover:bg-gray-100">
+          <p
+            @click="setRoleFilter('ADMIN')"
+            class="cursor-pointer px-2 py-1 hover:bg-gray-100"
+          >
             ADMIN
           </p>
         </div>
@@ -38,57 +56,78 @@
 
     <div class="p-8 mb-32">
       <table class="table-auto w-full border-collapse border border-gray-300">
-      <thead>
-        <tr class="bg-gray-200">
-          <th class="border border-gray-300 px-4 py-2">Avatar</th>
-          <th class="border border-gray-300 px-4 py-2">
-            ID
-            <button @click="sortUsers('id')" class="buttonclass ml-2 px-2 py-1 bg-gray-300 rounded">{{
-              getSortArrow('id') }}</button>
-          </th>
-          <th class="border border-gray-300 px-4 py-2">
-            User Name
-            <button @click="sortUsers('username')" class="buttonclass ml-2 px-2 py-1 bg-gray-300 rounded">{{
-              getSortArrow('username') }}</button>
-          </th>
-          <th class="border border-gray-300 px-4 py-2">
-            Full Name
-            <button @click="sortUsers('fullName')" class="buttonclass ml-2 px-2 py-1 bg-gray-300 rounded">{{
-              getSortArrow('fullName') }}</button>
-          </th>
-          <th class="border border-gray-300 px-4 py-2">Email</th>
-          <th class="border border-gray-300 px-4 py-2">Role</th>
-          <th class="border border-gray-300 px-4 py-2">Activity</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="user in filteredUsers" :key="user.id">
-          <td class="border border-gray-300 px-4 py-2">
-            <img :src="user.avatar || defaultAvatar" alt="Avatar" class="w-10 h-10 rounded-full object-cover" />
-          </td>
-          <td class="border border-gray-300 px-4 py-2">{{ user.id }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ user.username }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ user.fullName }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ user.email }}</td>
-          <td class="border border-gray-300 px-4 py-2">
-            <select v-model="user.role" @change="updateRole(user)">
-              <option value="USER">USER</option>
-              <option value="ADMIN">ADMIN</option>
-            </select>
-          </td>
-          <td class="border border-gray-300 px-4 py-2">
-            <button @click="deleteUser(user.id)" class="bg-red-500 text-white px-3 py-1 rounded">
-              Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="border border-gray-300 px-4 py-2">Avatar</th>
+            <th class="border border-gray-300 px-4 py-2">
+              ID
+              <button
+                @click="sortUsers('id')"
+                class="buttonclass ml-2 px-2 py-1 bg-gray-300 rounded"
+              >
+                {{ getSortArrow("id") }}
+              </button>
+            </th>
+            <th class="border border-gray-300 px-4 py-2">
+              User Name
+              <button
+                @click="sortUsers('username')"
+                class="buttonclass ml-2 px-2 py-1 bg-gray-300 rounded"
+              >
+                {{ getSortArrow("username") }}
+              </button>
+            </th>
+            <th class="border border-gray-300 px-4 py-2">
+              Full Name
+              <button
+                @click="sortUsers('fullName')"
+                class="buttonclass ml-2 px-2 py-1 bg-gray-300 rounded"
+              >
+                {{ getSortArrow("fullName") }}
+              </button>
+            </th>
+            <th class="border border-gray-300 px-4 py-2">Email</th>
+            <th class="border border-gray-300 px-4 py-2">Role</th>
+            <th class="border border-gray-300 px-4 py-2">Activity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in filteredUsers" :key="user.id">
+            <td class="border border-gray-300 px-4 py-2">
+              <img
+                :src="user.avatar || defaultAvatar"
+                alt="Avatar"
+                class="w-10 h-10 rounded-full object-cover"
+              />
+            </td>
+            <td class="border border-gray-300 px-4 py-2">{{ user.id }}</td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{ user.username }}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{ user.fullName }}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">{{ user.email }}</td>
+            <td class="border border-gray-300 px-4 py-2">
+              <select v-model="user.role" @change="updateRole(user)">
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
+              </select>
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              <button
+                @click="deleteUser(user.id)"
+                class="bg-red-500 text-white px-3 py-1 rounded"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    
   </div>
 </template>
-
 
 <script>
 import userService from "@/services/UserService";
@@ -111,9 +150,13 @@ export default {
   },
   computed: {
     filteredUsers() {
-      return this.sortedUsers.filter(user => {
-        const matchesSearch = user.username.toLowerCase().includes(this.searchQuery.toLowerCase());
-        const matchesRole = this.selectedRole ? user.role === this.selectedRole : true;
+      return this.sortedUsers.filter((user) => {
+        const matchesSearch = user.username
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase());
+        const matchesRole = this.selectedRole
+          ? user.role === this.selectedRole
+          : true;
         return matchesSearch && matchesRole;
       });
     },
@@ -124,7 +167,7 @@ export default {
         if (a[this.sortKey] < b[this.sortKey]) return -this.sortOrder;
         return 0;
       });
-    }
+    },
   },
   methods: {
     async fetchUsers() {
@@ -148,7 +191,7 @@ export default {
       if (confirm("Are you sure you want to delete this user?")) {
         try {
           await userService.deleteUser(id);
-          this.users = this.users.filter(user => user.id !== id);
+          this.users = this.users.filter((user) => user.id !== id);
           alert("User deleted successfully!");
         } catch (error) {
           console.error("Lỗi khi xóa user:", error);
@@ -176,7 +219,7 @@ export default {
         return this.sortOrder === 1 ? "🔼" : "🔽";
       }
       return "🔽"; // Mặc định là giảm dần
-    }
+    },
   },
 };
 </script>

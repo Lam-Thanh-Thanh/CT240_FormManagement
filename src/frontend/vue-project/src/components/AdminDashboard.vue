@@ -1,12 +1,20 @@
 <template>
   <div class="admin-dashboard">
-    <h1 class="text-center p-20 text-4xl font-extrabold ">Administration Panel</h1>
+    <h1 class="text-center p-20 text-4xl font-extrabold">
+      Administration Panel
+    </h1>
 
     <div class="button-container">
-      <button @click="goToUsers" class="admin-button bg-blue-500 hover:bg-blue-700">
-        👤 User Management
+      <button
+        @click="goToUsers"
+        class="admin-button bg-sky-600 hover:bg-sky-700"
+      >
+        <i class="fa-solid fa-user-secret text-gray-700"></i> User Management
       </button>
-      <button @click="goToProjects" class="admin-button bg-green-500 hover:bg-green-700">
+      <button
+        @click="goToProjects"
+        class="admin-button bg-rose-600 hover:bg-rose-700"
+      >
         📂 Project Management
       </button>
     </div>
