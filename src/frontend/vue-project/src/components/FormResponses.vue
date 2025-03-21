@@ -57,10 +57,10 @@
       <div
         v-for="(answer, index) in getAnswersForQuestion(question.id)"
         :key="index"
-        class="mt-7"
+        class="mt-7 border-2 p-7 rounded-xl"
       >
         <!-- Thêm số thứ tự -->
-        <p class="font-bold text-gray-500">Response {{ index + 1 }}:</p>
+        <p class="font-bold text-red-700">Response {{ index + 1 }}:</p>
 
         <!-- user Id -->
         <p class="font-bold text-gray-500">
@@ -106,58 +106,61 @@
         </div>
 
         <!-- Nếu là câu trả lời dạng file -->
-        <div v-else-if="answer.fileUrl">
-          <div
-            class="bg-gray-50 rounded my-1 flex gap-20 items-center py-4 px-40 border"
-          >
-            <iframe
-              :src="answer.fileUrl"
-              width="80%"
-              height="150px"
-              class="border rounded-md"
-            ></iframe>
-            <!-- Nút tải xuống -->
-            <div class="mt-2">
-              <a
-                :href="answer.fileUrl"
-                class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
-                title="View"
-              >
-                <i class="fa-solid fa-arrow-right"></i>
-              </a>
+
+        <div v-else-if="answer.fileUrl || answer.textUrl">
+          <div v-if="answer.fileUrl">
+            <div
+              class="bg-gray-50 rounded my-1 flex gap-20 items-center py-4 px-40 border"
+            >
+              <iframe
+                :src="answer.fileUrl"
+                width="80%"
+                height="150px"
+                class="border rounded-md"
+              ></iframe>
+              <!-- Nút tải xuống -->
+              <div class="mt-2">
+                <a
+                  :href="answer.fileUrl"
+                  class="text-gray-900 rounded-full border border-gray-400 px-1 py-0.5 hover:bg-gray-100 transition duration-300 ease-in-out"
+                  title="View"
+                >
+                  <i class="fa-solid fa-arrow-right"></i>
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- pdf -->
-        <div
-          v-else-if="answer.textUrl"
-          class="my-5 relative p-4 px-6 border rounded-full"
-        >
-          <a
-            :href="backendUrl + answer.textUrl"
-            download
-            title="Download to view this file"
-            class="hover:border-pink-800 hover:text-pink-800 transition duration-300 ease-in-out"
+          <!-- pdf -->
+          <div
+            v-if="answer.textUrl"
+            class="my-5 relative p-4 px-6 border rounded-full"
           >
-            <i
-              v-if="getFileIcon(answer.textUrl) === 'pdf'"
-              class="fa-regular fa-file-pdf text-5xl"
-            ></i>
-            <i
-              v-else-if="getFileIcon(answer.textUrl) === 'doc'"
-              class="fa-solid fa-file-word text-5xl"
-            ></i>
-            <i
-              v-else-if="getFileIcon(answer.textUrl) === 'xls'"
-              class="fa-regular fa-file-excel text-5xl"
-            ></i>
-            <i
-              v-else="getFileIcon(answer.textUrl) === 'file'"
-              class="fa-regular fa-file text-5xl"
-            ></i>
+            <a
+              :href="backendUrl + answer.textUrl"
+              download
+              title="Download to view this file"
+              class="hover:border-pink-800 hover:text-pink-800 transition duration-300 ease-in-out"
+            >
+              <i
+                v-if="getFileIcon(answer.textUrl) === 'pdf'"
+                class="fa-regular fa-file-pdf text-5xl"
+              ></i>
+              <i
+                v-else-if="getFileIcon(answer.textUrl) === 'doc'"
+                class="fa-solid fa-file-word text-5xl"
+              ></i>
+              <i
+                v-else-if="getFileIcon(answer.textUrl) === 'xls'"
+                class="fa-regular fa-file-excel text-5xl"
+              ></i>
+              <i
+                v-else="getFileIcon(answer.textUrl) === 'file'"
+                class="fa-regular fa-file text-5xl"
+              ></i>
 
-            Download to view
-          </a>
+              Download to view
+            </a>
+          </div>
         </div>
         <!-- Nếu là câu trả lời radio -->
         <div v-else-if="answer.oneOption.id">
