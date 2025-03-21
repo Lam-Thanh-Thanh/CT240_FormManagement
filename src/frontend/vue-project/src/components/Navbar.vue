@@ -3,9 +3,10 @@
     class="flex justify-between items-center h-[70px] px-10 border-solid border-b-gray-200 border-b-2"
   >
     <div class="">
-      <router-link to="/" class="text-3xl font-black"
-        ><i class="fa-solid fa-leaf"></i>Form</router-link
-      >
+      <router-link to="/" class="text-3xl font-black flex">
+        <img src="@/assets/shiba-smug.gif" alt="Logo" class="w-8 h-8" />
+        <span> Form</span>
+      </router-link>
     </div>
     <nav class="flex justify-between items-center">
       <router-link to="/" class="text-xl font-normal px-7 hover:text-gray-900"
@@ -26,9 +27,16 @@
         ></router-link
       >
 
-       <!-- Hiển thị Admin nếu role là ADMIN -->
-       <router-link v-if="isAdmin" to="/admin" class="text-xl font-normal px-7 hover:text-gray-900">
-        <span class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out">Admin</span>
+      <!-- Hiển thị Admin nếu role là ADMIN -->
+      <router-link
+        v-if="isAdmin"
+        to="/admin"
+        class="text-xl font-normal px-7 hover:text-gray-900"
+      >
+        <span
+          class="hover:border-b-2 hover:border-b-pink-700 transition duration-500 ease-in-out"
+          >Admin</span
+        >
       </router-link>
 
       <!-- Biểu tượng User -->
@@ -95,7 +103,7 @@ export default {
     },
     isAdmin() {
       return AuthService.getUserRole() === "ADMIN";
-    }
+    },
   },
   methods: {
     toggleDropdown() {

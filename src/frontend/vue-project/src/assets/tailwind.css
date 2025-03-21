@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Đổi con trỏ chuột mặc định cho toàn bộ trang */
+body {
+    cursor: url("/mouse-dog1.png") 16 16, auto;
+}
+
+/* Đổi con trỏ cho các phần tử có thể click */
+button, a, [role="button"], [onclick], .clickable {
+    cursor: url("/mouse-dog2.png") 16 16, auto;
+  }

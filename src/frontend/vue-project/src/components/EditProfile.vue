@@ -1,55 +1,84 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+  <div
+    class="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500"
+  >
     <div class="bg-white shadow-lg rounded-lg p-6 w-96 text-center">
       <h2 class="text-2xl font-semibold text-gray-800 mb-4">Edit Profile</h2>
 
       <!-- Ảnh đại diện -->
       <div class="relative flex justify-center mb-4">
         <label for="avatarInput" class="cursor-pointer">
-          <img :src="avatarPreview || user.avatar || defaultAvatar" alt="Avatar"
-            class="w-24 h-24 rounded-full border-4 border-gray-300 shadow-md object-cover">
+          <img
+            :src="avatarPreview || user.avatar || defaultAvatar"
+            alt="Avatar"
+            class="w-24 h-24 rounded-full border-4 border-gray-300 shadow-md object-cover"
+          />
         </label>
-        <input type="file" id="avatarInput" @change="handleFileUpload" accept="image/*" class="hidden" />
+        <input
+          type="file"
+          id="avatarInput"
+          @change="handleFileUpload"
+          accept="image/*"
+          class="hidden"
+        />
       </div>
 
       <form @submit.prevent="updateProfile" class="space-y-4">
         <!-- Full Name -->
         <div>
           <label class="block text-gray-700 text-left">Full Name</label>
-          <input v-model="user.fullName" type="text"
-            class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" />
+          <input
+            v-model="user.fullName"
+            type="text"
+            class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+          />
         </div>
 
         <!-- Username -->
         <div>
           <label class="block text-gray-700 text-left">Username</label>
-          <input v-model="user.username" type="text" disabled
-            class="w-full border px-3 py-2 rounded-lg bg-gray-100 cursor-not-allowed" />
+          <input
+            v-model="user.username"
+            type="text"
+            disabled
+            class="w-full border px-3 py-2 rounded-lg bg-gray-100 cursor-not-allowed"
+          />
         </div>
 
         <!-- Email -->
         <div>
           <label class="block text-gray-700 text-left">Email</label>
-          <input v-model="user.email" type="email"
-            class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" />
+          <input
+            v-model="user.email"
+            type="email"
+            class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+          />
         </div>
 
         <!-- Nút "Change Password" -->
-        <button type="button" @click="toggleChangePassword"
-          class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-semibold shadow-md transition duration-300 ease-in-out">
+        <button
+          type="button"
+          @click="toggleChangePassword"
+          class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-semibold shadow-md transition duration-300 ease-in-out"
+        >
           🔑 {{ showPasswordField ? "Cancel" : "Change Password" }}
         </button>
 
         <!-- New Password (Chỉ hiển thị khi bấm "Change Password") -->
         <div v-if="showPasswordField">
           <label class="block text-gray-700 text-left">New Password</label>
-          <input v-model="newPassword" type="password"
-            class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500" />
+          <input
+            v-model="newPassword"
+            type="password"
+            class="w-full border px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+          />
         </div>
 
         <!-- Nút Save -->
-        <button type="submit"
-          class="w-full bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-semibold shadow-md transition duration-300 ease-in-out">
+        <button
+          type="submit"
+          class="w-full bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-semibold shadow-md transition duration-300 ease-in-out"
+        >
           💾 Save Changes
         </button>
       </form>
@@ -122,28 +151,28 @@ export default {
       }
     },
     async updateProfile() {
-    try {
-      const updatedUser = { ...this.user };
+      try {
+        const updatedUser = { ...this.user };
 
-      // Xóa field password nếu người dùng không nhập mới
-      if (this.showPasswordField) {
-        if (this.newPassword.trim() !== "") {
-          updatedUser.password = this.newPassword;
+        // Xóa field password nếu người dùng không nhập mới
+        if (this.showPasswordField) {
+          if (this.newPassword.trim() !== "") {
+            updatedUser.password = this.newPassword;
+          } else {
+            delete updatedUser.password;
+          }
         } else {
           delete updatedUser.password;
         }
-      } else {
-        delete updatedUser.password;
-      }
 
-      await UserService.updateUser(this.userId, updatedUser);
-      alert("Cập nhật thành công!");
-      router.push("/account");
-    } catch (error) {
-      console.error("Lỗi khi cập nhật user:", error);
-      alert("Cập nhật thất bại!");
-    }
-  },
+        await UserService.updateUser(this.userId, updatedUser);
+        alert("Cập nhật thành công!");
+        router.push("/account");
+      } catch (error) {
+        console.error("Lỗi khi cập nhật user:", error);
+        alert("Cập nhật thất bại!");
+      }
+    },
   },
 };
 </script>

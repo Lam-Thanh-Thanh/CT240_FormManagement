@@ -1,18 +1,23 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+  <div
+    class="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500"
+  >
     <div class="bg-white shadow-lg rounded-lg p-6 w-96">
       <div class="flex flex-col items-center m-6">
-        <img :src="avatarPreview || user.avatar || defaultAvatar"
+        <img
+          :src="avatarPreview || user.avatar || defaultAvatar"
           class="w-24 h-24 rounded-full border-4 border-pink-700"
         />
         <h2 class="mt-4 text-xl font-semibold text-gray-700">
           {{ user.fullName }}
         </h2>
-        <p class="text-gray-500">{{ user.email}}</p>
+        <p class="text-gray-500">{{ user.email }}</p>
       </div>
       <div class="m-4">
-        <button @click="goToEditProfile"
-          class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out w-full">
+        <button
+          @click="goToEditProfile"
+          class="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded transition duration-300 ease-in-out w-full"
+        >
           Edit Profile
         </button>
       </div>
@@ -40,7 +45,7 @@ export default {
   },
   methods: {
     goToEditProfile() {
-    this.$router.push(`/edit-profile/${this.userId}`);
+      this.$router.push(`/edit-profile/${this.userId}`);
     },
     async checkLogin() {
       // Lấy token từ localStorage
